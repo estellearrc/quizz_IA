@@ -38,6 +38,10 @@ namespace Domain
             Score = 0;
         }
 
+        public void NoteSur20()
+        {
+            Score = (Score * 20) / 33;  //penser à faire une requete pour obtenir le 33 c'est moche de coder en dur
+        }
 
     }
 }

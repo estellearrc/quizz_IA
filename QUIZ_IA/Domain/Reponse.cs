@@ -43,5 +43,11 @@ namespace Domain
             Points = points;
         }
 
+        public bool EstVrai()
+        {
+            if (Points == 0) return false;
+            return true;
+        }
+
     }
 }

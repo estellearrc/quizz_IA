@@ -30,6 +30,7 @@
         {
             this.txtQuestion = new System.Windows.Forms.TextBox();
             this.btnValider = new System.Windows.Forms.Button();
+            this.txtBoxCorrection = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtQuestion
@@ -59,16 +60,30 @@
             this.btnValider.UseVisualStyleBackColor = false;
             this.btnValider.Click += new System.EventHandler(this.btnValider_Click);
             // 
-            // Quiz
+            // txtBoxCorrection
+            // 
+            this.txtBoxCorrection.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtBoxCorrection.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtBoxCorrection.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxCorrection.Location = new System.Drawing.Point(31, 386);
+            this.txtBoxCorrection.Multiline = true;
+            this.txtBoxCorrection.Name = "txtBoxCorrection";
+            this.txtBoxCorrection.Size = new System.Drawing.Size(467, 53);
+            this.txtBoxCorrection.TabIndex = 2;
+            this.txtBoxCorrection.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(534, 512);
+            this.Controls.Add(this.txtBoxCorrection);
             this.Controls.Add(this.btnValider);
             this.Controls.Add(this.txtQuestion);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Name = "Quiz";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "MainForm";
             this.Text = "Quiz IA";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -79,6 +94,7 @@
 
         private System.Windows.Forms.TextBox txtQuestion;
         private System.Windows.Forms.Button btnValider;
+        private System.Windows.Forms.TextBox txtBoxCorrection;
     }
 }
 

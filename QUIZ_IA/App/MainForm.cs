@@ -63,7 +63,7 @@ namespace App
                 {
                     checkBoxes[i] = new CheckBox();
                     checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                    checkBoxes[i].Text = question.LesReponses[i].Intitule;
+                    checkBoxes[i].Text = alphabet[i]+".  " + question.LesReponses[i].Intitule;
                     checkBoxes[i].AutoSize = true;
                     this.Controls.Add(checkBoxes[i]);
 
@@ -73,9 +73,41 @@ namespace App
             }
         }
 
-        private void Affiche_Correction(Question question) { }
+        private void Affiche_Correction(Question question, bool avoirJuste) {
+            Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
+            if (avoirJuste)
+            {
+                couleurtxt= Color.FromKnownColor(KnownColor.Red);
+                txtBoxCorrection.Text = "C'est ça ! BRAVO !";
+                txtBoxCorrection.ForeColor = couleurtxt;
+            }
+            else
+            {
+                txtBoxCorrection.ForeColor = couleurtxt;
+                string correction = "";
+                if (question.Type == Question.TypeQues.QCM)
+                {
+                    correction="Faux!Il fallait cocher:";
+                    for (int i = 0; i < question.LesReponses.Count; i++)
+                    {
+                        if (question.LesReponses[i].EstVrai())
+                        {
+                            correction += " " + alphabet[i];
+                        }                                                                             
+                    }
+                  
+                }
+                else
+                {
+                    correction = "Non, la bonne réponse est " + question.LesReponses[0].Intitule;
+                }
+                txtBoxCorrection.Text = correction;
+            }
+        }
         private void btnValider_Click(object sender, EventArgs e)
         {
+            Afficher_Question(Lequiz.LesQuestions[0]);
+            
 
         }
     }
