@@ -15,6 +15,9 @@ namespace App
         public List<LabelledPoint> PointsScanned { get; private set; }
         public LabelledPoint CurrentPoint { get; private set; }
         public List<LabelledRelation> Relations { get; private set; }
+        public LabelledPoint InitialPoint { get; private set; }
+        public LabelledPoint LastPoint { get; private set; }
+        
         public Graph(Dijkstra d)
         {
             PointsToScan = new List<LabelledPoint>();
@@ -23,6 +26,8 @@ namespace App
             Relations = new List<LabelledRelation>();
             GenerateRelationList();
             CurrentPoint = PointsToScan.First();
+            InitialPoint = PointsToScan.First();
+            LastPoint = PointsToScan.Last();
         }
         public void GeneratePointList(Dijkstra d)
         {

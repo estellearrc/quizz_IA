@@ -25,9 +25,10 @@ namespace App
         {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
+
+
             drawingPanel = new Panel();
             drawingPanel.Location = new Point(0, 0);
-            drawingPanel.Size = new Size(800, 500);
             // Subscribing to a paint eventhandler to drawingPanel:
             drawingPanel.Paint += new PaintEventHandler(DrawingPanel_Paint);
             drawingPanel.BackColor = Color.White;
@@ -39,7 +40,11 @@ namespace App
             drawingPanel.Left = offset;
             drawingPanel.Top = offset;
             drawingPanel.Width = ClientRectangle.Width - 2 * offset;
-            drawingPanel.Height = ClientRectangle.Height - 12 * offset;
+            drawingPanel.Height = ClientRectangle.Height - 14 * offset;
+
+
+            Size = new Size(550, 550);
+            Controls.Add(drawingPanel);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -66,8 +71,13 @@ namespace App
         private void PlotPoint2D(LabelledPoint pt, Graphics g, Graph gD)
         {
             Point ptf = pt.Pt;
-            Font f = new Font("Calibri", 11, FontStyle.Regular);
-            g.DrawString(pt.Label, f, Brushes.Black, ptf);
+            Font f = new Font("Calibri", 11, FontStyle.Bold);
+            Brush b = Brushes.Black;
+            if(pt.Equals(gD.InitialPoint) || pt.Equals(gD.LastPoint))
+            {
+                b = Brushes.Blue;
+            }
+            g.DrawString(pt.Label, f, b, ptf);
             if (pt.Equals(gD.CurrentPoint))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
@@ -87,7 +97,7 @@ namespace App
             Point ptf2 = r.Pt2.Pt;
             g.DrawLine(aPen, ptf1, ptf2);
             aPen.Dispose();
-            Font f = new Font("Calibri", 10, FontStyle.Italic);
+            Font f = new Font("Calibri", 10, FontStyle.Regular);
             Point pt1 = r.Pt1.Pt;
             Point pt2 = r.Pt2.Pt;
             Point milieu = new Point((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);

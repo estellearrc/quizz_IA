@@ -59,7 +59,7 @@
             this.btnValider.UseVisualStyleBackColor = false;
             this.btnValider.Click += new System.EventHandler(this.btnValider_Click);
             // 
-            // Quiz
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -68,7 +68,8 @@
             this.Controls.Add(this.btnValider);
             this.Controls.Add(this.txtQuestion);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Name = "Quiz";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "MainForm";
             this.Text = "Quiz IA";
             this.ResumeLayout(false);
             this.PerformLayout();
