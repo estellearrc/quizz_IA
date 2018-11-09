@@ -14,7 +14,7 @@ namespace App
 {
     public partial class MainForm : Form
     {
-        private List<Question> Lequiz { get; set; }
+        private Quiz Lequiz { get; set; }
         CheckBox[] ck = null;
         public MainForm()
         {
@@ -35,9 +35,11 @@ namespace App
             lesRepq2.Add(new Reponse(6, "L'ajout d’une heuristique pour estimer le coût du chemin restant pour atteindre le but", 0));
             Question quest2 = new Question(1, "Quel est l'intérêt d'utiliser A* plutôt que Dijkstra classique ?", lesRepq2, 0);
 
-            Lequiz = new List<Question>();
-            Lequiz.Add(quest1);
-            Lequiz.Add(quest2);
+            List<Question> questions = new List<Question>();
+            questions.Add(quest1);
+            questions.Add(quest2);
+
+            Lequiz = new Quiz(questions);
 
             int score;
 
