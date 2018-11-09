@@ -20,6 +20,8 @@ namespace App
         {
             InitializeComponent();
 
+            new Dijkstra();
+
             List<Reponse> lesRepq = new List<Reponse>();
             lesRepq.Add(new Reponse(0, "L'IA forte a conscience d'elle-même", 1));
             lesRepq.Add(new Reponse(1, "L'IA forte est plus rapide que l'IA faible", 0));
@@ -45,7 +47,7 @@ namespace App
 
         private void Afficher_Question(Question question)
         {
-            if (question != null)
+            if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
             {
 
                 btnValider.Text = "Valider";
