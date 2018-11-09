@@ -72,6 +72,8 @@ namespace App
 
             }
         }
+
+        private void Affiche_Correction(Question question) { }
         private void btnValider_Click(object sender, EventArgs e)
         {
 
