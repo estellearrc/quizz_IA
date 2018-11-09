@@ -20,6 +20,8 @@ namespace App
         public MainForm()
         {
             InitializeComponent();
+            Size = new Size(550, 550);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
             Dijkstra d = new Dijkstra();
             d.Show();
