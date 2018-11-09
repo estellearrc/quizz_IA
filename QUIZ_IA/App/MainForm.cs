@@ -14,13 +14,15 @@ namespace App
 {
     public partial class MainForm : Form
     {
+        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         private Quiz Lequiz { get; set; }
         CheckBox[] ck = null;
         public MainForm()
         {
             InitializeComponent();
 
-            new Dijkstra();
+            Dijkstra d = new Dijkstra();
+            d.Show();
 
             List<Reponse> lesRepq = new List<Reponse>();
             lesRepq.Add(new Reponse(0, "L'IA forte a conscience d'elle-même", 1));

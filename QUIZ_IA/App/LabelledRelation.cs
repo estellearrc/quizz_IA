@@ -19,10 +19,10 @@ namespace App
         }
         public int CalculeDistance()
         {
-            float x1 = Pt1.Ptf.X;
-            float x2 = Pt2.Ptf.X;
-            float y1 = Pt1.Ptf.Y;
-            float y2 = Pt2.Ptf.Y;
+            float x1 = Pt1.Pt.X;
+            float x2 = Pt2.Pt.X;
+            float y1 = Pt1.Pt.Y;
+            float y2 = Pt2.Pt.Y;
             return (int)Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
         }
         public override string ToString()

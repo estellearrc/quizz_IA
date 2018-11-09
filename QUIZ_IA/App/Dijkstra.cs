@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,10 @@ namespace App
     public partial class Dijkstra : Form
     {
         // Unit defined in world coordinate system:
-        public float xMin = 0f;
-        public float xMax = 10f;
-        public float yMin = 0f;
-        public float yMax = 10f;
+        public int xMin = 0;
+        public int xMax = 10;
+        public int yMin = 0;
+        public int yMax = 10;
         // Define the offset in pixel:
         private int offset = 20;
         public Panel drawingPanel;
@@ -26,6 +27,7 @@ namespace App
             SetStyle(ControlStyles.ResizeRedraw, true);
             drawingPanel = new Panel();
             drawingPanel.Location = new Point(0, 0);
+            drawingPanel.Size = new Size(800, 500);
             // Subscribing to a paint eventhandler to drawingPanel:
             drawingPanel.Paint += new PaintEventHandler(DrawingPanel_Paint);
             drawingPanel.BackColor = Color.White;
@@ -45,7 +47,7 @@ namespace App
             Graph graphDijkstra = new Graph(this);
             foreach (LabelledPoint pt in graphDijkstra.PointsToScan)
             {
-                pt.Ptf = Point2D(pt.Ptf);
+                pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt, g, graphDijkstra);
             }
             foreach (LabelledRelation r in graphDijkstra.Relations)
@@ -54,17 +56,17 @@ namespace App
             }
             g.Dispose();
         }
-        private PointF Point2D(PointF ptf)
+        private Point Point2D(Point ptf)
         {
-            PointF aPoint = new PointF();
+            Point aPoint = new Point();
             aPoint.X = (ptf.X - xMin) * drawingPanel.Width / (xMax - xMin);
             aPoint.Y = drawingPanel.Height - (ptf.Y - yMin) * drawingPanel.Height / (yMax - yMin);
             return aPoint;
         }
         private void PlotPoint2D(LabelledPoint pt, Graphics g, Graph gD)
         {
-            PointF ptf = pt.Ptf;
-            Font f = new Font("Arial", 11, FontStyle.Regular);
+            Point ptf = pt.Pt;
+            Font f = new Font("Calibri", 11, FontStyle.Regular);
             g.DrawString(pt.Label, f, Brushes.Black, ptf);
             if (pt.Equals(gD.CurrentPoint))
             {
@@ -81,14 +83,14 @@ namespace App
             //aPen.EndCap = LineCap.RoundAnchor;
             aPen.DashStyle = DashStyle.Dash;
             aPen.DashOffset = 500;
-            PointF ptf1 = r.Pt1.Ptf;
-            PointF ptf2 = r.Pt2.Ptf;
+            Point ptf1 = r.Pt1.Pt;
+            Point ptf2 = r.Pt2.Pt;
             g.DrawLine(aPen, ptf1, ptf2);
             aPen.Dispose();
-            Font f = new Font("Arial", 10, FontStyle.Italic);
-            PointF pt1 = r.Pt1.Ptf;
-            PointF pt2 = r.Pt2.Ptf;
-            PointF milieu = new PointF((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
+            Font f = new Font("Calibri", 10, FontStyle.Italic);
+            Point pt1 = r.Pt1.Pt;
+            Point pt2 = r.Pt2.Pt;
+            Point milieu = new Point((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
             g.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
     }

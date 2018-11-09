@@ -5,24 +5,24 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace App
 {
     class LabelledPoint
     {
-        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         private static int _LASTLETTER = -1;
         public string Label { get; private set; }
-        public PointF Ptf { get; set; }
-        public LabelledPoint(float x, float y)
+        public Point Pt { get; set; }
+        public LabelledPoint(int x, int y)
         {
-            Ptf = new PointF(x, y);
+            Pt = new Point(x, y);
             _LASTLETTER++;
-            Label = alphabet[_LASTLETTER];
+            Label = MainForm.alphabet[_LASTLETTER];
         }
         public bool Equals(LabelledPoint pt)
         {
-            return ((Ptf.X == pt.Ptf.X) && (Ptf.Y == pt.Ptf.Y));
+            return ((Pt.X == pt.Pt.X) && (Pt.Y == pt.Pt.Y));
         }
         public override string ToString()
         {
