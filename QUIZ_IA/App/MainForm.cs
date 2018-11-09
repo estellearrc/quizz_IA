@@ -12,14 +12,14 @@ using Domain;
 
 namespace App
 {
-    public partial class Quiz : Form
+    public partial class MainForm : Form
     {
         private List<Question> Lequiz { get; set; }
-        CheckBox[] rd = null;
-        public Quiz()
+        CheckBox[] ck = null;
+        public MainForm()
         {
             InitializeComponent();
-           
+
             List<Reponse> lesRepq = new List<Reponse>();
             lesRepq.Add(new Reponse(0, "L'IA forte a conscience d'elle-même", 1));
             lesRepq.Add(new Reponse(1, "L'IA forte est plus rapide que l'IA faible", 0));
@@ -30,7 +30,7 @@ namespace App
             List<Reponse> lesRepq2 = new List<Reponse>();
             lesRepq2.Add(new Reponse(4, "L'algorithme A* est une version simplifiée de Dijkstra", 0));
             lesRepq2.Add(new Reponse(5, "L'ajout d’une heuristique pour estimer le coût du chemin restant pour atteindre le but", 1));
-            lesRepq2.Add(new Reponse(6, "L'ajout d’une heuristique pour estimer le coût du chemin restant pour atteindre le but", 0));          
+            lesRepq2.Add(new Reponse(6, "L'ajout d’une heuristique pour estimer le coût du chemin restant pour atteindre le but", 0));
             Question quest2 = new Question(1, "Quel est l'intérêt d'utiliser A* plutôt que Dijkstra classique ?", lesRepq2, 0);
 
             Lequiz = new List<Question>();
@@ -39,30 +39,36 @@ namespace App
 
             int score;
 
-            CheckBox[] rd = null;
+
         }
 
+
+        private void Afficher_Question(Question question)
+        {
+            if (question != null)
+            {
+
+                btnValider.Text = "Valider";
+                txtQuestion.Text = question.Intitule;
+                CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
+                ck = new CheckBox[question.LesReponses.Count];
+
+                for (int i = 0; i < question.LesReponses.Count; i++)
+                {
+                    checkBoxes[i] = new CheckBox();
+                    checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                    checkBoxes[i].Text = question.LesReponses[i].Intitule;
+                    checkBoxes[i].AutoSize = true;
+                    this.Controls.Add(checkBoxes[i]);
+
+                }
+
+
+            }
+        }
         private void btnValider_Click(object sender, EventArgs e)
         {
-            foreach(Question question in Lequiz)
-            {
-                if(question!=null)
-                {
-                    txtQuestion.Text = question.Intitule;
-                    CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                    rd = new CheckBox[question.LesReponses.Count];
 
-                    for (int i = 0; i < question.LesReponses.Count; i++)
-                    {
-                        checkBoxes[i] = new CheckBox();
-                        checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                        checkBoxes[i].Text = question.LesReponses[i].Intitule;
-                        checkBoxes[i].AutoSize = true;
-                        this.Controls.Add(checkBoxes[i]);
-
-                    }
-                }
-            }
         }
     }
 }

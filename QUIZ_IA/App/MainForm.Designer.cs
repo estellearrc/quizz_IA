@@ -1,6 +1,6 @@
 ﻿namespace App
 {
-    partial class Quiz
+    partial class MainForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
