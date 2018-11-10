@@ -25,7 +25,7 @@ namespace Domain
             Points = points;
         }
 
-        public bool EstCorrecte()
+        public virtual bool EstCorrecte()
         {
             return (Points == 0) ? false : true;
         }
