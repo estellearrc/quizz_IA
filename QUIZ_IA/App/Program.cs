@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DAL;
 
 namespace App
 {
@@ -16,7 +17,8 @@ namespace App
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            IQuizRepository quizRepo = new StubQuizRepository();
+            Application.Run(new MainForm(quizRepo));
         }
     }
 }

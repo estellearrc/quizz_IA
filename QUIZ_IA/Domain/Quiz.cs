@@ -10,32 +10,19 @@ namespace Domain
   /// </summary>
     public class Quiz
     {
-
-        /// <summary>
-        /// La note du quiz
-        /// </summary>
-        public virtual int Score { get; set; }
-
-
-        /// <summary>
-        /// Liste des questions du quiz 
-        /// </summary>
-        public virtual List<Question> LesQuestions { get; set; }
-
-
-        /// <summary>
-        /// Constructeur par défaut
-        /// </summary>
-        public Quiz() { }
-
-        /// <summary>
-        /// Constructeur question sans image
-        /// </summary>
+        public int Score { get; set; }
+        
+        public List<Question> LesQuestions { get; set; }
 
         public Quiz(List<Question> questions)
         {
             LesQuestions = questions;
             Score = 0;
+        }
+
+        public void ActualiseScore(int points)
+        {
+            Score += points;
         }
 
         public void NoteSur20()

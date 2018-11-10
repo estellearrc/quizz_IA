@@ -11,42 +11,23 @@ namespace Domain
         /// </summary>
     public class Reponse
     {
-        /// <summary>
-        /// IDentifiant de la réponse
-        /// </summary>
         public virtual int Id { get; set; }
 
-        /// <summary>
-        /// Intitulé de la réponse
-        /// </summary>
         public virtual string Intitule { get; set; }
 
-        /// <summary>
-        /// Nombre de points associés à la question
-        /// </summary>
         public virtual int Points { get; set; }
 
-
-        /// <summary>
-        /// Constructeur par défaut
-        /// </summary>
         public Reponse() { }
 
-        /// <summary>
-        /// Constructeur de Réponses
-        /// </summary>
-
-        public Reponse(int id, string intitule, int points)
+        public Reponse(string intitule, int points)
         {
-            Id = id;
             Intitule = intitule;
             Points = points;
         }
 
-        public bool EstVrai()
+        public bool EstCorrecte()
         {
-            if (Points == 0) return false;
-            return true;
+            return (Points == 0) ? false : true;
         }
 
     }
