@@ -9,18 +9,18 @@ using System.Windows.Forms;
 
 namespace App
 {
-    class LabelledPoint
+    class Sommet
     {
         private static int _LASTLETTER = -1;
         public string Label { get; private set; }
         public Point Pt { get; set; }
-        public LabelledPoint(int x, int y)
+        public Sommet(int x, int y)
         {
             Pt = new Point(x, y);
             _LASTLETTER++;
             Label = MainForm.alphabet[_LASTLETTER];
         }
-        public bool Equals(LabelledPoint pt)
+        public bool Equals(Sommet pt)
         {
             return ((Pt.X == pt.Pt.X) && (Pt.Y == pt.Pt.Y));
         }

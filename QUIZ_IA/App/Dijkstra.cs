@@ -49,13 +49,13 @@ namespace App
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Graph graphDijkstra = new Graph(this);
-            foreach (LabelledPoint pt in graphDijkstra.PointsToScan)
+            Graphe graphDijkstra = new Graphe(this);
+            foreach (Sommet pt in graphDijkstra.PointsToScan)
             {
                 pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt, g, graphDijkstra);
             }
-            foreach (LabelledRelation r in graphDijkstra.Relations)
+            foreach (Arete r in graphDijkstra.Relations)
             {
                 TraceRelation(r, g);
             }
@@ -68,7 +68,7 @@ namespace App
             aPoint.Y = drawingPanel.Height - (ptf.Y - yMin) * drawingPanel.Height / (yMax - yMin);
             return aPoint;
         }
-        private void PlotPoint2D(LabelledPoint pt, Graphics g, Graph gD)
+        private void PlotPoint2D(Sommet pt, Graphics g, Graphe gD)
         {
             Point ptf = pt.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
@@ -85,7 +85,7 @@ namespace App
                 g.FillRectangle(aBrush, ptf.X - w / 2, ptf.Y - w / 2, w, w);
             }
         }
-        private void TraceRelation(LabelledRelation r, Graphics g)
+        private void TraceRelation(Arete r, Graphics g)
         {
             Pen aPen = new Pen(Color.Black, 2);
             // Set line caps and dash style:

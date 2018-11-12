@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class LabelledRelation
+    class Arete
     {
-        public LabelledPoint Pt1 { get; private set; }
-        public LabelledPoint Pt2 { get; private set; }
+        public Sommet Pt1 { get; private set; }
+        public Sommet Pt2 { get; private set; }
         public int Distance { get; private set; }
-        public LabelledRelation(LabelledPoint pt1, LabelledPoint pt2)
+        public Arete(Sommet pt1, Sommet pt2)
         {
             Pt1 = pt1;
             Pt2 = pt2;
