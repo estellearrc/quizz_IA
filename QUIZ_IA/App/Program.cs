@@ -17,7 +17,7 @@ namespace App
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            IQuizRepository quizRepo = new StubQuizRepository();
+            IQuizRepository quizRepo = new QuizRepository();
             Application.Run(new MainForm(quizRepo));
         }
     }

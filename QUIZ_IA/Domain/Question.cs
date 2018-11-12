@@ -19,7 +19,7 @@ namespace Domain
 
         public virtual string Image { get; set; }
 
-        public virtual List<Reponse> LesReponses { get; set; }
+        public virtual IList<Reponse> LesReponses { get; set; }
 
         public virtual TypeQues Type { get; set; }
 
