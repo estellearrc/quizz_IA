@@ -17,7 +17,8 @@ namespace App
         private IQuizRepository _quizRepository;
 
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
-        CheckBox[] ck = null;
+        CheckBox[] lesCheckBoxes = null;
+        public int compteur = 0;
 
         public MainForm(IQuizRepository quizRepository)
         {
@@ -39,16 +40,31 @@ namespace App
 
                 btnValider.Text = "Valider";
                 txtQuestion.Text = question.Intitule;
-                CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                ck = new CheckBox[question.LesReponses.Count];
+                if (question.Type == Question.TypeQues.QCM)
+                { 
+                    CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
+                    lesCheckBoxes = new CheckBox[question.LesReponses.Count];
 
-                for (int i = 0; i < question.LesReponses.Count; i++)
+                    for (int i = 0; i < question.LesReponses.Count; i++)
+                    {
+                        checkBoxes[i] = new CheckBox();
+                        checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                        checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
+                        checkBoxes[i].AutoSize = true;
+                        this.Controls.Add(checkBoxes[i]);
+                    }
+                }
+
+                if (question.Type == Question.TypeQues.QCM)
                 {
-                    checkBoxes[i] = new CheckBox();
-                    checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                    checkBoxes[i].Text = alphabet[i]+".  " + question.LesReponses[i].Intitule;
-                    checkBoxes[i].AutoSize = true;
-                    this.Controls.Add(checkBoxes[i]);
+                    for (int i = 0; i < question.LesReponses.Count; i++)
+                    {
+
+                    }
+                }
+
+                if (question.Type == Question.TypeQues.saisieNum)
+                {
 
                 }
 
@@ -56,6 +72,16 @@ namespace App
             }
         }
 
+        private bool Correction(Question question )
+        {
+            bool juste = true;
+            // compter les points 
+            if (question.Type == Question.TypeQues.saisieNum)
+            {
+
+            }
+            return juste;
+        }
         private void Affiche_Correction(Question question, bool avoirJuste) {
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
@@ -87,10 +113,38 @@ namespace App
                 txtBoxCorrection.Text = correction;
             }
         }
+
+        private void Nettoyer_Form()
+        {
+            txtBoxCorrection.Text = "";
+            foreach (CheckBox checkbox in lesCheckBoxes)
+            {
+                this.Controls.Remove(checkbox);
+            }
+
+        }                    
+                     
+                    
         private void btnValider_Click(object sender, EventArgs e)
         {
-            Afficher_Question(_quizRepository.GetAllQuestions()[0]);
-            
+           
+
+            if (btnValider.Text == "Suivant"|| btnValider.Text == "Commencer")
+            {
+                if (btnValider.Text == "Suivant")
+                {
+                    // on nettoie le form
+                }
+                //on affiche la question numéro "compteur"
+                Afficher_Question(_quizRepository.GetAllQuestions()[compteur]);
+            }
+            else if(btnValider.Text == "Valider"){
+                //corriger (voir si la reponse est correcte)
+                //on met à jour les points
+                //afficher correction
+                compteur++;
+            }
+
 
         }
     }

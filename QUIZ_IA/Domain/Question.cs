@@ -23,6 +23,8 @@ namespace Domain
 
         public virtual TypeQues Type { get; set; }
 
+        public virtual int Points { get; set; }
+
         public Question() { }
 
         public Question(string intitule, List<Reponse> lesReponses, int type)
@@ -30,6 +32,12 @@ namespace Domain
             Intitule = intitule;
             LesReponses = lesReponses;
             Type = (TypeQues)type;
+            int somme = 0;
+            foreach(Reponse rep in lesReponses)
+            {
+                somme += rep.Points;
+            }
+            Points = somme;
         }
 
         public Question(string intitule, List<Reponse> lesReponses, string image, int type)
@@ -38,6 +46,12 @@ namespace Domain
             LesReponses = lesReponses;
             Type = (TypeQues)type;
             Image = image;
+            int somme = 0;
+            foreach (Reponse rep in lesReponses)
+            {
+                somme += rep.Points;
+            }
+            Points = somme;
         }
        
     }
