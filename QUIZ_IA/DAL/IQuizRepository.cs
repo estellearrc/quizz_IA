@@ -10,6 +10,7 @@ namespace DAL
     public interface IQuizRepository
     {
         List<Question> GetAllQuestions();
+        List<Question> Get20Questions();
         int CalculateMaxMark();
     }
 }

@@ -26,7 +26,7 @@ namespace App
         {
             InitializeComponent();
             _quizRepository = quizRepository;
-            _quiz = new Quiz(_quizRepository.GetAllQuestions());
+            _quiz = new Quiz(_quizRepository.Get20Questions());
             Size = new Size(550, 550); //dans le designer.cs
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
