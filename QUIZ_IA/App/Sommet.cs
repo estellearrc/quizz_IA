@@ -56,14 +56,32 @@ namespace App
 
             foreach(Arete a in MainForm.d.graphDijkstra.Aretes)
             {
-                if(a.S1.IsEqual)
+                if(IsEqual(a.S1))
+                {
+                    lsucc.Add(a.S1);
+                }
+                else
+                {
+                    if (IsEqual(a.S2))
+                    {
+                        lsucc.Add(a.S2);
+                    }
+                }
             }
             return lsucc;
         }
 
         public override double CalculeHCost()
         {
-            throw new NotImplementedException();
+            return 0;
+        }
+        public int CalculeDistance(Sommet s)
+        {
+            float x1 = Pt.X;
+            float x2 = s.Pt.X;
+            float y1 = Pt.Y;
+            float y2 = s.Pt.Y;
+            return (int)Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
         }
     }
 }
