@@ -21,7 +21,7 @@ namespace App
         // Define the offset in pixel:
         private int offset = 20;
         public Panel drawingPanel;
-        public Graphe GraphDijkstra { get; private set; }
+        public Graphe graphDijkstra;
         public Dijkstra()
         {
             InitializeComponent();
@@ -48,17 +48,17 @@ namespace App
             Controls.Add(drawingPanel);
 
 
-            GraphDijkstra = new Graphe(this);
+            graphDijkstra = new Graphe(this);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            foreach (Sommet pt in GraphDijkstra.PointsToScan)
+            foreach (Sommet pt in graphDijkstra.PointsToScan)
             {
                 pt.Pt = Point2D(pt.Pt);
-                PlotPoint2D(pt, g, GraphDijkstra);
+                PlotPoint2D(pt, g, graphDijkstra);
             }
-            foreach (Arete r in GraphDijkstra.Relations)
+            foreach (Arete r in graphDijkstra.Aretes)
             {
                 TraceRelation(r, g);
             }
@@ -96,13 +96,13 @@ namespace App
             //aPen.EndCap = LineCap.RoundAnchor;
             aPen.DashStyle = DashStyle.Dash;
             aPen.DashOffset = 500;
-            Point ptf1 = r.Pt1.Pt;
-            Point ptf2 = r.Pt2.Pt;
+            Point ptf1 = r.S1.Pt;
+            Point ptf2 = r.S2.Pt;
             g.DrawLine(aPen, ptf1, ptf2);
             aPen.Dispose();
             Font f = new Font("Calibri", 10, FontStyle.Regular);
-            Point pt1 = r.Pt1.Pt;
-            Point pt2 = r.Pt2.Pt;
+            Point pt1 = r.S1.Pt;
+            Point pt2 = r.S2.Pt;
             Point milieu = new Point((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
             g.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }

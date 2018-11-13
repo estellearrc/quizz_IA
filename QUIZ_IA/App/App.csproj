@@ -53,6 +53,7 @@
     <Compile Include="Dijkstra.Designer.cs">
       <DependentUpon>Dijkstra.cs</DependentUpon>
     </Compile>
+    <Compile Include="GenericNode.cs" />
     <Compile Include="Graphe.cs" />
     <Compile Include="Sommet.cs" />
     <Compile Include="MainForm.cs">

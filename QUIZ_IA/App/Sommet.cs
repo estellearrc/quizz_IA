@@ -47,12 +47,18 @@ namespace App
 
         public override bool EndState()
         {
-            throw new NotImplementedException();
+            return IsEqual(MainForm.d.graphDijkstra.LastPoint);
         }
 
         public override List<GenericNode> GetListSucc()
         {
-            throw new NotImplementedException();
+            List<GenericNode> lsucc = new List<GenericNode>();
+
+            foreach(Arete a in MainForm.d.graphDijkstra.Aretes)
+            {
+                if(a.S1.IsEqual)
+            }
+            return lsucc;
         }
 
         public override double CalculeHCost()

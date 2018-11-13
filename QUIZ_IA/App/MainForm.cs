@@ -17,19 +17,21 @@ namespace App
         private IQuizRepository _quizRepository;
 
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
+        public static Dijkstra d;
+        public static Quiz _quiz;
         CheckBox[] lesCheckBoxes = null;
         public int compteur = 0;
-
+        
         public MainForm(IQuizRepository quizRepository)
         {
             InitializeComponent();
             _quizRepository = quizRepository;
-
+            _quiz = new Quiz(_quizRepository.GetAllQuestions());
             Size = new Size(550, 550); //dans le designer.cs
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            Dijkstra d = new Dijkstra();
-            d.Show();
+            //d = new Dijkstra();
+            //d.Show();
         }
 
 
@@ -136,7 +138,7 @@ namespace App
                     // on nettoie le form
                 }
                 //on affiche la question numéro "compteur"
-                Afficher_Question(_quizRepository.GetAllQuestions()[compteur]);
+                Afficher_Question(_quiz.LesQuestions[compteur]);
             }
             else if(btnValider.Text == "Valider"){
                 //corriger (voir si la reponse est correcte)

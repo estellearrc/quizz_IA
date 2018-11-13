@@ -14,7 +14,7 @@ namespace App
         public List<Sommet> PointsToScan { get; private set; }
         public List<Sommet> PointsScanned { get; private set; }
         public Sommet CurrentPoint { get; private set; }
-        public List<Arete> Relations { get; private set; }
+        public List<Arete> Aretes { get; private set; }
         public Sommet InitialPoint { get; private set; }
         public Sommet LastPoint { get; private set; }
         
@@ -23,7 +23,7 @@ namespace App
             PointsToScan = new List<Sommet>();
             GeneratePointList(d);
             PointsScanned = new List<Sommet>();
-            Relations = new List<Arete>();
+            Aretes = new List<Arete>();
             GenerateRelationList();
             CurrentPoint = PointsToScan.First();
             InitialPoint = PointsToScan.First();
@@ -52,13 +52,13 @@ namespace App
             int nbPoints = PointsToScan.Count;
             int nbRelMax = nbPoints * nbPoints;
             int nbRelations = 7; // rnd.Next(2 * nbPoints);
-            Relations.Add(new Arete(PointsToScan[0], PointsToScan[1]));
-            Relations.Add(new Arete(PointsToScan[0], PointsToScan[2]));
-            Relations.Add(new Arete(PointsToScan[0], PointsToScan[3]));
-            Relations.Add(new Arete(PointsToScan[1], PointsToScan[4]));
-            Relations.Add(new Arete(PointsToScan[2], PointsToScan[4]));
-            Relations.Add(new Arete(PointsToScan[4], PointsToScan[5]));
-            Relations.Add(new Arete(PointsToScan[5], PointsToScan[6]));
+            Aretes.Add(new Arete(PointsToScan[0], PointsToScan[1]));
+            Aretes.Add(new Arete(PointsToScan[0], PointsToScan[2]));
+            Aretes.Add(new Arete(PointsToScan[0], PointsToScan[3]));
+            Aretes.Add(new Arete(PointsToScan[1], PointsToScan[4]));
+            Aretes.Add(new Arete(PointsToScan[2], PointsToScan[4]));
+            Aretes.Add(new Arete(PointsToScan[4], PointsToScan[5]));
+            Aretes.Add(new Arete(PointsToScan[5], PointsToScan[6]));
             //for(int i = 0; i < nbRelations; i++)
             //{
             //    int index1 = rnd.Next(nbPoints);
