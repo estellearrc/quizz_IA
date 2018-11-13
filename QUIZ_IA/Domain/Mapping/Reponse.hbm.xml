@@ -9,7 +9,7 @@
       <generator class="native"></generator>
     </id>
     <property name="Intitule" column="intitule_rep" not-null="true"/>
-    <property name="Points" column="points" not-null="true"/>
+    <property name="EstCorrecte" column="est_correct" not-null="true"/>
   </class>
 
 </hibernate-mapping>

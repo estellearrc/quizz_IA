@@ -8,8 +8,9 @@
       <generator class="native"></generator>
     </id>
     <property name="Intitule" column="intitule_ques" not-null="true"/>
-    <property name="Image" column="image"/>
+    <property name="PieceJointe" column="piece_jointe"/>
     <property name="Type" column="type" not-null="true"/>
+    <property name="Points" column="point" not-null="true"/>
     <bag name="LesReponses" cascade="all" lazy="true">
       <key column="id_ques"/>
       <one-to-many class="Reponse"/>

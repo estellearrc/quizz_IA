@@ -14,21 +14,16 @@ namespace Domain
         public virtual int Id { get; set; }
 
         public virtual string Intitule { get; set; }
-
-        public virtual int Points { get; set; }
+        public virtual bool EstCorrecte { get; set; }
 
         public Reponse() { }
-
-        public Reponse(string intitule, int points)
+       
+        public Reponse(string intitule, bool estCorrecte)
         {
             Intitule = intitule;
-            Points = points;
+            EstCorrecte = estCorrecte;
         }
 
-        public virtual bool EstCorrecte()
-        {
-            return (Points == 0) ? false : true;
-        }
-
+       
     }
 }

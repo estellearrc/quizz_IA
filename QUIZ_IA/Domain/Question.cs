@@ -17,7 +17,7 @@ namespace Domain
 
         public virtual string Intitule { get; set; }
 
-        public virtual string Image { get; set; }
+        public virtual string PieceJointe { get; set; }
 
         public virtual IList<Reponse> LesReponses { get; set; }
 
@@ -27,31 +27,21 @@ namespace Domain
 
         public Question() { }
 
-        public Question(string intitule, List<Reponse> lesReponses, int type)
+        public Question(string intitule, List<Reponse> lesReponses, int type,int point)
         {
             Intitule = intitule;
             LesReponses = lesReponses;
             Type = (TypeQues)type;
-            int somme = 0;
-            foreach(Reponse rep in lesReponses)
-            {
-                somme += rep.Points;
-            }
-            Points = somme;
+            Points = point;
         }
 
-        public Question(string intitule, List<Reponse> lesReponses, string image, int type)
+        public Question(string intitule, List<Reponse> lesReponses, string pieceJointe, int type, int point)
         {
             Intitule = intitule;
             LesReponses = lesReponses;
             Type = (TypeQues)type;
-            Image = image;
-            int somme = 0;
-            foreach (Reponse rep in lesReponses)
-            {
-                somme += rep.Points;
-            }
-            Points = somme;
+            PieceJointe = pieceJointe;
+            Points = point;
         }
        
     }
