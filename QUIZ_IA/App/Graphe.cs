@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class Graphe
+    public class Graphe
     {
         public static Random rnd = new Random();
         public List<Sommet> PointsToScan { get; private set; }
