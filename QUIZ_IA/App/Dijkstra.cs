@@ -21,6 +21,7 @@ namespace App
         // Define the offset in pixel:
         private int offset = 20;
         public Panel drawingPanel;
+        public Graphe GraphDijkstra { get; private set; }
         public Dijkstra()
         {
             InitializeComponent();
@@ -45,17 +46,19 @@ namespace App
 
             Size = new Size(550, 550);
             Controls.Add(drawingPanel);
+
+
+            GraphDijkstra = new Graphe(this);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Graphe graphDijkstra = new Graphe(this);
-            foreach (Sommet pt in graphDijkstra.PointsToScan)
+            foreach (Sommet pt in GraphDijkstra.PointsToScan)
             {
                 pt.Pt = Point2D(pt.Pt);
-                PlotPoint2D(pt, g, graphDijkstra);
+                PlotPoint2D(pt, g, GraphDijkstra);
             }
-            foreach (Arete r in graphDijkstra.Relations)
+            foreach (Arete r in GraphDijkstra.Relations)
             {
                 TraceRelation(r, g);
             }
@@ -73,12 +76,12 @@ namespace App
             Point ptf = pt.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
             Brush b = Brushes.Black;
-            if(pt.Equals(gD.InitialPoint) || pt.Equals(gD.LastPoint))
+            if(pt.IsEqual(gD.InitialPoint) || pt.IsEqual(gD.LastPoint))
             {
                 b = Brushes.Blue;
             }
             g.DrawString(pt.Label, f, b, ptf);
-            if (pt.Equals(gD.CurrentPoint))
+            if (pt.IsEqual(gD.CurrentPoint))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
                 int w = 6;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class Arete
+    public class Arete
     {
         public Sommet Pt1 { get; private set; }
         public Sommet Pt2 { get; private set; }
