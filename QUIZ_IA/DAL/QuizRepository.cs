@@ -21,13 +21,11 @@ namespace DAL
             Random random = new Random();
             for (int i = 0; i<20;i++)
             {
-                int randomQuestion = random.Next(0, allQuestions.Capacity);
+                int randomQuestion = random.Next(0, allQuestions.Count);
                 twentyQuestions.Add(allQuestions[randomQuestion]);
                 allQuestions.Remove(allQuestions[randomQuestion]);
             }
             return twentyQuestions;
-
-
         }
         public int CalculateMaxMark()
         {
