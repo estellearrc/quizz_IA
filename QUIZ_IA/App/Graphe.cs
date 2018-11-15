@@ -24,7 +24,7 @@ namespace App
             GenerePoints(d);
             Closedpoints = new List<Sommet>();
             Aretes = new List<Arete>();
-            GenereAretes();
+            ConnectePoints();
             CurrentPoint = OpenPoints.First();
             InitialPoint = OpenPoints.First();
             LastPoint = OpenPoints.Last();
@@ -47,7 +47,7 @@ namespace App
             //    PointsToScan.Add(new LabelledPoint(x, y));
             //}
         }
-        public void GenereAretes()
+        public void ConnectePoints()
         {
             int nbPoints = OpenPoints.Count;
             int nbRelMax = nbPoints * nbPoints;

@@ -56,7 +56,6 @@ namespace App
 
         // Méthodes abstrates, donc à surcharger obligatoirement avec override dans une classe fille
         public abstract bool IsEqual(GenericNode N);
-        public abstract double GetArcCost(GenericNode N);
         public abstract bool EndState();
         public abstract List<GenericNode> GetListSucc();
         public abstract double CalculeHCost();

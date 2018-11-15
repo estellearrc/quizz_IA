@@ -14,7 +14,8 @@ namespace App
         private static int _LASTNUMBER = -1;
         public int Numero { get; private set; } //indice du sommet (unique)
         public string Label { get; private set; } //label du sommet
-        public Point Pt { get; set; } //coordonnées du sommet
+        public Point Pt { get; private set; } //coordonnées du sommet
+        public List<Arete> Incidences { get; private set; }
         public Sommet(int x, int y)
         {
             Pt = new Point(x, y);
@@ -28,6 +29,7 @@ namespace App
             {
                 Label = "P" + Numero;
             }
+            Incidences = new List<Arete>();
         }
         public override string ToString()
         {
@@ -39,12 +41,6 @@ namespace App
             Sommet pt = (Sommet)N;
             return Numero == pt.Numero;
         }
-
-        public override double GetArcCost(GenericNode N)
-        {
-            throw new NotImplementedException();
-        }
-
         public override bool EndState()
         {
             return IsEqual(MainForm.d.graphDijkstra.LastPoint);
