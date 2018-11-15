@@ -10,6 +10,10 @@ namespace App
 {
     public class Graphe
     {
+        //pour la génération automatique de graphes : gestion de plusieurs solutions possibles avec un simple Dijkstra ou A* : vérifier que le coût du chemin trouvé par l'utilisateur est égal à celui trouvé par l'algo
+        //distance minimale entre le poitn initial et le point final à respecter, genre min 5
+        //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
+        //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
         public static Random rnd = new Random();
         public List<Sommet> PointsOuverts { get; private set; } //liste des noeuds ouverts
         public List<Sommet> PointsFermes { get; private set; } //liste des noeuds fermés
