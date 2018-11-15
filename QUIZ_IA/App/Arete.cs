@@ -19,7 +19,7 @@ namespace App
         }
         public bool IsEqual(Arete a)
         {
-            return S1.IsEqual(a.S1) && S2.IsEqual(a.S2);
+            return (S1.IsEqual(a.S1) && S2.IsEqual(a.S2)) || (S2.IsEqual(a.S1) && S1.IsEqual(a.S2));
         }
         public override string ToString()
         {

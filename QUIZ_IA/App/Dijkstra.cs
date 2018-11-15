@@ -53,7 +53,7 @@ namespace App
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            foreach (Sommet pt in graphDijkstra.OpenPoints)
+            foreach (Sommet pt in graphDijkstra.PointsOuverts)
             {
                 pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt, g, graphDijkstra);
@@ -76,12 +76,12 @@ namespace App
             Point ptf = pt.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
             Brush b = Brushes.Black;
-            if(pt.IsEqual(gD.InitialPoint) || pt.IsEqual(gD.LastPoint))
+            if(pt.IsEqual(gD.PointInitial) || pt.IsEqual(gD.PointFinal))
             {
                 b = Brushes.Blue;
             }
             g.DrawString(pt.Label, f, b, ptf);
-            if (pt.IsEqual(gD.CurrentPoint))
+            if (pt.IsEqual(gD.PointActuel))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
                 int w = 6;

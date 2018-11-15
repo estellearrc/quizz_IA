@@ -9,46 +9,93 @@ using System.Windows.Forms;
 
 namespace App
 {
-    public class Sommet : GenericNode
+    public class Sommet
     {
-        private static int _LASTNUMBER = -1;
-        public int Numero { get; private set; } //indice du sommet (unique)
-        public string Label { get; private set; } //label du sommet
-        public Point Pt { get; private set; } //coordonnées du sommet
+        private static int _LASTNUMBER = -1; //numéro du dernier sommet créé
+
+        public int Numero { get; private set; }                 //indice du sommet (unique)
+        public string Label { get; private set; }               //label du sommet
+        public Point Pt { get; set; }                   //coordonnées du sommet
         public List<Arete> Incidences { get; private set; }
+        public int CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
+        public int CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
+        public int CoutTotal { get; private set; }           //coût total (g+h)
+        public List<Sommet> Enfants { get; protected set; }     // noeuds enfants
+        private Sommet _sommetParent;
+        public Sommet SommetParent                                // noeud parent
+        {
+            get
+            {
+                return _sommetParent;
+            }
+            set
+            {
+                SommetParent = value;
+                value.Enfants.Add(this);
+            }
+        }
+
+
         public Sommet(int x, int y)
         {
             Pt = new Point(x, y);
             _LASTNUMBER++;
             Numero = _LASTNUMBER;
-            if(Numero < MainForm.alphabet.Count())
+            Label = Label;
+            Incidences = new List<Arete>();
+            SommetParent = null;
+            Enfants = new List<Sommet>();
+        }
+        public string AttribueLabel()
+        {
+            string label;
+            if (Numero < MainForm.alphabet.Count())
             {
-                Label = MainForm.alphabet[Numero];
+                label = MainForm.alphabet[Numero];
             }
             else
             {
-                Label = "P" + Numero;
+                label = "P" + Numero;
             }
-            Incidences = new List<Arete>();
+            return label;
         }
         public override string ToString()
         {
             return Label;
         }
 
-        public override bool IsEqual(GenericNode N)
+        public void SupprimeLienParent()
         {
-            Sommet pt = (Sommet)N;
-            return Numero == pt.Numero;
-        }
-        public override bool EndState()
-        {
-            return IsEqual(MainForm.d.graphDijkstra.LastPoint);
+            if (SommetParent != null)
+            {
+                SommetParent.Enfants.Remove(this);
+                SommetParent = null;
+            }
         }
 
-        public override List<GenericNode> GetListSucc()
+        public void CalculCoutTotal()
         {
-            List<GenericNode> lsucc = new List<GenericNode>();
+            CoutHeuristique = CalculeHCost();
+            CoutTotal = CoutCumule + CoutHeuristique;
+        }
+
+        public void RecalculeCoutTotal()
+        {
+            CoutTotal = CoutCumule + CoutHeuristique;
+        }
+
+        public bool IsEqual(Sommet s)
+        {
+            return Numero == s.Numero;
+        }
+        public bool EndState()
+        {
+            return IsEqual(MainForm.d.graphDijkstra.PointFinal);
+        }
+
+        public List<Sommet> GetSuccesseurs()
+        {
+            List<Sommet> lsucc = new List<Sommet>();
 
             foreach(Arete a in MainForm.d.graphDijkstra.Aretes)
             {
@@ -67,7 +114,7 @@ namespace App
             return lsucc;
         }
 
-        public override double CalculeHCost()
+        public int CalculeHCost()
         {
             return 0;
         }

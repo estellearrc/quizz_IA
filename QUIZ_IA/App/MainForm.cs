@@ -101,7 +101,7 @@ namespace App
                     correction="Faux!Il fallait cocher:";
                     for (int i = 0; i < question.LesReponses.Count; i++)
                     {
-                        if (question.LesReponses[i].EstCorrecte())
+                        if (question.LesReponses[i].EstCorrecte)
                         {
                             correction += " " + alphabet[i];
                         }                                                                             

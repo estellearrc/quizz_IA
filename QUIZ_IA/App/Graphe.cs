@@ -11,34 +11,34 @@ namespace App
     public class Graphe
     {
         public static Random rnd = new Random();
-        public List<Sommet> OpenPoints { get; private set; } //liste des noeuds ouverts
-        public List<Sommet> Closedpoints { get; private set; } //liste des noeuds fermés
-        public Sommet CurrentPoint { get; private set; }
+        public List<Sommet> PointsOuverts { get; private set; } //liste des noeuds ouverts
+        public List<Sommet> PointsFermes { get; private set; } //liste des noeuds fermés
+        public Sommet PointActuel { get; private set; }
         public List<Arete> Aretes { get; private set; }
-        public Sommet InitialPoint { get; private set; }
-        public Sommet LastPoint { get; private set; }
+        public Sommet PointInitial { get; private set; }
+        public Sommet PointFinal { get; private set; }
         
         public Graphe(Dijkstra d)
         {
-            OpenPoints = new List<Sommet>();
+            PointsOuverts = new List<Sommet>();
             GenerePoints(d);
-            Closedpoints = new List<Sommet>();
+            PointsFermes = new List<Sommet>();
             Aretes = new List<Arete>();
             ConnectePoints();
-            CurrentPoint = OpenPoints.First();
-            InitialPoint = OpenPoints.First();
-            LastPoint = OpenPoints.Last();
+            PointActuel = PointsOuverts.First();
+            PointInitial = PointsOuverts.First();
+            PointFinal = PointsOuverts.Last();
         }
         public void GenerePoints(Dijkstra d)
         {
             int nbPoints = 7;
-            OpenPoints.Add(new Sommet(1, 1));
-            OpenPoints.Add(new Sommet(2, 5));
-            OpenPoints.Add(new Sommet(3, 3));
-            OpenPoints.Add(new Sommet(1, 4));
-            OpenPoints.Add(new Sommet(4, 6));
-            OpenPoints.Add(new Sommet(5, 7));
-            OpenPoints.Add(new Sommet(7, 7));
+            PointsOuverts.Add(new Sommet(1, 1));
+            PointsOuverts.Add(new Sommet(2, 5));
+            PointsOuverts.Add(new Sommet(3, 3));
+            PointsOuverts.Add(new Sommet(1, 4));
+            PointsOuverts.Add(new Sommet(4, 6));
+            PointsOuverts.Add(new Sommet(5, 7));
+            PointsOuverts.Add(new Sommet(7, 7));
             //int nbPoints = rnd.Next(5, LabelledPoint.alphabet.Length + 1);
             //for (int i = 0; i < nbPoints; i++)
             //{
@@ -49,16 +49,16 @@ namespace App
         }
         public void ConnectePoints()
         {
-            int nbPoints = OpenPoints.Count;
+            int nbPoints = PointsOuverts.Count;
             int nbRelMax = nbPoints * nbPoints;
             int nbRelations = 7; // rnd.Next(2 * nbPoints);
-            Aretes.Add(new Arete(OpenPoints[0], OpenPoints[1]));
-            Aretes.Add(new Arete(OpenPoints[0], OpenPoints[2]));
-            Aretes.Add(new Arete(OpenPoints[0], OpenPoints[3]));
-            Aretes.Add(new Arete(OpenPoints[1], OpenPoints[4]));
-            Aretes.Add(new Arete(OpenPoints[2], OpenPoints[4]));
-            Aretes.Add(new Arete(OpenPoints[4], OpenPoints[5]));
-            Aretes.Add(new Arete(OpenPoints[5], OpenPoints[6]));
+            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[1]));
+            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[2]));
+            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[3]));
+            Aretes.Add(new Arete(PointsOuverts[1], PointsOuverts[4]));
+            Aretes.Add(new Arete(PointsOuverts[2], PointsOuverts[4]));
+            Aretes.Add(new Arete(PointsOuverts[4], PointsOuverts[5]));
+            Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
             //for(int i = 0; i < nbRelations; i++)
             //{
             //    int index1 = rnd.Next(nbPoints);
@@ -67,35 +67,35 @@ namespace App
             //}
         }
 
-        public List<GenericNode> RechercheSolutionAEtoile(GenericNode N0)
+        public List<Sommet> RechercheSolutionAEtoile(Sommet s0)
         {
-            OpenPoints = new List<GenericNode>();
-            Closedpoints = new List<GenericNode>();
+            PointsOuverts = new List<Sommet>();
+            PointsFermes = new List<Sommet>();
             // Le noeud passé en paramètre est supposé être le noeud initial
-            GenericNode N = N0;
-            L_Ouverts.Add(N0);
+            Sommet s = s0;
+            PointsOuverts.Add(s0);
 
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
-            while (L_Ouverts.Count != 0 && N.EndState() == false)
+            while (PointsOuverts.Count != 0 && s.EndState() == false)
             {
                 // Le meilleur noeud des ouverts est supposé placé en tête de liste
                 // On le place dans les fermés
-                L_Ouverts.Remove(N);
-                L_Fermes.Add(N);
+                PointsOuverts.Remove(s);
+                PointsFermes.Add(s);
 
-                // Il faut trouver les noeuds successeurs de N
-                this.MAJSuccesseurs(N);
+                // Il faut trouver les noeuds successeurs de s
+                MAJSuccesseurs(s);
                 // Inutile de retrier car les insertions ont été faites en respectant l'ordre
 
                 // On prend le meilleur, donc celui en position 0, pour continuer à explorer les états
                 // A condition qu'il existe bien sûr
-                if (L_Ouverts.Count > 0)
+                if (PointsOuverts.Count > 0)
                 {
-                    N = L_Ouverts[0];
+                    s = PointsOuverts[0];
                 }
                 else
                 {
-                    N = null;
+                    s = null;
                 }
             }
 
@@ -103,122 +103,126 @@ namespace App
             // On retourne le chemin qui va du noeud initial au noeud final sous forme de liste
             // Le chemin est retrouvé en partant du noeud final et en accédant aux parents de manière
             // itérative jusqu'à ce qu'on tombe sur le noeud initial
-            List<GenericNode> _LN = new List<GenericNode>();
-            if (N != null)
+            List<Sommet> _LN = new List<Sommet>();
+            if (s != null)
             {
-                _LN.Add(N);
+                _LN.Add(s);
 
-                while (N != N0)
+                while (s != s0)
                 {
-                    N = N.GetNoeud_Parent();
-                    _LN.Insert(0, N);  // On insère en position 1
+                    s = s.SommetParent;
+                    _LN.Insert(0, s);  // On insère en position 1
                 }
             }
             return _LN;
         }
 
-        private void MAJSuccesseurs(GenericNode N)
+        private void MAJSuccesseurs(Sommet s)
         {
             // On fait appel à GetListSucc, méthode abstraite qu'on doit réécrire pour chaque
-            // problème. Elle doit retourner la liste complète des noeuds successeurs de N.
-            List<GenericNode> listsucc = N.GetListSucc();
-            foreach (GenericNode N2 in listsucc)
+            // problème. Elle doit retourner la liste complète des noeuds successeurs de s.
+            List<Sommet> listsucc = s.GetSuccesseurs();
+            foreach (Sommet succ in listsucc)
             {
-                // N2 est-il une copie d'un nœud déjà vu et placé dans la liste des fermés ?
-                GenericNode N2bis = ChercheNodeDansFermes(N2);
-                if (N2bis == null)
+                // succ est-il une copie d'un nœud déjà vu et placé dans la liste des fermés ?
+                Sommet succBis = PointsFermes.Find(x => x.IsEqual(succ));
+                if (succBis == null)
                 {
                     // Rien dans les fermés. Est-il dans les ouverts ?
-                    N2bis = ChercheNodeDansOuverts(N2);
-                    if (N2bis != null)
+                    succBis = PointsOuverts.Find(x => x.IsEqual(succ));
+                    if (succBis != null)
                     {
-                        // Il existe, donc on l'a déjà vu, N2 n'est qu'une copie de N2Bis
-                        // Le nouveau chemin passant par N est-il meilleur ?
-                        if (N.GetGCost() + N.GetArcCost(N2) < N2bis.GetGCost())
+                        // Il existe, donc on l'a déjà vu, succ n'est qu'une copie de N2Bis
+                        // Le nouveau chemin passant par s est-il meilleur ?
+                        if (s.CoutCumule + RetrouveArete(s,succ).Cout < succBis.CoutCumule)
                         {
-                            // Mise à jour de N2bis
-                            N2bis.SetGCost(N.GetGCost() + N.GetArcCost(N2));
+                            // Mise à jour de succBis
+                            succBis.CoutCumule = s.CoutCumule + RetrouveArete(s, succ).Cout;
                             // HCost pas recalculé car toujours bon
-                            N2bis.RecalculeCoutTotal(); // somme de GCost et HCost
+                            succBis.RecalculeCoutTotal(); // somme de CoutCumule et CoutHeuristique
                             // Mise à jour de la famille ....
-                            N2bis.Supprime_Liens_Parent();
-                            N2bis.SetNoeud_Parent(N);
+                            succBis.SupprimeLienParent();
+                            succBis.SommetParent = s;
                             // Mise à jour des ouverts
-                            L_Ouverts.Remove(N2bis);
-                            this.InsertNewNodeInOpenList(N2bis);
+                            PointsOuverts.Remove(succBis);
+                            InsertNewNodeInOpenList(succBis);
                         }
                         // else on ne fait rien, car le nouveau chemin est moins bon
                     }
                     else
                     {
-                        // N2 est nouveau, MAJ et insertion dans les ouverts
-                        N2.SetGCost(N.GetGCost() + N.GetArcCost(N2));
-                        N2.SetNoeud_Parent(N);
-                        N2.calculCoutTotal(); // somme de GCost et HCost
-                        this.InsertNewNodeInOpenList(N2);
+                        // succ est nouveau, MAJ et insertion dans les ouverts
+                        succ.CoutCumule = s.CoutCumule + RetrouveArete(s, succ).Cout;
+                        succ.SommetParent = s;
+                        succ.CalculCoutTotal(); // somme de GCost et HCost
+                        InsertNewNodeInOpenList(succ);
                     }
                 }
                 // else il est dans les fermés donc on ne fait rien,
-                // car on a déjà trouvé le plus court chemin pour aller en N2
+                // car on a déjà trouvé le plus court chemin pour aller en succ
             }
         }
 
-        public void InsertNewNodeInOpenList(GenericNode NewNode)
+        public void InsertNewNodeInOpenList(Sommet NewNode)
         {
             // Insertion pour respecter l'ordre du cout total le plus petit au plus grand
-            if (this.L_Ouverts.Count == 0)
-            { L_Ouverts.Add(NewNode); }
+            if (this.PointsOuverts.Count == 0)
+            { PointsOuverts.Add(NewNode); }
             else
             {
-                GenericNode N = L_Ouverts[0];
+                Sommet s = PointsOuverts[0];
                 bool trouve = false;
                 int i = 0;
                 do
-                    if (NewNode.Cout_Total < N.Cout_Total)
+                    if (NewNode.CoutTotal < s.CoutTotal)
                     {
-                        L_Ouverts.Insert(i, NewNode);
+                        PointsOuverts.Insert(i, NewNode);
                         trouve = true;
                     }
                     else
                     {
                         i++;
-                        if (L_Ouverts.Count == i)
+                        if (PointsOuverts.Count == i)
                         {
-                            N = null;
-                            L_Ouverts.Insert(i, NewNode);
+                            s = null;
+                            PointsOuverts.Insert(i, NewNode);
                         }
                         else
-                        { N = L_Ouverts[i]; }
+                        { s = PointsOuverts[i]; }
                     }
-                while ((N != null) && (trouve == false));
+                while ((s != null) && (trouve == false));
             }
+        }
+        public Arete RetrouveArete(Sommet s1, Sommet s2)
+        {
+            return Aretes.Find(x => x.IsEqual(new Arete(s1, s2)));
         }
 
         // Si on veut afficher l'arbre de recherche, il suffit de passer un treeview en paramètres
         // Celui-ci est mis à jour avec les noeuds de la liste des fermés, on ne tient pas compte des ouverts
-        public void GetSearchTree(TreeView TV)
-        {
-            if (L_Fermes == null) return;
-            if (L_Fermes.Count == 0) return;
+        //public void GetSearchTree(TreeView TV)
+        //{
+        //    if (PointsFermes == null) return;
+        //    if (PointsFermes.Count == 0) return;
 
-            // On suppose le TreeView préexistant
-            TV.Nodes.Clear();
+        //    // On suppose le TreeView préexistant
+        //    TV.Nodes.Clear();
 
-            TreeNode TN = new TreeNode(L_Fermes[0].ToString());
-            TV.Nodes.Add(TN);
+        //    TreeNode TN = new TreeNode(PointsFermes[0].ToString());
+        //    TV.Nodes.Add(TN);
 
-            AjouteBranche(L_Fermes[0], TN);
-        }
+        //    AjouteBranche(PointsFermes[0], TN);
+        //}
 
-        // AjouteBranche est exclusivement appelée par GetSearchTree; les noeuds sont ajoutés de manière récursive
-        private void AjouteBranche(GenericNode GN, TreeNode TN)
-        {
-            foreach (GenericNode GNfils in GN.GetEnfants())
-            {
-                TreeNode TNfils = new TreeNode(GNfils.ToString());
-                TN.Nodes.Add(TNfils);
-                if (GNfils.GetEnfants().Count > 0) AjouteBranche(GNfils, TNfils);
-            }
-        }
+        //// AjouteBranche est exclusivement appelée par GetSearchTree; les noeuds sont ajoutés de manière récursive
+        //private void AjouteBranche(Sommet GN, TreeNode TN)
+        //{
+        //    foreach (Sommet GNfils in GN.Enfants)
+        //    {
+        //        TreeNode TNfils = new TreeNode(GNfils.ToString());
+        //        TN.Nodes.Add(TNfils);
+        //        if (GNfils.Enfants.Count > 0) AjouteBranche(GNfils, TNfils);
+        //    }
+        //}
     }
 }
