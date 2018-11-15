@@ -53,7 +53,7 @@ namespace App
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            foreach (Sommet pt in graphDijkstra.PointsToScan)
+            foreach (Sommet pt in graphDijkstra.OpenPoints)
             {
                 pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt, g, graphDijkstra);
