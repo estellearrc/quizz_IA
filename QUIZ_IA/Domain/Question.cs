@@ -27,12 +27,12 @@ namespace Domain
 
         public Question() { }
 
-        public Question(string intitule, List<Reponse> lesReponses, int type,int point)
+        public Question(string intitule, List<Reponse> lesReponses, int type,int points)
         {
             Intitule = intitule;
             LesReponses = lesReponses;
             Type = (TypeQues)type;
-            Points = point;
+            Points = points;
         }
 
         public Question(string intitule, List<Reponse> lesReponses, string pieceJointe, int type, int point)

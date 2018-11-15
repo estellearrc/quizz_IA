@@ -15,7 +15,7 @@ namespace App
         {
             S1 = s1;
             S2 = s2;
-            Cout = CalculeDistance();
+            Cout = S1.CalculeDistance(S2);
         }
         public bool IsEqual(Arete a)
         {
