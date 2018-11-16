@@ -29,7 +29,7 @@ namespace DAL
         }
         public int CalculateMaxMark()
         {
-            string requete = "SELECT SUM(points) FROM reponse";
+            string requete = "SELECT SUM(point) FROM question";
             string result = Session.CreateSQLQuery(requete).ToString();
             return Convert.ToInt32(result);
         }

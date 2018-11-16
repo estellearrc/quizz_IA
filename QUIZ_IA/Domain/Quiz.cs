@@ -25,9 +25,9 @@ namespace Domain
             Score += points;
         }
 
-        public void NoteSur20()
+        public void NoteSur20(int noteMax)
         {
-            Score = (Score * 20) / 33;  //penser à faire une requete pour obtenir le 33 c'est moche de coder en dur
+            Score = (Score * 20) / noteMax; 
         }
 
     }

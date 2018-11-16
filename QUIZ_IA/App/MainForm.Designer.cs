@@ -38,6 +38,7 @@
             // 
             this.txtQuestion.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.txtQuestion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtQuestion.Enabled = false;
             this.txtQuestion.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtQuestion.Location = new System.Drawing.Point(31, 53);
             this.txtQuestion.Multiline = true;

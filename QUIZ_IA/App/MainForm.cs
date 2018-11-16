@@ -36,7 +36,7 @@ namespace App
 
         private void Affiche_Score()
         {
-            _quiz.NoteSur20();
+            _quiz.NoteSur20(_quizRepository.CalculateMaxMark());
             txtQuestion.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             txtQuestion.Text = "Note obtenue: " + _quiz.Score + "/20";
         }
