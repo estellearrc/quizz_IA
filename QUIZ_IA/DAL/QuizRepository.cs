@@ -30,7 +30,7 @@ namespace DAL
         public int CalculateMaxMark()
         {
             string requete = "SELECT SUM(points) FROM reponse";
-            string result = Session.CreateSQLQuery(requete).ToString();
+            NHibernate.ISQLQuery result = Session.CreateSQLQuery(requete);
             return Convert.ToInt32(result);
         }
     }

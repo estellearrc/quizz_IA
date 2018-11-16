@@ -14,6 +14,7 @@ namespace App
         //distance minimale entre le poitn initial et le point final à respecter, genre min 5
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
+
         public static Random rnd = new Random();
         public List<Sommet> PointsOuverts { get; private set; } //liste des noeuds ouverts
         public List<Sommet> PointsFermes { get; private set; } //liste des noeuds fermés
