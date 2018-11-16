@@ -67,7 +67,11 @@ namespace App
             {
                 int x = rnd.Next(d.xMin + 1, d.xMax);
                 int y = rnd.Next(d.yMin + 1, d.yMax);
-                PointsOuverts.Add(new Sommet(x, y));
+                Sommet s = new Sommet(x, y);
+                if(!PointsOuverts.Contains(s))
+                {
+                    PointsOuverts.Add(s);
+                }
             }
         }
         /// <summary>
@@ -75,10 +79,11 @@ namespace App
         /// </summary>
         public void ConnecteSommets()
         {
-            for(int i = 0; i < PointsOuverts.Count; i++)
+            int n = PointsOuverts.Count;
+            for (int i = 0; i < n; i++)
             {
                 Sommet s1 = PointsOuverts[i];
-                for(int j = i + 1; j < PointsOuverts.Count; i++) //Parcours "en triangle"
+                for(int j = i + 1; j < n; j++) //Parcours "en triangle"
                 {
                     Sommet s2 = PointsOuverts[j];
                     if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
@@ -108,7 +113,7 @@ namespace App
             {
                 if (s.CalculeDistance(s1) < r && s.CalculeDistance(s2) < r) //Évaluation paresseuse plutôt que de rechercher le maximum
                 {
-                    if (s != s1 && s != s2) //Pour ne pas tester le sommet avec lui-même ; condition testée en second
+                    if (!s.IsEqual(s1) && !s.IsEqual(s2)) //Pour ne pas tester le sommet avec lui-même ; condition testée en second
                     {
                         return false; //Sortie de boucle si un sommet est dans le domaine d'exclusion
                     }

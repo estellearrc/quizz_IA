@@ -72,22 +72,22 @@ namespace App
             aPoint.Y = zoneDessin.Height - (ptf.Y - yMin) * zoneDessin.Height / (yMax - yMin);
             return aPoint;
         }
-        private void PlotPoint2D(Sommet pt, Graphics g, Graphe gD)
+        private void PlotPoint2D(Sommet s, Graphics g, Graphe gD)
         {
-            Point ptf = pt.Pt;
+            Point ptf = s.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
             Brush b = Brushes.Black;
-            if(pt.IsEqual(gD.PointInitial) || pt.IsEqual(gD.PointFinal))
+            if(s.IsEqual(gD.PointInitial) || s.IsEqual(gD.PointFinal))
             {
                 b = Brushes.Blue;
             }
-            g.DrawString(pt.Label, f, b, ptf);
-            if (pt.IsEqual(gD.PointActuel))
+            if (s.IsEqual(gD.PointActuel))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
                 int w = 6;
                 g.FillRectangle(aBrush, ptf.X - w / 2, ptf.Y - w / 2, w, w);
             }
+            g.DrawString(s.Label, f, b, ptf);
         }
         private void TraceArete(Arete r, Graphics g)
         {
