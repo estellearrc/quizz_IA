@@ -11,7 +11,7 @@ namespace App
     public class Graphe
     {
         //pour la génération automatique de graphes : gestion de plusieurs solutions possibles avec un simple Dijkstra ou A* : vérifier que le coût du chemin trouvé par l'utilisateur est égal à celui trouvé par l'algo
-        //distance minimale entre le poitn initial et le point final à respecter, genre min 5
+        //distance minimale entre le point initial et le point final à respecter, genre min 5
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
 
@@ -26,52 +26,96 @@ namespace App
         public Graphe(Dijkstra d)
         {
             PointsOuverts = new List<Sommet>();
-            GenerePoints(d);
+            GenereSommets(d);
             PointsFermes = new List<Sommet>();
             Aretes = new List<Arete>();
-            ConnectePoints();
-            PointActuel = PointsOuverts.First();
-            PointInitial = PointsOuverts.First();
-            PointFinal = PointsOuverts.Last();
+            ConnecteSommets();
+            PointInitial = DeterminePointInitial();
+            PointActuel = PointInitial;
+            PointFinal = DeterminePointFinal();
         }
-        public void GenerePoints(Dijkstra d)
+        public Sommet DeterminePointFinal()
         {
-            int nbPoints = 7;
-            PointsOuverts.Add(new Sommet(1, 1));
-            PointsOuverts.Add(new Sommet(2, 5));
-            PointsOuverts.Add(new Sommet(3, 3));
-            PointsOuverts.Add(new Sommet(1, 4));
-            PointsOuverts.Add(new Sommet(4, 6));
-            PointsOuverts.Add(new Sommet(5, 7));
-            PointsOuverts.Add(new Sommet(7, 7));
-            //int nbPoints = rnd.Next(5, LabelledPoint.alphabet.Length + 1);
-            //for (int i = 0; i < nbPoints; i++)
-            //{
-            //    float x = rnd.Next((int)d.xMin + 1, (int)d.xMax);
-            //    float y = rnd.Next((int)d.yMin + 1 , (int)d.yMax);
-            //    PointsToScan.Add(new LabelledPoint(x, y));
-            //}
+            Sommet s;
+            do
+            {
+                int n = PointsOuverts.Count;
+                int k = rnd.Next(n);
+                s = PointsOuverts[k];
+            }
+            while (s.CalculeDistance(PointInitial) < 5);
+            return s;
         }
-        public void ConnectePoints()
+        public Sommet DeterminePointInitial()
         {
-            int nbPoints = PointsOuverts.Count;
-            int nbRelMax = nbPoints * nbPoints;
-            int nbRelations = 7; // rnd.Next(2 * nbPoints);
-            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[1]));
-            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[2]));
-            Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[3]));
-            Aretes.Add(new Arete(PointsOuverts[1], PointsOuverts[4]));
-            Aretes.Add(new Arete(PointsOuverts[2], PointsOuverts[4]));
-            Aretes.Add(new Arete(PointsOuverts[4], PointsOuverts[5]));
-            Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
-            //for(int i = 0; i < nbRelations; i++)
-            //{
-            //    int index1 = rnd.Next(nbPoints);
-            //    int index2 = rnd.Next(nbPoints);
-            //    Relations.Add(new Relation(PointsToScan[index1], PointsToScan[index2]));
-            //}
+            int n = PointsOuverts.Count;
+            int i = rnd.Next(n);
+            return PointsOuverts[i];
         }
-
+        public void GenereSommets(Dijkstra d)
+        {
+            //int nbPoints = 7;
+            //PointsOuverts.Add(new Sommet(1, 1));
+            //PointsOuverts.Add(new Sommet(2, 5));
+            //PointsOuverts.Add(new Sommet(3, 3));
+            //PointsOuverts.Add(new Sommet(1, 4));
+            //PointsOuverts.Add(new Sommet(4, 6));
+            //PointsOuverts.Add(new Sommet(5, 7));
+            //PointsOuverts.Add(new Sommet(7, 7));
+            int nbPoints = rnd.Next(5, MainForm.alphabet.Length + 1);
+            for (int i = 0; i < nbPoints; i++)
+            {
+                int x = rnd.Next(d.xMin + 1, d.xMax);
+                int y = rnd.Next(d.yMin + 1, d.yMax);
+                PointsOuverts.Add(new Sommet(x, y));
+            }
+        }
+        /// <summary>
+        /// Génère le Graphe de Voisinage Relatif (GVR) d'après le nuage de points PointsOuverts
+        /// </summary>
+        public void ConnecteSommets()
+        {
+            for(int i = 0; i < PointsOuverts.Count; i++)
+            {
+                Sommet s1 = PointsOuverts[i];
+                for(int j = i + 1; j < PointsOuverts.Count; i++) //Parcours "en triangle"
+                {
+                    Sommet s2 = PointsOuverts[j];
+                    if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
+                    {
+                        Aretes.Add(new Arete(s1, s2));
+                    }
+                }
+            }
+            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[1]));
+            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[2]));
+            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[3]));
+            //Aretes.Add(new Arete(PointsOuverts[1], PointsOuverts[4]));
+            //Aretes.Add(new Arete(PointsOuverts[2], PointsOuverts[4]));
+            //Aretes.Add(new Arete(PointsOuverts[4], PointsOuverts[5]));
+            //Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
+        }
+        /// <summary>
+        /// Prédicat vrai ssi le graphe de voisinage relatif comporte l'arête entre s1 et s2
+        /// </summary>
+        /// <param name="s1"></param>
+        /// <param name="s2"></param>
+        /// <returns></returns>
+        public bool DoiventEtreRelies(Sommet s1, Sommet s2)
+        {
+            int r = s1.CalculeDistance(s2); //Rayon des cercles dont l'intersection est le domaine d'exclusion
+            foreach (Sommet s in PointsOuverts)
+            {
+                if (s.CalculeDistance(s1) < r && s.CalculeDistance(s2) < r) //Évaluation paresseuse plutôt que de rechercher le maximum
+                {
+                    if (s != s1 && s != s2) //Pour ne pas tester le sommet avec lui-même ; condition testée en second
+                    {
+                        return false; //Sortie de boucle si un sommet est dans le domaine d'exclusion
+                    }
+                }
+            }
+            return true;
+        }
         public List<Sommet> RechercheSolutionAEtoile(Sommet s0)
         {
             PointsOuverts = new List<Sommet>();
@@ -108,18 +152,18 @@ namespace App
             // On retourne le chemin qui va du noeud initial au noeud final sous forme de liste
             // Le chemin est retrouvé en partant du noeud final et en accédant aux parents de manière
             // itérative jusqu'à ce qu'on tombe sur le noeud initial
-            List<Sommet> _LN = new List<Sommet>();
+            List<Sommet> sommets = new List<Sommet>();
             if (s != null)
             {
-                _LN.Add(s);
+                sommets.Add(s);
 
                 while (s != s0)
                 {
                     s = s.SommetParent;
-                    _LN.Insert(0, s);  // On insère en position 1
+                    sommets.Insert(0, s);  // On insère en position 1
                 }
             }
-            return _LN;
+            return sommets;
         }
 
         private void MAJSuccesseurs(Sommet s)

@@ -20,55 +20,56 @@ namespace App
         public int yMax = 10;
         // Define the offset in pixel:
         private int offset = 20;
-        public Panel drawingPanel;
-        public Graphe graphDijkstra;
+        public static Panel zoneDessin; //design context = zone de dessin
+        public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
+        public static Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
         public Dijkstra()
         {
+            //Initialisation des composants et de la fenêtre client
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
-
-
-            drawingPanel = new Panel();
-            drawingPanel.Location = new Point(0, 0);
-            // Subscribing to a paint eventhandler to drawingPanel:
-            drawingPanel.Paint += new PaintEventHandler(DrawingPanel_Paint);
-            drawingPanel.BackColor = Color.White;
-            drawingPanel.BorderStyle = BorderStyle.FixedSingle;
-            drawingPanel.Anchor = AnchorStyles.Bottom;
-            drawingPanel.Anchor = AnchorStyles.Left;
-            drawingPanel.Anchor = AnchorStyles.Right;
-            drawingPanel.Anchor = AnchorStyles.Top;
-            drawingPanel.Left = offset;
-            drawingPanel.Top = offset;
-            drawingPanel.Width = ClientRectangle.Width - 2 * offset;
-            drawingPanel.Height = ClientRectangle.Height - 14 * offset;
-
-
             Size = new Size(550, 550);
-            Controls.Add(drawingPanel);
 
+            //Ajout d'une zone de dessin drawingPanel
+            zoneDessin = new Panel();
+            zoneDessin.Location = new Point(0, 0);
+            // Subscribing to a paint eventhandler to drawingPanel:
+            zoneDessin.Paint += new PaintEventHandler(DrawingPanel_Paint);
+            zoneDessin.BackColor = Color.White;
+            zoneDessin.BorderStyle = BorderStyle.FixedSingle;
+            zoneDessin.Anchor = AnchorStyles.Bottom;
+            zoneDessin.Anchor = AnchorStyles.Left;
+            zoneDessin.Anchor = AnchorStyles.Right;
+            zoneDessin.Anchor = AnchorStyles.Top;
+            zoneDessin.Left = offset;
+            zoneDessin.Top = offset;
+            zoneDessin.Width = ClientRectangle.Width - 2 * offset;
+            zoneDessin.Height = ClientRectangle.Height - 14 * offset;
+            Controls.Add(zoneDessin);
 
-            graphDijkstra = new Graphe(this);
+            //Création du graphe à afficher dans le drawing panel
+            grapheDijkstra = new Graphe(this);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
-            foreach (Sommet pt in graphDijkstra.PointsOuverts)
+            //Obtient le graphique WinForm utilisé pour dessiner dedans
+            dessin = e.Graphics;
+            foreach (Sommet pt in grapheDijkstra.PointsOuverts)
             {
                 pt.Pt = Point2D(pt.Pt);
-                PlotPoint2D(pt, g, graphDijkstra);
+                PlotPoint2D(pt, dessin, grapheDijkstra);
             }
-            foreach (Arete r in graphDijkstra.Aretes)
+            foreach (Arete r in grapheDijkstra.Aretes)
             {
-                TraceRelation(r, g);
+                TraceArete(r, dessin);
             }
-            g.Dispose();
+            dessin.Dispose();
         }
         private Point Point2D(Point ptf)
         {
             Point aPoint = new Point();
-            aPoint.X = (ptf.X - xMin) * drawingPanel.Width / (xMax - xMin);
-            aPoint.Y = drawingPanel.Height - (ptf.Y - yMin) * drawingPanel.Height / (yMax - yMin);
+            aPoint.X = (ptf.X - xMin) * zoneDessin.Width / (xMax - xMin);
+            aPoint.Y = zoneDessin.Height - (ptf.Y - yMin) * zoneDessin.Height / (yMax - yMin);
             return aPoint;
         }
         private void PlotPoint2D(Sommet pt, Graphics g, Graphe gD)
@@ -88,7 +89,7 @@ namespace App
                 g.FillRectangle(aBrush, ptf.X - w / 2, ptf.Y - w / 2, w, w);
             }
         }
-        private void TraceRelation(Arete r, Graphics g)
+        private void TraceArete(Arete r, Graphics g)
         {
             Pen aPen = new Pen(Color.Black, 2);
             // Set line caps and dash style:

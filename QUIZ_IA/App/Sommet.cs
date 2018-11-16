@@ -20,7 +20,7 @@ namespace App
         public int CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
         public int CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
         public int CoutTotal { get; private set; }           //coût total (g+h)
-        public List<Sommet> Enfants { get; protected set; }     // noeuds enfants
+        public List<Sommet> Enfants { get; private set; }     // noeuds enfants
         private Sommet _sommetParent;
         public Sommet SommetParent                                // noeud parent
         {
@@ -30,12 +30,11 @@ namespace App
             }
             set
             {
-                SommetParent = value;
-                value.Enfants.Add(this);
+                _sommetParent = value;
+                if(_sommetParent != null)
+                    value.Enfants.Add(this);
             }
         }
-
-
         public Sommet(int x, int y)
         {
             Pt = new Point(x, y);
@@ -90,14 +89,14 @@ namespace App
         }
         public bool EndState()
         {
-            return IsEqual(MainForm.d.graphDijkstra.PointFinal);
+            return IsEqual(Dijkstra.grapheDijkstra.PointFinal);
         }
 
         public List<Sommet> GetSuccesseurs()
         {
             List<Sommet> lsucc = new List<Sommet>();
 
-            foreach(Arete a in MainForm.d.graphDijkstra.Aretes)
+            foreach(Arete a in Dijkstra.grapheDijkstra.Aretes)
             {
                 if(IsEqual(a.S1))
                 {

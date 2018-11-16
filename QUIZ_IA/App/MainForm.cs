@@ -30,8 +30,8 @@ namespace App
             Size = new Size(550, 550); //dans le designer.cs
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            //d = new Dijkstra();
-            //d.Show();
+            d = new Dijkstra();
+            d.Show();
         }
 
         private void Affiche_Score()
