@@ -34,38 +34,45 @@ namespace App
             //d.Show();
         }
 
-
+        private void Affiche_Score()
+        {
+            _quiz.NoteSur20();
+            txtQuestion.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            txtQuestion.Text = "Note obtenue: " + _quiz.Score + "/20";
+        }
         private void Afficher_Question(Question question)
         {
             if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
             {
 
                 btnValider.Text = "Valider";
-                txtQuestion.Text = question.Intitule;
-                if (question.Type == Question.TypeQues.QCM)
-                { 
-                    CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                    lesCheckBoxes = new CheckBox[question.LesReponses.Count];
-
-                    for (int i = 0; i < question.LesReponses.Count; i++)
-                    {
-                        checkBoxes[i] = new CheckBox();
-                        checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                        checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
-                        checkBoxes[i].AutoSize = true;
-                        this.Controls.Add(checkBoxes[i]);
-                    }
-                }
-
-                if (question.Type == Question.TypeQues.QCM)
+                txtQuestion.Text = @question.Intitule;
+                if (question.Type == Question.TypeQues.QCM)// pour les qcm
                 {
-                    for (int i = 0; i < question.LesReponses.Count; i++)
+                    if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
                     {
 
                     }
+                    else
+                    {
+                        CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
+                        lesCheckBoxes = new CheckBox[question.LesReponses.Count];
+
+                        for (int i = 0; i < question.LesReponses.Count; i++)
+                        {
+                            checkBoxes[i] = new CheckBox();
+                            checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                            checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
+                            checkBoxes[i].AutoSize = true;
+                            this.Controls.Add(checkBoxes[i]);
+                            lesCheckBoxes[i] = checkBoxes[i];
+                        }
+                    }
                 }
 
-                if (question.Type == Question.TypeQues.saisieNum)
+
+
+                if (question.Type == Question.TypeQues.saisieNum)// pour la saisie numérique
                 {
 
                 }
@@ -74,7 +81,8 @@ namespace App
             }
         }
 
-        private bool Correction(Question question )
+
+        private bool Correction(Question question)
         {
             bool juste = true;
             // compter les points 
@@ -82,31 +90,47 @@ namespace App
             {
 
             }
+            if (question.Type == Question.TypeQues.QCM)
+            {
+                for (int i = 0; i < question.LesReponses.Count; i++)
+                {
+                    if ((lesCheckBoxes[i].Checked && !question.LesReponses[i].EstCorrecte) || (!lesCheckBoxes[i].Checked && question.LesReponses[i].EstCorrecte))
+                    {
+                        juste = false;
+                    }
+                }
+            }
             return juste;
+
         }
-        private void Affiche_Correction(Question question, bool avoirJuste) {
+
+    
+
+        private void Affiche_Correction(Question question, bool avoirJuste)
+        {
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
             {
-                couleurtxt= Color.FromKnownColor(KnownColor.Red);
+
                 txtBoxCorrection.Text = "C'est ça ! BRAVO !";
                 txtBoxCorrection.ForeColor = couleurtxt;
             }
             else
             {
+                couleurtxt = Color.FromKnownColor(KnownColor.Red);
                 txtBoxCorrection.ForeColor = couleurtxt;
                 string correction = "";
                 if (question.Type == Question.TypeQues.QCM)
                 {
-                    correction="Faux!Il fallait cocher:";
+                    correction = "Faux! Il fallait cocher:";
                     for (int i = 0; i < question.LesReponses.Count; i++)
                     {
                         if (question.LesReponses[i].EstCorrecte)
                         {
                             correction += " " + alphabet[i];
-                        }                                                                             
+                        }
                     }
-                  
+
                 }
                 else
                 {
@@ -119,34 +143,71 @@ namespace App
         private void Nettoyer_Form()
         {
             txtBoxCorrection.Text = "";
+            textBxNumQuestion.Text = "";
             foreach (CheckBox checkbox in lesCheckBoxes)
             {
                 this.Controls.Remove(checkbox);
             }
 
-        }                    
-                     
-                    
+        }
+
+        private void MAJscore(Question question, bool estJuste)
+        {
+
+            if (question.Type == Question.TypeQues.saisieNum)// pour la saisie numérique
+            {
+
+            }
+            else if (question.Type == Question.TypeQues.QCM)// pour les qcm
+            {
+                if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
+                {
+
+                }
+                else
+                {
+                    if (estJuste)
+                    {
+                        _quiz.ActualiseScore(question.Points);
+                    }
+
+                }
+            }
+
+        }
         private void btnValider_Click(object sender, EventArgs e)
         {
-           
 
-            if (btnValider.Text == "Suivant"|| btnValider.Text == "Commencer")
+            if (btnValider.Text == "Terminer")
             {
-                if (btnValider.Text == "Suivant")
+                Application.Exit();
+            }
+            else if (compteur < _quiz.LesQuestions.Count)
+            {
+                if (btnValider.Text == "Suivant" || btnValider.Text == "Commencer")
                 {
-                    // on nettoie le form
+                    if (btnValider.Text == "Suivant")
+                    {
+                        Nettoyer_Form();
+                    }
+                    textBxNumQuestion.Text = "Question " + (compteur + 1) + "/" + _quiz.LesQuestions.Count;
+                    Afficher_Question(_quiz.LesQuestions[compteur]);
                 }
-                //on affiche la question numéro "compteur"
-                Afficher_Question(_quiz.LesQuestions[compteur]);
+                else
+                {
+                    btnValider.Text = "Suivant";
+                    Affiche_Correction(_quiz.LesQuestions[compteur], Correction(_quiz.LesQuestions[compteur]));
+                    MAJscore(_quiz.LesQuestions[compteur], Correction(_quiz.LesQuestions[compteur]));
+                    compteur++;
+                }
             }
-            else if(btnValider.Text == "Valider"){
-                //corriger (voir si la reponse est correcte)
-                //on met à jour les points
-                //afficher correction
-                compteur++;
-            }
+            else
+            {
+                btnValider.Text = "Terminer";
+                Nettoyer_Form();
+                Affiche_Score();
 
+            }
 
         }
     }

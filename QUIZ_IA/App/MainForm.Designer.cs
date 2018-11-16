@@ -31,6 +31,7 @@
             this.txtQuestion = new System.Windows.Forms.TextBox();
             this.btnValider = new System.Windows.Forms.Button();
             this.txtBoxCorrection = new System.Windows.Forms.TextBox();
+            this.textBxNumQuestion = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtQuestion
@@ -72,12 +73,23 @@
             this.txtBoxCorrection.TabIndex = 2;
             this.txtBoxCorrection.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // textBxNumQuestion
+            // 
+            this.textBxNumQuestion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBxNumQuestion.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBxNumQuestion.ForeColor = System.Drawing.Color.LightSeaGreen;
+            this.textBxNumQuestion.Location = new System.Drawing.Point(175, 20);
+            this.textBxNumQuestion.Name = "textBxNumQuestion";
+            this.textBxNumQuestion.Size = new System.Drawing.Size(174, 24);
+            this.textBxNumQuestion.TabIndex = 4;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(534, 512);
+            this.Controls.Add(this.textBxNumQuestion);
             this.Controls.Add(this.txtBoxCorrection);
             this.Controls.Add(this.btnValider);
             this.Controls.Add(this.txtQuestion);
@@ -95,6 +107,7 @@
         private System.Windows.Forms.TextBox txtQuestion;
         private System.Windows.Forms.Button btnValider;
         private System.Windows.Forms.TextBox txtBoxCorrection;
+        private System.Windows.Forms.TextBox textBxNumQuestion;
     }
 }
 
