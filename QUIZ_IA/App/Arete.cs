@@ -12,12 +12,12 @@ namespace App
     {
         public Sommet S1 { get; private set; }
         public Sommet S2 { get; private set; }
-        public int Cout { get; private set; }
+        public double Cout { get; private set; }
         public Arete(Sommet s1, Sommet s2)
         {
             S1 = s1;
             S2 = s2;
-            Cout = (int)S1.CalculeDistance(S2);
+            Cout = Math.Round(S1.CalculeDistance(S2),1);
         }
         public bool IsEqual(Arete a)
         {

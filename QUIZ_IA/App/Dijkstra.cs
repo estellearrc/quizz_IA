@@ -28,7 +28,7 @@ namespace App
             //Initialisation des composants et de la fenêtre client
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
-            Size = new Size(550, 550);
+            Size = new Size(700, 700);
 
             //Ajout d'une zone de dessin drawingPanel
             zoneDessin = new Panel();

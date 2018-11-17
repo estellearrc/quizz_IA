@@ -17,9 +17,9 @@ namespace App
         public string Label { get; private set; }               //label du sommet
         public PointF Pt { get; set; }                   //coordonnées du sommet
         public List<Arete> Incidences { get; private set; }
-        public int CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
-        public int CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
-        public int CoutTotal { get; private set; }           //coût total (g+h)
+        public double CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
+        public double CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
+        public double CoutTotal { get; private set; }           //coût total (g+h)
         public List<Sommet> Enfants { get; private set; }     // noeuds enfants
         private Sommet _sommetParent;
         public Sommet SommetParent                                // noeud parent
