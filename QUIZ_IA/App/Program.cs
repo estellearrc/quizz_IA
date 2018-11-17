@@ -10,7 +10,7 @@ namespace App
     static class Program
     {
         /// <summary>
-        /// Point d'entrée principal de l'application.
+        /// PointF d'entrée principal de l'application.
         /// </summary>
         [STAThread]
         static void Main()

@@ -15,7 +15,7 @@ namespace App
 
         public int Numero { get; private set; }                 //indice du sommet (unique)
         public string Label { get; private set; }               //label du sommet
-        public Point Pt { get; set; }                   //coordonnées du sommet
+        public PointF Pt { get; set; }                   //coordonnées du sommet
         public List<Arete> Incidences { get; private set; }
         public int CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
         public int CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
@@ -35,26 +35,29 @@ namespace App
                     value.Enfants.Add(this);
             }
         }
-        public Sommet(int x, int y)
+        public Sommet(float x, float y, bool addLabel)
         {
-            Pt = new Point(x, y);
+            Pt = new PointF(x, y);
             _LASTNUMBER++;
             Numero = _LASTNUMBER;
-            Label = Label;
+            Label = AttribueLabel(addLabel);
             Incidences = new List<Arete>();
             SommetParent = null;
             Enfants = new List<Sommet>();
         }
-        public string AttribueLabel()
+        public string AttribueLabel(bool addLabel)
         {
-            string label;
-            if (Numero < MainForm.alphabet.Count())
+            string label = "";
+            if (addLabel)
             {
-                label = MainForm.alphabet[Numero];
-            }
-            else
-            {
-                label = "P" + Numero;
+                if (Numero < MainForm.alphabet.Count())
+                {
+                    label = MainForm.alphabet[Numero];
+                }
+                else
+                {
+                    label = "P" + Numero;
+                }
             }
             return label;
         }
@@ -85,7 +88,7 @@ namespace App
 
         public bool IsEqual(Sommet s)
         {
-            return Numero == s.Numero;
+            return (Pt.Equals(s.Pt));
         }
         public bool EndState()
         {
@@ -117,13 +120,22 @@ namespace App
         {
             return 0;
         }
-        public int CalculeDistance(Sommet s)
+        public double CalculeDistance(Sommet s)
         {
             float x1 = Pt.X;
             float x2 = s.Pt.X;
             float y1 = Pt.Y;
             float y2 = s.Pt.Y;
-            return (int)Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
+            return Math.Sqrt(Math.Pow((x1 - x2), 2) + Math.Pow((y1 - y2), 2));
+        }
+        public Sommet CalculeMilieu(Sommet s)
+        {
+            float x1 = Pt.X;
+            float x2 = s.Pt.X;
+            float y1 = Pt.Y;
+            float y2 = s.Pt.Y;
+            Sommet milieu = new Sommet((x1 + x2) / 2, (y1 + y2) / 2, false);
+            return milieu;
         }
     }
 }

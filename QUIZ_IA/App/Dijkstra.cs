@@ -57,55 +57,53 @@ namespace App
             foreach (Sommet pt in grapheDijkstra.PointsOuverts)
             {
                 pt.Pt = Point2D(pt.Pt);
-                PlotPoint2D(pt, dessin, grapheDijkstra);
+                PlotPoint2D(pt);
             }
             foreach (Arete r in grapheDijkstra.Aretes)
             {
-                TraceArete(r, dessin);
+                TraceArete(r);
             }
             dessin.Dispose();
         }
-        private Point Point2D(Point ptf)
+        private PointF Point2D(PointF ptf)
         {
-            Point aPoint = new Point();
+            PointF aPoint = new PointF();
             aPoint.X = (ptf.X - xMin) * zoneDessin.Width / (xMax - xMin);
             aPoint.Y = zoneDessin.Height - (ptf.Y - yMin) * zoneDessin.Height / (yMax - yMin);
             return aPoint;
         }
-        private void PlotPoint2D(Sommet s, Graphics g, Graphe gD)
+        private void PlotPoint2D(Sommet s)
         {
-            Point ptf = s.Pt;
+            PointF ptf = s.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
             Brush b = Brushes.Black;
-            if(s.IsEqual(gD.PointInitial) || s.IsEqual(gD.PointFinal))
+            if(s.IsEqual(grapheDijkstra.PointInitial) || s.IsEqual(grapheDijkstra.PointFinal))
             {
                 b = Brushes.Blue;
             }
-            if (s.IsEqual(gD.PointActuel))
+            dessin.DrawString(s.Label, f, b, ptf);
+            if (s.IsEqual(grapheDijkstra.PointActuel))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
-                int w = 6;
-                g.FillRectangle(aBrush, ptf.X - w / 2, ptf.Y - w / 2, w, w);
+                int w = 7;
+                dessin.FillRectangle(aBrush, ptf.X - w / 2, ptf.Y - w / 2, w, w);
             }
-            g.DrawString(s.Label, f, b, ptf);
         }
-        private void TraceArete(Arete r, Graphics g)
+        private void TraceArete(Arete r)
         {
             Pen aPen = new Pen(Color.Black, 2);
             // Set line caps and dash style:
-            //aPen.StartCap = LineCap.RoundAnchor;
-            //aPen.EndCap = LineCap.RoundAnchor;
+            aPen.StartCap = LineCap.RoundAnchor;
+            aPen.EndCap = LineCap.RoundAnchor;
             aPen.DashStyle = DashStyle.Dash;
             aPen.DashOffset = 500;
-            Point ptf1 = r.S1.Pt;
-            Point ptf2 = r.S2.Pt;
-            g.DrawLine(aPen, ptf1, ptf2);
+            PointF ptf1 = r.S1.Pt;
+            PointF ptf2 = r.S2.Pt;
+            dessin.DrawLine(aPen, ptf1, ptf2);
             aPen.Dispose();
-            Font f = new Font("Calibri", 10, FontStyle.Regular);
-            Point pt1 = r.S1.Pt;
-            Point pt2 = r.S2.Pt;
-            Point milieu = new Point((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
-            g.DrawString(r.ToString(), f, Brushes.Black, milieu);
+            Font f = new Font("Calibri", 11, FontStyle.Regular);
+            PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
+            dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
     }
 }

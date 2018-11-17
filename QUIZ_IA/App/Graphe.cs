@@ -11,6 +11,7 @@ namespace App
     public class Graphe
     {
         //pour la génération automatique de graphes : gestion de plusieurs solutions possibles avec un simple Dijkstra ou A* : vérifier que le coût du chemin trouvé par l'utilisateur est égal à celui trouvé par l'algo
+        //mais surtout, ne proposer qu'une solution correcte à l'utilisateur pour les ouverts et fermés et toutes les autres incorrectes
         //distance minimale entre le point initial et le point final à respecter, genre min 5
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
@@ -65,10 +66,12 @@ namespace App
             int nbPoints = rnd.Next(5, MainForm.alphabet.Length + 1);
             for (int i = 0; i < nbPoints; i++)
             {
-                int x = rnd.Next(d.xMin + 1, d.xMax);
-                int y = rnd.Next(d.yMin + 1, d.yMax);
-                Sommet s = new Sommet(x, y);
-                if(!PointsOuverts.Contains(s))
+                float partieDecimaleX = (float)rnd.NextDouble();
+                float partieDecimaleY = (float)rnd.NextDouble();
+                float x = rnd.Next(d.xMin + 1, d.xMax - 1) + partieDecimaleX;
+                float y = rnd.Next(d.yMin + 1, d.yMax - 1) + partieDecimaleY;
+                Sommet s = new Sommet(x, y,true);
+                if (!PointsOuverts.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1)))
                 {
                     PointsOuverts.Add(s);
                 }
@@ -101,17 +104,18 @@ namespace App
             //Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
         }
         /// <summary>
-        /// Prédicat vrai ssi le graphe de voisinage relatif comporte l'arête entre s1 et s2
+        /// Prédicat vrai ssi le graphe de Gabriel comporte l'arête entre s1 et s2
         /// </summary>
         /// <param name="s1"></param>
         /// <param name="s2"></param>
         /// <returns></returns>
         public bool DoiventEtreRelies(Sommet s1, Sommet s2)
         {
-            int r = s1.CalculeDistance(s2); //Rayon des cercles dont l'intersection est le domaine d'exclusion
+            Sommet s0 = s1.CalculeMilieu(s2);
+            double r = s1.CalculeDistance(s2) / 2; //Rayon des cercles dont l'intersection est le domaine d'exclusion
             foreach (Sommet s in PointsOuverts)
             {
-                if (s.CalculeDistance(s1) < r && s.CalculeDistance(s2) < r) //Évaluation paresseuse plutôt que de rechercher le maximum
+                if (s.CalculeDistance(s0) < r) //Évaluation paresseuse plutôt que de rechercher le maximum
                 {
                     if (!s.IsEqual(s1) && !s.IsEqual(s2)) //Pour ne pas tester le sommet avec lui-même ; condition testée en second
                     {

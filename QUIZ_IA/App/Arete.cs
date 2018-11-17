@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@ namespace App
         {
             S1 = s1;
             S2 = s2;
-            Cout = S1.CalculeDistance(S2);
+            Cout = (int)S1.CalculeDistance(S2);
         }
         public bool IsEqual(Arete a)
         {
