@@ -17,7 +17,7 @@ namespace App
         {
             S1 = s1;
             S2 = s2;
-            Cout = Math.Round(S1.CalculeDistance(S2),1);
+            Cout = S1.CalculeDistance(S2);
         }
         public bool IsEqual(Arete a)
         {
@@ -25,7 +25,7 @@ namespace App
         }
         public override string ToString()
         {
-            return Cout.ToString();
+            return Math.Round(Cout, 1).ToString();
         }
     }
 }

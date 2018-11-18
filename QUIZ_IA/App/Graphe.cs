@@ -35,23 +35,83 @@ namespace App
             PointActuel = PointInitial;
             PointFinal = DeterminePointFinal();
         }
+        public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... 
+        {
+            int n = PointsOuverts.Count;
+            Sommet s;
+            do
+            {
+                int i = rnd.Next(n);
+                s = PointsOuverts[i];
+            }
+            while (s.Incidences.Count < 2);
+            return s;
+        }
         public Sommet DeterminePointFinal()
         {
             Sommet s;
+            double distanceMin;
             do
             {
                 int n = PointsOuverts.Count;
                 int k = rnd.Next(n);
                 s = PointsOuverts[k];
+                distanceMin = CalculeDistanceMinimale(s, PointInitial);
             }
-            while (s.CalculeDistance(PointInitial) < 5);
+            while (s.CalculeDistance(PointInitial) <= distanceMin);
             return s;
         }
-        public Sommet DeterminePointInitial()
+        /// <summary>
+        /// Calcule la distance minimale entre 2 sommets s1 et s2 pour qu'ils soient séparés d'au moins 2 sommets
+        /// </summary>
+        /// <param name="s1"></param>
+        /// <param name="s2"></param>
+        /// <returns></returns>
+        public double CalculeDistanceMinimale(Sommet s1, Sommet s2)
         {
-            int n = PointsOuverts.Count;
-            int i = rnd.Next(n);
-            return PointsOuverts[i];
+            // création de deep copies des listes d'incidences des somets s1 et s2 pour ne pas que ces dernières soient modifiées
+            Arete[] aretesS1 = new Arete[s1.Incidences.Count];
+            s1.Incidences.CopyTo(aretesS1);
+            List<Arete> incidencesS1 = new List<Arete>(aretesS1);
+
+            Arete[] aretesS2 = new Arete[s2.Incidences.Count];
+            s2.Incidences.CopyTo(aretesS2);
+            List<Arete> incidencesS2 = new List<Arete>(aretesS2);
+
+            //calcul de la distance max sur ces 2 nouvelles listes
+            double distanceMax1 = CalculeDistanceMax(incidencesS1,0);
+            double distanceMax2 = CalculeDistanceMax(incidencesS2, 0);
+
+            double distanceMin = distanceMax1 + distanceMax2;
+            return distanceMin;
+
+        }
+        /// <summary>
+        /// Calcule la distance entre un sommet et son sommet voisin le plus éloigné
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public double CalculeDistanceMax(List<Arete> incidences, double distanceMax)
+        {
+            if(incidences.Count == 1)
+            {
+                return distanceMax;
+            }
+            else
+            {
+                Arete a1 = incidences[0];
+                Arete a2 = incidences[1];
+                if(a1.Cout < a2.Cout)
+                {
+                    incidences.Remove(a1);
+                    return CalculeDistanceMax(incidences, a2.Cout);
+                }
+                else
+                {
+                    incidences.Remove(a2);
+                    return CalculeDistanceMax(incidences, a1.Cout);
+                }
+            }
         }
         public void GenereSommets(Dijkstra d)
         {
@@ -91,7 +151,10 @@ namespace App
                     Sommet s2 = PointsOuverts[j];
                     if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
                     {
-                        Aretes.Add(new Arete(s1, s2));
+                        Arete a = new Arete(s1, s2);
+                        Aretes.Add(a);
+                        s1.Incidences.Add(a);
+                        s2.Incidences.Add(a);
                     }
                 }
             }
@@ -111,13 +174,13 @@ namespace App
         /// <returns></returns>
         public bool DoiventEtreRelies(Sommet s1, Sommet s2)
         {
-            Sommet s0 = s1.CalculeMilieu(s2);
-            double r = s1.CalculeDistance(s2) / 2; //Rayon des cercles dont l'intersection est le domaine d'exclusion
+            Sommet s0 = s1.CalculeMilieu(s2); //Milieu de s1 et s2
+            double r = s1.CalculeDistance(s2) / 2; //Rayon du disque ouvert d'exclusion
             foreach (Sommet s in PointsOuverts)
             {
-                if (s.CalculeDistance(s0) < r) //Évaluation paresseuse plutôt que de rechercher le maximum
+                if (s.CalculeDistance(s0) < r) //Si un sommet est dans le disque ouvert
                 {
-                    if (!s.IsEqual(s1) && !s.IsEqual(s2)) //Pour ne pas tester le sommet avec lui-même ; condition testée en second
+                    if (!s.IsEqual(s1) && !s.IsEqual(s2)) //Pour ne pas tester le sommet avec lui-même 
                     {
                         return false; //Sortie de boucle si un sommet est dans le domaine d'exclusion
                     }
@@ -224,7 +287,7 @@ namespace App
         public void InsertNewNodeInOpenList(Sommet NewNode)
         {
             // Insertion pour respecter l'ordre du cout total le plus petit au plus grand
-            if (this.PointsOuverts.Count == 0)
+            if (PointsOuverts.Count == 0)
             { PointsOuverts.Add(NewNode); }
             else
             {
@@ -253,7 +316,21 @@ namespace App
         }
         public Arete RetrouveArete(Sommet s1, Sommet s2)
         {
-            return Aretes.Find(x => x.IsEqual(new Arete(s1, s2)));
+            if(s1.Incidences.Count < s2.Incidences.Count) //On effectue une recherche sur la plus petite liste d'incidences possible
+            {
+                return s1.Incidences.Find(x => x.IsEqual(new Arete(s1, s2)));
+            }
+            else
+            {
+                if(s1.Incidences.Count >= s2.Incidences.Count)
+                {
+                    return s2.Incidences.Find(x => x.IsEqual(new Arete(s1, s2)));
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         // Si on veut afficher l'arbre de recherche, il suffit de passer un treeview en paramètres
