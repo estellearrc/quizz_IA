@@ -24,10 +24,10 @@ namespace App
         public Sommet PointInitial { get; private set; }
         public Sommet PointFinal { get; private set; }
         
-        public Graphe(Dijkstra d)
+        public Graphe(int xMin, int xMax, int yMin, int yMax)
         {
             PointsOuverts = new List<Sommet>();
-            GenereSommets(d);
+            GenereSommets(xMin,xMax,yMin,yMax);
             PointsFermes = new List<Sommet>();
             Aretes = new List<Arete>();
             ConnecteSommets();
@@ -47,7 +47,7 @@ namespace App
             while (s.Incidences.Count < 2);
             return s;
         }
-        public Sommet DeterminePointFinal()
+        public Sommet DeterminePointFinal() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... 
         {
             Sommet s;
             double distanceMin;
@@ -58,15 +58,12 @@ namespace App
                 s = PointsOuverts[k];
                 distanceMin = CalculeDistanceMinimale(s, PointInitial);
             }
-            while (s.CalculeDistance(PointInitial) <= distanceMin);
+            while (s.CalculeDistance(PointInitial) <= distanceMin || s.Incidences.Count < 2);
             return s;
         }
         /// <summary>
         /// Calcule la distance minimale entre 2 sommets s1 et s2 pour qu'ils soient séparés d'au moins 2 sommets
         /// </summary>
-        /// <param name="s1"></param>
-        /// <param name="s2"></param>
-        /// <returns></returns>
         public double CalculeDistanceMinimale(Sommet s1, Sommet s2)
         {
             // création de deep copies des listes d'incidences des somets s1 et s2 pour ne pas que ces dernières soient modifiées
@@ -89,8 +86,6 @@ namespace App
         /// <summary>
         /// Calcule la distance entre un sommet et son sommet voisin le plus éloigné
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
         public double CalculeDistanceMax(List<Arete> incidences, double distanceMax)
         {
             if(incidences.Count == 1)
@@ -113,7 +108,7 @@ namespace App
                 }
             }
         }
-        public void GenereSommets(Dijkstra d)
+        public void GenereSommets(int xMin, int xMax, int yMin, int yMax)
         {
             //int nbPoints = 7;
             //PointsOuverts.Add(new Sommet(1, 1));
@@ -128,10 +123,10 @@ namespace App
             {
                 float partieDecimaleX = (float)rnd.NextDouble();
                 float partieDecimaleY = (float)rnd.NextDouble();
-                float x = rnd.Next(d.xMin + 1, d.xMax - 1) + partieDecimaleX;
-                float y = rnd.Next(d.yMin + 1, d.yMax - 1) + partieDecimaleY;
+                float x = rnd.Next(xMin + 1, xMax - 1) + partieDecimaleX;
+                float y = rnd.Next(yMin + 1, yMax - 1) + partieDecimaleY;
                 Sommet s = new Sommet(x, y,true);
-                if (!PointsOuverts.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1)))
+                if (!PointsOuverts.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les ouverts et à une distance >= 1 des autres sommets
                 {
                     PointsOuverts.Add(s);
                 }
@@ -169,9 +164,6 @@ namespace App
         /// <summary>
         /// Prédicat vrai ssi le graphe de Gabriel comporte l'arête entre s1 et s2
         /// </summary>
-        /// <param name="s1"></param>
-        /// <param name="s2"></param>
-        /// <returns></returns>
         public bool DoiventEtreRelies(Sommet s1, Sommet s2)
         {
             Sommet s0 = s1.CalculeMilieu(s2); //Milieu de s1 et s2

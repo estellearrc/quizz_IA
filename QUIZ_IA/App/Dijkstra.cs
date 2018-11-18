@@ -14,15 +14,15 @@ namespace App
     public partial class Dijkstra : Form
     {
         // Unit defined in world coordinate system:
-        public int xMin = 0;
-        public int xMax = 10;
-        public int yMin = 0;
-        public int yMax = 10;
+        private int xMin = 0;
+        private int xMax = 10;
+        private int yMin = 0;
+        private int yMax = 10;
         // Define the offset in pixel:
         private int offset = 20;
         public static Panel zoneDessin; //design context = zone de dessin
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
-        public static Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
+        public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
         public Dijkstra()
         {
             //Initialisation des composants et de la fenêtre client
@@ -44,11 +44,11 @@ namespace App
             zoneDessin.Left = offset;
             zoneDessin.Top = offset;
             zoneDessin.Width = ClientRectangle.Width - 2 * offset;
-            zoneDessin.Height = ClientRectangle.Height - 14 * offset;
+            zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
 
             //Création du graphe à afficher dans le drawing panel
-            grapheDijkstra = new Graphe(this);
+            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {

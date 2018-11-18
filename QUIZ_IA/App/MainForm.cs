@@ -34,13 +34,13 @@ namespace App
             d.Show();
         }
 
-        private void Affiche_Score()
+        private void AfficheScore()
         {
             _quiz.NoteSur20(_quizRepository.CalculateMaxMark());
             txtQuestion.Font = new System.Drawing.Font("Calibri", 20, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             txtQuestion.Text = "Note obtenue: " + _quiz.Score + "/20";
         }
-        private void Afficher_Question(Question question)
+        private void AfficheQuestion(Question question)
         {
             if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
             {
@@ -80,9 +80,7 @@ namespace App
 
             }
         }
-
-
-        private bool Correction(Question question)
+        private bool Corrige(Question question)
         {
             bool juste = true;
             // compter les points 
@@ -103,10 +101,7 @@ namespace App
             return juste;
 
         }
-
-    
-
-        private void Affiche_Correction(Question question, bool avoirJuste)
+        private void AfficheCorrection(Question question, bool avoirJuste)
         {
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
@@ -139,18 +134,16 @@ namespace App
                 txtBoxCorrection.Text = correction;
             }
         }
-
-        private void Nettoyer_Form()
+        private void NettoieForm()
         {
             txtBoxCorrection.Text = "";
             textBxNumQuestion.Text = "";
             foreach (CheckBox checkbox in lesCheckBoxes)
             {
-                this.Controls.Remove(checkbox);
+                Controls.Remove(checkbox);
             }
 
         }
-
         private void MAJscore(Question question, bool estJuste)
         {
 
@@ -175,7 +168,7 @@ namespace App
             }
 
         }
-        private void btnValider_Click(object sender, EventArgs e)
+        private void BtnValider_Click(object sender, EventArgs e)
         {
 
             if (btnValider.Text == "Terminer")
@@ -188,24 +181,24 @@ namespace App
                 {
                     if (btnValider.Text == "Suivant")
                     {
-                        Nettoyer_Form();
+                        NettoieForm();
                     }
                     textBxNumQuestion.Text = "Question " + (compteur + 1) + "/" + _quiz.LesQuestions.Count;
-                    Afficher_Question(_quiz.LesQuestions[compteur]);
+                    AfficheQuestion(_quiz.LesQuestions[compteur]);
                 }
                 else
                 {
                     btnValider.Text = "Suivant";
-                    Affiche_Correction(_quiz.LesQuestions[compteur], Correction(_quiz.LesQuestions[compteur]));
-                    MAJscore(_quiz.LesQuestions[compteur], Correction(_quiz.LesQuestions[compteur]));
+                    AfficheCorrection(_quiz.LesQuestions[compteur], Corrige(_quiz.LesQuestions[compteur]));
+                    MAJscore(_quiz.LesQuestions[compteur], Corrige(_quiz.LesQuestions[compteur]));
                     compteur++;
                 }
             }
             else
             {
                 btnValider.Text = "Terminer";
-                Nettoyer_Form();
-                Affiche_Score();
+                NettoieForm();
+                AfficheScore();
 
             }
 

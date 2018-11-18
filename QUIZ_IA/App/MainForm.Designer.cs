@@ -60,7 +60,7 @@
             this.btnValider.TabIndex = 1;
             this.btnValider.Text = "Commencer";
             this.btnValider.UseVisualStyleBackColor = false;
-            this.btnValider.Click += new System.EventHandler(this.btnValider_Click);
+            this.btnValider.Click += new System.EventHandler(this.BtnValider_Click);
             // 
             // txtBoxCorrection
             // 
