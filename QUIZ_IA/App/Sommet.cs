@@ -116,9 +116,17 @@ namespace App
             return lsucc;
         }
 
-        public int CalculeHCost()
+        public double CalculeHCost()
         {
-            return 0;
+            if (Dijkstra.grapheDijkstra.ResolutionAEtoile)
+            {
+                //Calcule de la distance restante à vol d'oiseau
+                return CalculeDistance(Dijkstra.grapheDijkstra.PointFinal);
+            }
+            else
+            {
+                return 0;
+            }
         }
         public double CalculeDistance(Sommet s)
         {

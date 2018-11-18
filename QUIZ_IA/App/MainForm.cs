@@ -64,7 +64,7 @@ namespace App
                             checkBoxes[i].Location = new Point(69, 145 + i * 20);
                             checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
                             checkBoxes[i].AutoSize = true;
-                            this.Controls.Add(checkBoxes[i]);
+                            Controls.Add(checkBoxes[i]);
                             lesCheckBoxes[i] = checkBoxes[i];
                         }
                     }

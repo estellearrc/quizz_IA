@@ -48,7 +48,7 @@ namespace App
             Controls.Add(zoneDessin);
 
             //Création du graphe à afficher dans le drawing panel
-            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
+            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax,true);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {

@@ -19,12 +19,17 @@ namespace App
         public static Random rnd = new Random();
         public List<Sommet> PointsOuverts { get; private set; } //liste des noeuds ouverts
         public List<Sommet> PointsFermes { get; private set; } //liste des noeuds fermés
-        public Sommet PointActuel { get; private set; }
+        public Sommet PointActuel { get; set; }
         public List<Arete> Aretes { get; private set; }
         public Sommet PointInitial { get; private set; }
         public Sommet PointFinal { get; private set; }
-        
-        public Graphe(int xMin, int xMax, int yMin, int yMax)
+        public List<Sommet> PlusCourtChemin { get; private set; }
+        public double CoutPlusCourtChemin { get; private set; }
+        public List<List<Sommet>> EtatsSuccessifsOuverts { get; private set; }
+        public List<List<Sommet>> EtatsSuccessifsFermes { get; private set; }
+        public bool ResolutionAEtoile { get; private set; }
+
+        public Graphe(int xMin, int xMax, int yMin, int yMax, bool AEtoile)
         {
             PointsOuverts = new List<Sommet>();
             GenereSommets(xMin,xMax,yMin,yMax);
@@ -34,6 +39,11 @@ namespace App
             PointInitial = DeterminePointInitial();
             PointActuel = PointInitial;
             PointFinal = DeterminePointFinal();
+            PlusCourtChemin = new List<Sommet>();
+            ResolutionAEtoile = AEtoile;
+            EtatsSuccessifsFermes = new List<List<Sommet>>();
+            EtatsSuccessifsOuverts = new List<List<Sommet>>{ PointsOuverts };
+            RechercheSolutionAEtoile();
         }
         public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... 
         {
@@ -180,13 +190,9 @@ namespace App
             }
             return true;
         }
-        public List<Sommet> RechercheSolutionAEtoile(Sommet s0)
+        public void RechercheSolutionAEtoile()
         {
-            PointsOuverts = new List<Sommet>();
-            PointsFermes = new List<Sommet>();
-            // Le noeud passé en paramètre est supposé être le noeud initial
-            Sommet s = s0;
-            PointsOuverts.Add(s0);
+            Sommet s = PointInitial;
 
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
             while (PointsOuverts.Count != 0 && s.EndState() == false)
@@ -204,7 +210,7 @@ namespace App
                 // A condition qu'il existe bien sûr
                 if (PointsOuverts.Count > 0)
                 {
-                    s = PointsOuverts[0];
+                    s = PointsOuverts.First();
                 }
                 else
                 {
@@ -216,18 +222,17 @@ namespace App
             // On retourne le chemin qui va du noeud initial au noeud final sous forme de liste
             // Le chemin est retrouvé en partant du noeud final et en accédant aux parents de manière
             // itérative jusqu'à ce qu'on tombe sur le noeud initial
-            List<Sommet> sommets = new List<Sommet>();
             if (s != null)
             {
-                sommets.Add(s);
-
-                while (s != s0)
+                PlusCourtChemin.Add(s);
+                CoutPlusCourtChemin += s.CoutTotal;
+                while (!s.IsEqual(PointInitial))
                 {
                     s = s.SommetParent;
-                    sommets.Insert(0, s);  // On insère en position 1
+                    PlusCourtChemin.Insert(0, s);  // On insère en position 1
+                    CoutPlusCourtChemin += s.CoutTotal;
                 }
             }
-            return sommets;
         }
 
         private void MAJSuccesseurs(Sommet s)
