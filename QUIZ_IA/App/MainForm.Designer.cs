@@ -32,6 +32,10 @@
             this.btnValider = new System.Windows.Forms.Button();
             this.txtBoxCorrection = new System.Windows.Forms.TextBox();
             this.textBxNumQuestion = new System.Windows.Forms.TextBox();
+            this.NumBox = new System.Windows.Forms.TextBox();
+            this.labelSaisie = new System.Windows.Forms.Label();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // txtQuestion
@@ -83,6 +87,38 @@
             this.textBxNumQuestion.Name = "textBxNumQuestion";
             this.textBxNumQuestion.Size = new System.Drawing.Size(174, 24);
             this.textBxNumQuestion.TabIndex = 4;
+            this.textBxNumQuestion.Text = "IA QUIZ ! ";
+            this.textBxNumQuestion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // NumBox
+            // 
+            this.NumBox.BackColor = System.Drawing.SystemColors.Window;
+            this.NumBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.NumBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumBox.Location = new System.Drawing.Point(196, 199);
+            this.NumBox.Name = "NumBox";
+            this.NumBox.Size = new System.Drawing.Size(137, 31);
+            this.NumBox.TabIndex = 5;
+            this.NumBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumBox_KeyPress);
+            // 
+            // labelSaisie
+            // 
+            this.labelSaisie.AutoSize = true;
+            this.labelSaisie.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSaisie.Location = new System.Drawing.Point(199, 175);
+            this.labelSaisie.Name = "labelSaisie";
+            this.labelSaisie.Size = new System.Drawing.Size(131, 16);
+            this.labelSaisie.TabIndex = 6;
+            this.labelSaisie.Text = "Saisir la réponse ici :";
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(108, 237);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(322, 144);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 7;
+            this.pictureBox.TabStop = false;
             // 
             // MainForm
             // 
@@ -90,6 +126,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(534, 512);
+            this.Controls.Add(this.pictureBox);
+            this.Controls.Add(this.labelSaisie);
+            this.Controls.Add(this.NumBox);
             this.Controls.Add(this.textBxNumQuestion);
             this.Controls.Add(this.txtBoxCorrection);
             this.Controls.Add(this.btnValider);
@@ -98,6 +137,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "Quiz IA";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,6 +149,9 @@
         private System.Windows.Forms.Button btnValider;
         private System.Windows.Forms.TextBox txtBoxCorrection;
         private System.Windows.Forms.TextBox textBxNumQuestion;
+        private System.Windows.Forms.TextBox NumBox;
+        private System.Windows.Forms.Label labelSaisie;
+        private System.Windows.Forms.PictureBox pictureBox;
     }
 }
 

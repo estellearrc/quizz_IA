@@ -29,9 +29,10 @@ namespace App
             _quiz = new Quiz(_quizRepository.Get20Questions());
             Size = new Size(550, 550); //dans le designer.cs
             FormBorderStyle = FormBorderStyle.FixedSingle;
-
-            d = new Dijkstra();
-            d.Show();
+            NumBox.Hide();
+            labelSaisie.Hide();
+            //d = new Dijkstra();
+            // d.Show();
         }
 
         private void AfficheScore()
@@ -42,6 +43,14 @@ namespace App
         }
         private void AfficheQuestion(Question question)
         {
+
+            if (question.PieceJointe !=null)
+            {
+                string file = "../../../DAL/images/" + question.PieceJointe;
+                pictureBox.Show();
+                pictureBox.Image= Image.FromFile(file);
+            }
+
             if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
             {
 
@@ -74,19 +83,29 @@ namespace App
 
                 if (question.Type == Question.TypeQues.saisieNum)// pour la saisie numérique
                 {
+                    NumBox.Show();
+                    labelSaisie.Show();
+
+
+
 
                 }
 
 
             }
         }
+
+
         private bool Corrige(Question question)
         {
             bool juste = true;
             // compter les points 
             if (question.Type == Question.TypeQues.saisieNum)
             {
-
+                if (NumBox.Text != question.LesReponses[0].Intitule)
+                {
+                    juste = false;
+                }
             }
             if (question.Type == Question.TypeQues.QCM)
             {
@@ -138,35 +157,34 @@ namespace App
         {
             txtBoxCorrection.Text = "";
             textBxNumQuestion.Text = "";
-            foreach (CheckBox checkbox in lesCheckBoxes)
+            NumBox.Hide();
+            labelSaisie.Hide();
+            pictureBox.Hide();
+            if (lesCheckBoxes != null)
             {
-                Controls.Remove(checkbox);
-            }
+                foreach (CheckBox checkbox in lesCheckBoxes)
+                {
+                    Controls.Remove(checkbox);
 
+                }
+
+            }
         }
         private void MAJscore(Question question, bool estJuste)
         {
 
-            if (question.Type == Question.TypeQues.saisieNum)// pour la saisie numérique
+            if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
             {
 
             }
-            else if (question.Type == Question.TypeQues.QCM)// pour les qcm
+            else
             {
-                if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
+                if (estJuste)
                 {
-
+                    _quiz.ActualiseScore(question.Points);
                 }
-                else
-                {
-                    if (estJuste)
-                    {
-                        _quiz.ActualiseScore(question.Points);
-                    }
 
-                }
             }
-
         }
         private void BtnValider_Click(object sender, EventArgs e)
         {
@@ -202,6 +220,15 @@ namespace App
 
             }
 
+        }
+
+        private void NumBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((Char.IsControl(e.KeyChar) || !Char.IsNumber(e.KeyChar)) && e.KeyChar != 8)
+            {
+                e.Handled = true;
+                return;
+            }
         }
     }
 }
