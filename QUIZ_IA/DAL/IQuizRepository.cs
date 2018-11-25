@@ -11,6 +11,6 @@ namespace DAL
     {
         List<Question> GetAllQuestions();
         List<Question> Get20Questions();
-        int CalculateMaxMark();
+        
     }
 }

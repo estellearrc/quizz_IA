@@ -27,11 +27,6 @@ namespace DAL
             }
             return twentyQuestions;
         }
-        public int CalculateMaxMark()
-        {
-            string requete = "SELECT SUM(point) FROM question";
-            NHibernate.ISQLQuery result = Session.CreateSQLQuery(requete);
-            return Convert.ToInt32(result);
-        }
+       
     }
 }

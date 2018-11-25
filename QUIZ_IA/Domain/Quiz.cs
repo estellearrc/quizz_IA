@@ -29,6 +29,15 @@ namespace Domain
         {
             Score = (Score * 20) / noteMax; 
         }
+        public int CalculNoteMax()
+        {
+            int noteMax = 0;
+            foreach(Question q in LesQuestions)
+            {
+                noteMax += q.Points;
+            }
+            return noteMax;
+        }
 
     }
 }

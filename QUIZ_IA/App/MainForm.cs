@@ -31,13 +31,13 @@ namespace App
             FormBorderStyle = FormBorderStyle.FixedSingle;
             NumBox.Hide();
             labelSaisie.Hide();
-            d = new Dijkstra();
-            d.Show();
+            //d = new Dijkstra();
+            //d.Show();
         }
 
         private void AfficheScore()
         {
-            _quiz.NoteSur20(_quizRepository.CalculateMaxMark());
+            _quiz.NoteSur20(_quiz.CalculNoteMax());
             txtQuestion.Font = new Font("Calibri", 20, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtQuestion.Text = "Note obtenue: " + _quiz.Score + "/20";
         }
@@ -191,9 +191,20 @@ namespace App
 
             if (btnValider.Text == "Terminer")
             {
-                Application.Exit();
+                var result = MessageBox.Show("Voulez vous recommencer ?", "Recommencer", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    NettoieForm();
+                    compteur = 0;
+                    _quiz = new Quiz(_quizRepository.Get20Questions());
+                    btnValider.Text = "Commencer";
+                }
             }
-            else if (compteur < _quiz.LesQuestions.Count)
+            if (compteur < _quiz.LesQuestions.Count)
             {
                 if (btnValider.Text == "Suivant" || btnValider.Text == "Commencer")
                 {
