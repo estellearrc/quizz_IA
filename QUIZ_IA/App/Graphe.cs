@@ -217,13 +217,15 @@ namespace App
             PlusCourtChemin = new List<Sommet>();
             ResolutionAEtoile = AEtoile;
             EtatsSuccessifsFermes = new List<List<Sommet>>();
-            EtatsSuccessifsOuverts = new List<List<Sommet>> { SommetsOuverts };
+            EtatsSuccessifsOuverts = new List<List<Sommet>>();
             RechercheSolutionAEtoile();
         }
         public void RechercheSolutionAEtoile()
         {
             Sommet s = SommetInitial;
             SommetsOuverts.Add(s);
+            EtatsSuccessifsOuverts.Add(SommetsOuverts); //objets de type référence donc seront tous les mêmes à la fin de A*....... breaker le while
+            EtatsSuccessifsFermes.Add(SommetsFermes);
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
             while (SommetsOuverts.Count != 0 && s.EndState() == false)
             {

@@ -100,17 +100,17 @@ namespace App
         {
             List<Sommet> lsucc = new List<Sommet>();
 
-            foreach(Arete a in Dijkstra.grapheDijkstra.Aretes)
+            foreach(Arete a in Incidences)
             {
                 if(IsEqual(a.S1))
                 {
-                    lsucc.Add(a.S1);
+                    lsucc.Add(a.S2);
                 }
                 else
                 {
                     if (IsEqual(a.S2))
                     {
-                        lsucc.Add(a.S2);
+                        lsucc.Add(a.S1);
                     }
                 }
             }
