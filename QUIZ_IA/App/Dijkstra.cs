@@ -48,13 +48,14 @@ namespace App
             Controls.Add(zoneDessin);
 
             //Création du graphe à afficher dans le drawing panel
-            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax,true);
+            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
+            grapheDijkstra.ResoutGraphePlusCourtChemin(true);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
             //Obtient le graphique WinForm utilisé pour dessiner dedans
             dessin = e.Graphics;
-            foreach (Sommet pt in grapheDijkstra.PointsOuverts)
+            foreach (Sommet pt in grapheDijkstra.Sommets)
             {
                 pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt);
@@ -77,12 +78,12 @@ namespace App
             PointF ptf = s.Pt;
             Font f = new Font("Calibri", 11, FontStyle.Bold);
             Brush b = Brushes.Black;
-            if(s.IsEqual(grapheDijkstra.PointInitial) || s.IsEqual(grapheDijkstra.PointFinal))
+            if(s.IsEqual(grapheDijkstra.SommetInitial) || s.IsEqual(grapheDijkstra.SommetFinal))
             {
                 b = Brushes.Blue;
             }
             dessin.DrawString(s.Label, f, b, ptf);
-            if (s.IsEqual(grapheDijkstra.PointActuel))
+            if (s.IsEqual(grapheDijkstra.SommetActuel))
             {
                 SolidBrush aBrush = new SolidBrush(Color.Red);
                 int w = 7;

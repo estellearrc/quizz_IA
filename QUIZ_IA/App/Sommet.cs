@@ -85,14 +85,15 @@ namespace App
         {
             CoutTotal = CoutCumule + CoutHeuristique;
         }
+        public bool EndState()
+        {
+            return IsEqual(Dijkstra.grapheDijkstra.SommetFinal);
+        }
 
         public bool IsEqual(Sommet s)
         {
-            return (Pt.Equals(s.Pt));
-        }
-        public bool EndState()
-        {
-            return IsEqual(Dijkstra.grapheDijkstra.PointFinal);
+            return (Pt.X == s.Pt.X && Pt.Y == s.Pt.Y);
+            //return (Pt.Equals(s.Pt));
         }
 
         public List<Sommet> GetSuccesseurs()
@@ -121,7 +122,7 @@ namespace App
             if (Dijkstra.grapheDijkstra.ResolutionAEtoile)
             {
                 //Calcule de la distance restante à vol d'oiseau
-                return CalculeDistance(Dijkstra.grapheDijkstra.PointFinal);
+                return CalculeDistance(Dijkstra.grapheDijkstra.SommetFinal);
             }
             else
             {

@@ -16,59 +16,72 @@ namespace App
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
 
+        //propriétés utiles pour l'affichage du graphe
         public static Random rnd = new Random();
-        public List<Sommet> PointsOuverts { get; private set; } //liste des noeuds ouverts
-        public List<Sommet> PointsFermes { get; private set; } //liste des noeuds fermés
-        public Sommet PointActuel { get; set; }
         public List<Arete> Aretes { get; private set; }
-        public Sommet PointInitial { get; private set; }
-        public Sommet PointFinal { get; private set; }
+        public List<Sommet> Sommets { get; private set; } //liste des noeuds du graphe
+
+        //Propriétés utiles pour la résolution du graphe au sens du plus court chemin 
+        public List<Sommet> SommetsOuverts { get; private set; } //liste des noeuds ouverts
+        public List<Sommet> SommetsFermes { get; private set; } //liste des noeuds fermés
+        public Sommet SommetActuel { get; set; }
+        public Sommet SommetInitial { get; private set; }
+        public Sommet SommetFinal { get; private set; }
         public List<Sommet> PlusCourtChemin { get; private set; }
         public double CoutPlusCourtChemin { get; private set; }
         public List<List<Sommet>> EtatsSuccessifsOuverts { get; private set; }
         public List<List<Sommet>> EtatsSuccessifsFermes { get; private set; }
         public bool ResolutionAEtoile { get; private set; }
 
-        public Graphe(int xMin, int xMax, int yMin, int yMax, bool AEtoile)
+        public Graphe(int xMin, int xMax, int yMin, int yMax)
         {
-            PointsOuverts = new List<Sommet>();
-            GenereSommets(xMin,xMax,yMin,yMax);
-            PointsFermes = new List<Sommet>();
+            Sommets = new List<Sommet>();
+            GenereSommets(xMin,xMax,yMin,yMax); //initialise la liste Sommets
             Aretes = new List<Arete>();
-            ConnecteSommets();
-            PointInitial = DeterminePointInitial();
-            PointActuel = PointInitial;
-            PointFinal = DeterminePointFinal();
-            PlusCourtChemin = new List<Sommet>();
-            ResolutionAEtoile = AEtoile;
-            EtatsSuccessifsFermes = new List<List<Sommet>>();
-            EtatsSuccessifsOuverts = new List<List<Sommet>>{ PointsOuverts };
-            RechercheSolutionAEtoile();
+            ConnecteSommets(); //initialise la liste Aretes
         }
-        public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... 
+        public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... réglé avec compteur
         {
-            int n = PointsOuverts.Count;
             Sommet s;
+            int compteur = 0;
+            List<int> indicesDejaTestes = new List<int>();
+            int n = Sommets.Count;
             do
             {
-                int i = rnd.Next(n);
-                s = PointsOuverts[i];
+                int i;
+                do
+                {
+                    i = rnd.Next(n);
+                }
+                while (indicesDejaTestes.Contains(i));
+                indicesDejaTestes.Add(i);
+                s = Sommets[i];
+                compteur++;
             }
-            while (s.Incidences.Count < 2);
+            while (s.Incidences.Count < 2 && compteur < n);
             return s;
         }
-        public Sommet DeterminePointFinal() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... 
+        public Sommet DeterminePointFinal() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... réglé avec compteur
         {
             Sommet s;
+            int compteur = 0;
             double distanceMin;
+            List<int> indicesDejaTestes = new List<int>();
+            int n = Sommets.Count;
             do
             {
-                int n = PointsOuverts.Count;
-                int k = rnd.Next(n);
-                s = PointsOuverts[k];
-                distanceMin = CalculeDistanceMinimale(s, PointInitial);
+                int k;
+                do
+                {
+                    k = rnd.Next(n);
+                }
+                while (indicesDejaTestes.Contains(k));
+                indicesDejaTestes.Add(k);
+                s = Sommets[k];
+                distanceMin = CalculeDistanceMinimale(s, SommetInitial);
+                compteur++;
             }
-            while (s.CalculeDistance(PointInitial) <= distanceMin || s.Incidences.Count < 2);
+            while (s.CalculeDistance(SommetInitial) <= 2*distanceMin/3 && compteur < n ); //|| s.Incidences.Count < 2);
             return s;
         }
         /// <summary>
@@ -121,13 +134,13 @@ namespace App
         public void GenereSommets(int xMin, int xMax, int yMin, int yMax)
         {
             //int nbPoints = 7;
-            //PointsOuverts.Add(new Sommet(1, 1));
-            //PointsOuverts.Add(new Sommet(2, 5));
-            //PointsOuverts.Add(new Sommet(3, 3));
-            //PointsOuverts.Add(new Sommet(1, 4));
-            //PointsOuverts.Add(new Sommet(4, 6));
-            //PointsOuverts.Add(new Sommet(5, 7));
-            //PointsOuverts.Add(new Sommet(7, 7));
+            //Sommets.Add(new Sommet(1, 1));
+            //Sommets.Add(new Sommet(2, 5));
+            //Sommets.Add(new Sommet(3, 3));
+            //Sommets.Add(new Sommet(1, 4));
+            //Sommets.Add(new Sommet(4, 6));
+            //Sommets.Add(new Sommet(5, 7));
+            //Sommets.Add(new Sommet(7, 7));
             int nbPoints = rnd.Next(5, MainForm.alphabet.Length + 1);
             for (int i = 0; i < nbPoints; i++)
             {
@@ -136,24 +149,24 @@ namespace App
                 float x = rnd.Next(xMin + 1, xMax - 1) + partieDecimaleX;
                 float y = rnd.Next(yMin + 1, yMax - 1) + partieDecimaleY;
                 Sommet s = new Sommet(x, y,true);
-                if (!PointsOuverts.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les ouverts et à une distance >= 1 des autres sommets
+                if (!Sommets.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les sommets du graphe et à une distance >= 1 des autres sommets
                 {
-                    PointsOuverts.Add(s);
+                    Sommets.Add(s);
                 }
             }
         }
         /// <summary>
-        /// Génère le Graphe de Voisinage Relatif (GVR) d'après le nuage de points PointsOuverts
+        /// Génère le Graphe de Voisinage Relatif (GVR) d'après le nuage de points Sommets
         /// </summary>
         public void ConnecteSommets()
         {
-            int n = PointsOuverts.Count;
+            int n = Sommets.Count;
             for (int i = 0; i < n; i++)
             {
-                Sommet s1 = PointsOuverts[i];
+                Sommet s1 = Sommets[i];
                 for(int j = i + 1; j < n; j++) //Parcours "en triangle"
                 {
-                    Sommet s2 = PointsOuverts[j];
+                    Sommet s2 = Sommets[j];
                     if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
                     {
                         Arete a = new Arete(s1, s2);
@@ -178,7 +191,7 @@ namespace App
         {
             Sommet s0 = s1.CalculeMilieu(s2); //Milieu de s1 et s2
             double r = s1.CalculeDistance(s2) / 2; //Rayon du disque ouvert d'exclusion
-            foreach (Sommet s in PointsOuverts)
+            foreach (Sommet s in Sommets)
             {
                 if (s.CalculeDistance(s0) < r) //Si un sommet est dans le disque ouvert
                 {
@@ -190,17 +203,36 @@ namespace App
             }
             return true;
         }
+        /// <summary>
+        /// Résolution du graphe au sens du plus court chemin
+        /// </summary>
+        /// <param name="AEtoile">booléen indiquant l'utilisation d'A* ou non</param>
+        public void ResoutGraphePlusCourtChemin(bool AEtoile)
+        {
+            SommetsOuverts = new List<Sommet>();
+            SommetsFermes = new List<Sommet>();
+            SommetInitial = DeterminePointInitial();
+            SommetActuel = SommetInitial;
+            SommetFinal = DeterminePointFinal();
+            PlusCourtChemin = new List<Sommet>();
+            ResolutionAEtoile = AEtoile;
+            EtatsSuccessifsFermes = new List<List<Sommet>>();
+            EtatsSuccessifsOuverts = new List<List<Sommet>> { SommetsOuverts };
+            RechercheSolutionAEtoile();
+        }
         public void RechercheSolutionAEtoile()
         {
-            Sommet s = PointInitial;
-
+            Sommet s = SommetInitial;
+            SommetsOuverts.Add(s);
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
-            while (PointsOuverts.Count != 0 && s.EndState() == false)
+            while (SommetsOuverts.Count != 0 && s.EndState() == false)
             {
                 // Le meilleur noeud des ouverts est supposé placé en tête de liste
                 // On le place dans les fermés
-                PointsOuverts.Remove(s);
-                PointsFermes.Add(s);
+                SommetsOuverts.Remove(s);
+                EtatsSuccessifsOuverts.Add(SommetsOuverts);
+                SommetsFermes.Add(s);
+                EtatsSuccessifsFermes.Add(SommetsFermes);
 
                 // Il faut trouver les noeuds successeurs de s
                 MAJSuccesseurs(s);
@@ -208,9 +240,9 @@ namespace App
 
                 // On prend le meilleur, donc celui en position 0, pour continuer à explorer les états
                 // A condition qu'il existe bien sûr
-                if (PointsOuverts.Count > 0)
+                if (SommetsOuverts.Count > 0)
                 {
-                    s = PointsOuverts.First();
+                    s = SommetsOuverts.First();
                 }
                 else
                 {
@@ -226,7 +258,7 @@ namespace App
             {
                 PlusCourtChemin.Add(s);
                 CoutPlusCourtChemin += s.CoutTotal;
-                while (!s.IsEqual(PointInitial))
+                while (!s.IsEqual(SommetInitial))
                 {
                     s = s.SommetParent;
                     PlusCourtChemin.Insert(0, s);  // On insère en position 1
@@ -243,11 +275,11 @@ namespace App
             foreach (Sommet succ in listsucc)
             {
                 // succ est-il une copie d'un nœud déjà vu et placé dans la liste des fermés ?
-                Sommet succBis = PointsFermes.Find(x => x.IsEqual(succ));
+                Sommet succBis = SommetsFermes.Find(x => x.IsEqual(succ));
                 if (succBis == null)
                 {
                     // Rien dans les fermés. Est-il dans les ouverts ?
-                    succBis = PointsOuverts.Find(x => x.IsEqual(succ));
+                    succBis = SommetsOuverts.Find(x => x.IsEqual(succ));
                     if (succBis != null)
                     {
                         // Il existe, donc on l'a déjà vu, succ n'est qu'une copie de N2Bis
@@ -262,7 +294,7 @@ namespace App
                             succBis.SupprimeLienParent();
                             succBis.SommetParent = s;
                             // Mise à jour des ouverts
-                            PointsOuverts.Remove(succBis);
+                            SommetsOuverts.Remove(succBis);
                             InsertNewNodeInOpenList(succBis);
                         }
                         // else on ne fait rien, car le nouveau chemin est moins bon
@@ -284,29 +316,29 @@ namespace App
         public void InsertNewNodeInOpenList(Sommet NewNode)
         {
             // Insertion pour respecter l'ordre du cout total le plus petit au plus grand
-            if (PointsOuverts.Count == 0)
-            { PointsOuverts.Add(NewNode); }
+            if (SommetsOuverts.Count == 0)
+            { SommetsOuverts.Add(NewNode); }
             else
             {
-                Sommet s = PointsOuverts[0];
+                Sommet s = SommetsOuverts[0];
                 bool trouve = false;
                 int i = 0;
                 do
                     if (NewNode.CoutTotal < s.CoutTotal)
                     {
-                        PointsOuverts.Insert(i, NewNode);
+                        SommetsOuverts.Insert(i, NewNode);
                         trouve = true;
                     }
                     else
                     {
                         i++;
-                        if (PointsOuverts.Count == i)
+                        if (SommetsOuverts.Count == i)
                         {
                             s = null;
-                            PointsOuverts.Insert(i, NewNode);
+                            SommetsOuverts.Insert(i, NewNode);
                         }
                         else
-                        { s = PointsOuverts[i]; }
+                        { s = SommetsOuverts[i]; }
                     }
                 while ((s != null) && (trouve == false));
             }
