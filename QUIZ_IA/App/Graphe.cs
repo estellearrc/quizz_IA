@@ -90,13 +90,8 @@ namespace App
         public double CalculeDistanceMinimale(Sommet s1, Sommet s2)
         {
             // création de deep copies des listes d'incidences des somets s1 et s2 pour ne pas que ces dernières soient modifiées
-            Arete[] aretesS1 = new Arete[s1.Incidences.Count];
-            s1.Incidences.CopyTo(aretesS1);
-            List<Arete> incidencesS1 = new List<Arete>(aretesS1);
-
-            Arete[] aretesS2 = new Arete[s2.Incidences.Count];
-            s2.Incidences.CopyTo(aretesS2);
-            List<Arete> incidencesS2 = new List<Arete>(aretesS2);
+            List<Arete> incidencesS1 = DeepCopy(s1.Incidences);
+            List<Arete> incidencesS2 = DeepCopy(s2.Incidences);
 
             //calcul de la distance max sur ces 2 nouvelles listes
             double distanceMax1 = CalculeDistanceMax(incidencesS1,0);
@@ -105,6 +100,20 @@ namespace App
             double distanceMin = distanceMax1 + distanceMax2;
             return distanceMin;
 
+        }
+        public List<Arete> DeepCopy(List<Arete> liste)
+        {
+            Arete[] tab = new Arete[liste.Count];
+            liste.CopyTo(tab);
+            List<Arete> copieListe = new List<Arete>(tab);
+            return copieListe;
+        }
+        public List<Sommet> DeepCopy(List<Sommet> liste)
+        {
+            Sommet[] tab = new Sommet[liste.Count];
+            liste.CopyTo(tab);
+            List<Sommet> copieListe = new List<Sommet>(tab);
+            return copieListe;
         }
         /// <summary>
         /// Calcule la distance entre un sommet et son sommet voisin le plus éloigné
@@ -232,9 +241,9 @@ namespace App
                 // Le meilleur noeud des ouverts est supposé placé en tête de liste
                 // On le place dans les fermés
                 SommetsOuverts.Remove(s);
-                EtatsSuccessifsOuverts.Add(SommetsOuverts);
+                EtatsSuccessifsOuverts.Add(DeepCopy(SommetsOuverts));
                 SommetsFermes.Add(s);
-                EtatsSuccessifsFermes.Add(SommetsFermes);
+                EtatsSuccessifsFermes.Add(DeepCopy(SommetsFermes));
 
                 // Il faut trouver les noeuds successeurs de s
                 MAJSuccesseurs(s);

@@ -31,8 +31,8 @@ namespace App
             FormBorderStyle = FormBorderStyle.FixedSingle;
             NumBox.Hide();
             labelSaisie.Hide();
-            //d = new Dijkstra();
-            //d.Show();
+            d = new Dijkstra();
+            d.Show();
         }
 
         private void AfficheScore()
