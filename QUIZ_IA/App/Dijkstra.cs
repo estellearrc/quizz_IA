@@ -23,6 +23,12 @@ namespace App
         public static Panel zoneDessin; //design context = zone de dessin
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
         public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
+
+        CheckBox[] lesCheckBoxes = null;
+        Button btn = new Button();
+        
+        public int compteur = 0;
+        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         public Dijkstra(bool ResolutionAEtoile)
         {
             //Initialisation des composants et de la fenêtre client
@@ -60,6 +66,7 @@ namespace App
                 pt.Pt = Point2D(pt.Pt);
                 PlotPoint2D(pt);
             }
+
             foreach (Arete r in grapheDijkstra.Aretes)
             {
                 TraceArete(r);
@@ -106,10 +113,53 @@ namespace App
             PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
             dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
-        private void AfficheQuestion()
+        private void AfficheChoixPossible()
         {
-
+            List<Sommet> propositionsOuverts = new List<Sommet>();
+            List<Sommet> propositionsFermes = new List<Sommet>();
+            GenerePropositions(numEtape, propositionsOuverts, propositionsFermes);
         }
+
+        private void Affiche()
+        {
+            if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
+            {
+
+                btnValider.Text = "Valider";
+                txtQuestion.Text = question.Intitule;
+                if (question.Type == Question.TypeQues.QCM)// pour les qcm
+                {
+                    if (question.Intitule == "Dijkstra")
+                    {
+                        d = new Dijkstra(false);
+                        d.Show();
+                    }
+                    else
+                    {
+                        if (question.Intitule == "A*")
+                        {
+                            d = new Dijkstra(true);
+                            d.Show();
+                        }
+                        else
+                        {
+
+                            CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
+                            lesCheckBoxes = new CheckBox[question.LesReponses.Count];
+
+                            for (int i = 0; i < question.LesReponses.Count; i++)
+                            {
+                                checkBoxes[i] = new CheckBox();
+                                checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                                checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
+                                checkBoxes[i].AutoSize = true;
+                                Controls.Add(checkBoxes[i]);
+                                lesCheckBoxes[i] = checkBoxes[i];
+                            }
+                        }
+                    }
+                }
+
         private List<List<Sommet>> GenerePropositions(List<Sommet> propositionAlgo)
         {
             List<Sommet> reponseCorrecte = propositionAlgo;
