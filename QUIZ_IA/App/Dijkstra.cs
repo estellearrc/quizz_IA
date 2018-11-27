@@ -160,14 +160,13 @@ namespace App
                     }
                 }
 
-        private void GenerePropositions(int numEtape, out List<Sommet> propositionsOuverts, out List<Sommet> propositionsFermes)
+        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes, out int indiceOuvertCorrect, out int indiceFermeCorrect)
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
 
             List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
             List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
-            int nbPropositions = reponseCorrecteFermes.Count;
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
             indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
