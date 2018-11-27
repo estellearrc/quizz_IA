@@ -113,11 +113,53 @@ namespace App
             PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
             dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
+
+        private void GenerePropositions(int numEtape, out List<Sommet> propositionsOuverts, out List<Sommet> propositionsFermes)
+        {
+            List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
+            List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
+
+            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
+            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+            int nbPropositions = reponseCorrecteFermes.Count;
+            propositionsOuverts = new List<Sommet>(nbPropositions);
+            propositionsFermes = new List<Sommet>(nbPropositions);
+            for (int i = 0; i < nbPropositions; i++)
+            {
+            }
+        }
         private void AfficheChoixPossible()
         {
+            //prendre en compte le compteur
             List<Sommet> propositionsOuverts = new List<Sommet>();
             List<Sommet> propositionsFermes = new List<Sommet>();
-            GenerePropositions(numEtape, propositionsOuverts, propositionsFermes);
+            GenerePropositions(compteur, out propositionsOuverts, out propositionsFermes);
+
+            btn.Text = "Valider";
+            btn.Location= new Point(300, 300);
+            CheckBox[] checkBoxes = new CheckBox[6];
+            lesCheckBoxes = new CheckBox[6];
+
+            string choix;
+
+            for (int i = 0; i < 6; i++)
+            {
+                
+                checkBoxes[i] = new CheckBox();
+                if (i < 3) { checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                    choix=propositionsOuverts[i];
+                }
+                else { checkBoxes[i].Location = new Point(300, 145 + (i-3) * 20);
+                    choix = propositionsFermes[i];
+                }
+                                
+                checkBoxes[i].Text = alphabet[i] + ".  "+ choix ;
+                checkBoxes[i].AutoSize = true;
+                Controls.Add(checkBoxes[i]);
+                lesCheckBoxes[i] = checkBoxes[i];
+            }
+
+
         }
 
         private void Affiche()
@@ -161,6 +203,7 @@ namespace App
                 }
 
         private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes, out int indiceOuvertCorrect, out int indiceFermeCorrect)
+
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
@@ -191,5 +234,6 @@ namespace App
                 propositionsFermes[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteFermes);
             }
         }
+
     }
 }

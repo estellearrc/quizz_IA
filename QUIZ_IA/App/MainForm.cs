@@ -20,6 +20,7 @@ namespace App
         public static Dijkstra d;
         public static Quiz _quiz;
         CheckBox[] lesCheckBoxes = null;
+        
         public int compteur = 0;
         
         public MainForm(IQuizRepository quizRepository)
