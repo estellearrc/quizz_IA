@@ -113,27 +113,15 @@ namespace App
             PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
             dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
-
-        private void GenerePropositions(int numEtape, out List<Sommet> propositionsOuverts, out List<Sommet> propositionsFermes)
-        {
-            List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
-            List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
-
-            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
-            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
-            int nbPropositions = reponseCorrecteFermes.Count;
-            propositionsOuverts = new List<Sommet>(nbPropositions);
-            propositionsFermes = new List<Sommet>(nbPropositions);
-            for (int i = 0; i < nbPropositions; i++)
-            {
-            }
-        }
         private void AfficheChoixPossible()
         {
             //prendre en compte le compteur
-            List<Sommet> propositionsOuverts = new List<Sommet>();
-            List<Sommet> propositionsFermes = new List<Sommet>();
-            GenerePropositions(compteur, out propositionsOuverts, out propositionsFermes);
+            int nbPropositions = 3;
+            List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
+            List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
+            int indiceOuvertCorrect;
+            int indiceFermeCorrect;
+            GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes,out indiceOuvertCorrect, out indiceFermeCorrect);
 
             btn.Text = "Valider";
             btn.Location= new Point(300, 300);
