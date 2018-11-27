@@ -24,11 +24,16 @@ namespace App
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
         public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
 
+        public int indiceOuvertCorrect;
+        public int indiceFermeCorrect;
+
         CheckBox[] lesCheckBoxes = null;
         Button btnValider = new Button();
-        Label lblConsigne = new Label();
-        Label lblOuvert = new Label();
-        Label lblFerme = new Label();
+        Label lblConsigne = null;
+        Label lblOuvert = null;
+        Label lblFerme = null;
+        Label lblEtape = null;
+        Label lblCorrection = null;
 
 
         public int compteur = 0;
@@ -44,6 +49,7 @@ namespace App
             zoneDessin = new Panel();
             zoneDessin.Location = new Point(0, 0);
             // Subscribing to a paint eventhandler to drawingPanel:
+           
             zoneDessin.Paint += new PaintEventHandler(DrawingPanel_Paint);
             zoneDessin.BackColor = Color.White;
             zoneDessin.BorderStyle = BorderStyle.FixedSingle;
@@ -56,10 +62,16 @@ namespace App
             zoneDessin.Width = ClientRectangle.Width - 2 * offset;
             zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
+            btnValider.Text = "Valider";
+            btnValider.Location = new Point(300, 600);
+            this.btnValider.Click += new System.EventHandler(this.btnValider_Click);
+            Controls.Add(btnValider);
+            
 
             //Création du graphe à afficher dans le drawing panel
             grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
             grapheDijkstra.ResoutGraphePlusCourtChemin(ResolutionAEtoile);
+            AfficheChoixPossible();
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -124,15 +136,33 @@ namespace App
             int nbPropositions = 3;
             List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
             List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
-            int indiceOuvertCorrect;
-            int indiceFermeCorrect;
-            GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes,out indiceOuvertCorrect, out indiceFermeCorrect);
+            
+            GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes);
 
             btnValider.Text = "Valider";
-            btnValider.Location= new Point(300, 300);
+          
             CheckBox[] checkBoxes = new CheckBox[6];
             lesCheckBoxes = new CheckBox[6];
-            lblConsigne.Location= new Point(300, 300);
+
+            lblConsigne = new Label();
+            lblConsigne.Location= new Point(200, 400);
+            lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre A et E.";
+            Controls.Add(lblConsigne);
+
+            lblFerme = new Label();
+            lblFerme.Location = new Point(300, 450);
+            lblFerme.Text = "Donnez l'ensemble des fermés";
+            Controls.Add(lblFerme);
+
+            lblOuvert = new Label();
+            lblOuvert.Location = new Point(69, 450);
+            lblOuvert.Text = "Donnez l'ensemble des ouverts";
+            Controls.Add(lblOuvert);
+
+            lblEtape = new Label();
+            lblEtape.Location = new Point(200, 350);
+            lblEtape.Text = "Etape "+(compteur+1);
+            Controls.Add(lblEtape);
 
             string choix;
 
@@ -140,14 +170,15 @@ namespace App
             {
                 
                 checkBoxes[i] = new CheckBox();
-                if (i < 3) { checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                if (i < 3) { checkBoxes[i].Location = new Point(69, 500 + i * 20);
                     choix= ListeString(propositionsOuverts[i]);
                 }
-                else { checkBoxes[i].Location = new Point(300, 145 + (i-3) * 20);
-                    choix = ListeString(propositionsFermes[i]);
+                else { checkBoxes[i].Location = new Point(300, 500 + (i-3) * 20);
+                    choix = ListeString(propositionsFermes[i-3]);
                 }
                                 
                 checkBoxes[i].Text = alphabet[i] + ".  "+ choix ;
+
                 checkBoxes[i].AutoSize = true;
                 Controls.Add(checkBoxes[i]);
                 lesCheckBoxes[i] = checkBoxes[i];
@@ -170,51 +201,114 @@ namespace App
             return choix;
         }
 
-
-        private void Affiche()
+        private bool Corrige()
         {
-            if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
-            {
-
-                btnValider.Text = "Valider";
-                txtQuestion.Text = question.Intitule;
-                if (question.Type == Question.TypeQues.QCM)// pour les qcm
+            bool juste = true;          
+                for (int i = 0; i < 6; i++)
                 {
-                    if (question.Intitule == "Dijkstra")
+                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || i!=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || i == indiceFermeCorrect)))
                     {
-                        d = new Dijkstra(false);
-                        d.Show();
-                    }
-                    else
-                    {
-                        if (question.Intitule == "A*")
-                        {
-                            d = new Dijkstra(true);
-                            d.Show();
-                        }
-                        else
-                        {
-
-                            CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                            lesCheckBoxes = new CheckBox[question.LesReponses.Count];
-
-                            for (int i = 0; i < question.LesReponses.Count; i++)
-                            {
-                                checkBoxes[i] = new CheckBox();
-                                checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                                checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
-                                checkBoxes[i].AutoSize = true;
-                                Controls.Add(checkBoxes[i]);
-                                lesCheckBoxes[i] = checkBoxes[i];
-                            }
-                        }
+                        juste = false;
                     }
                 }
+            
+            return juste;
+
+        }
+
+        private void AfficheCorrection( bool avoirJuste)
+        {
+            string correction = "";
+            lblCorrection = new Label();
+            lblCorrection.Location = new Point(300, 550);
+            Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
+            if (avoirJuste)
+            {
+
+                correction = "C'est ça ! BRAVO !";
+                lblCorrection.ForeColor = couleurtxt;
+            }
+            else
+            {
+                couleurtxt = Color.FromKnownColor(KnownColor.Red);
+                lblCorrection.ForeColor = couleurtxt;
+                
+                
+                    correction = "Faux! Il fallait cocher:";
+                    for (int i = 0; i < 6; i++)
+                    {
+                        if (i==indiceOuvertCorrect|| i==indiceFermeCorrect)
+                        {
+                            correction += " " + alphabet[i];
+                        }
+                    }
+
+                }
+               
+                lblCorrection.Text = correction;
+            Controls.Add(lblCorrection);
+
+            
+        }
+
+        private void NettoieForm()
+        {
+            Controls.Remove(lblCorrection);
+            Controls.Remove(lblConsigne);
+            Controls.Remove(lblEtape);
+            Controls.Remove(lblFerme);
+            Controls.Remove(lblOuvert);
+            
+            if (lesCheckBoxes != null)
+            {
+                foreach (CheckBox checkbox in lesCheckBoxes)
+                {
+                    Controls.Remove(checkbox);
+
+                }
+
             }
         }
 
+        private void btnValider_Click(object sender, EventArgs e)
+        {
+            if (btnValider.Text == "Terminer")
+            {
+               
+                    Application.Exit();
+                }
+                
+            
+            if (compteur< grapheDijkstra.GetNbEtapes())
+            {
+                if (btnValider.Text == "Suivant" )
+                {
+                    if (btnValider.Text == "Suivant")
+                    {
+                        NettoieForm();
+                    }
+                  
+                    AfficheChoixPossible();
+                }
+                else
+                {
+                    btnValider.Text = "Suivant";
+                    AfficheCorrection(Corrige());
+                   
+                    compteur++;
+                }
+            }
+            else
+            {
+                btnValider.Text = "Terminer";
+                NettoieForm();
+                
 
-        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes, out int indiceOuvertCorrect, out int indiceFermeCorrect)
+            }
+
+        }
+
+        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];

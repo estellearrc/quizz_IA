@@ -52,7 +52,6 @@ namespace App
 
             if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
             {
-
                 btnValider.Text = "Valider";
                 txtQuestion.Text = question.Intitule;
                 if (question.Type == Question.TypeQues.QCM)// pour les qcm
@@ -88,19 +87,11 @@ namespace App
                     }
                 }
 
-
-
                 if (question.Type == Question.TypeQues.saisieNum)// pour la saisie numérique
                 {
                     NumBox.Show();
                     labelSaisie.Show();
-
-
-
-
                 }
-
-
             }
         }
 
@@ -197,7 +188,6 @@ namespace App
         }
         private void BtnValider_Click(object sender, EventArgs e)
         {
-
             if (btnValider.Text == "Terminer")
             {
                 var result = MessageBox.Show("Voulez vous recommencer ?", "Recommencer", MessageBoxButtons.YesNo);
