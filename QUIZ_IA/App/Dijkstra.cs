@@ -25,8 +25,12 @@ namespace App
         public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
 
         CheckBox[] lesCheckBoxes = null;
-        Button btn = new Button();
-        
+        Button btnValider = new Button();
+        Label lblConsigne = new Label();
+        Label lblOuvert = new Label();
+        Label lblFerme = new Label();
+
+
         public int compteur = 0;
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         public Dijkstra(bool ResolutionAEtoile)
@@ -124,11 +128,11 @@ namespace App
             int indiceFermeCorrect;
             GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes,out indiceOuvertCorrect, out indiceFermeCorrect);
 
-
-            btn.Text = "Valider";
-            btn.Location= new Point(300, 300);
+            btnValider.Text = "Valider";
+            btnValider.Location= new Point(300, 300);
             CheckBox[] checkBoxes = new CheckBox[6];
             lesCheckBoxes = new CheckBox[6];
+            lblConsigne.Location= new Point(300, 300);
 
             string choix;
 
@@ -137,10 +141,10 @@ namespace App
                 
                 checkBoxes[i] = new CheckBox();
                 if (i < 3) { checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                    choix=propositionsOuverts[i];
+                    choix= ListeString(propositionsOuverts[i]);
                 }
                 else { checkBoxes[i].Location = new Point(300, 145 + (i-3) * 20);
-                    choix = propositionsFermes[i];
+                    choix = ListeString(propositionsFermes[i]);
                 }
                                 
                 checkBoxes[i].Text = alphabet[i] + ".  "+ choix ;
@@ -161,49 +165,14 @@ namespace App
             {
                 choix += liste[i] + ", ";
             }
-            choix.Substring(-1);
+            choix.Substring(0, choix.Length-2);
+            choix += "}";
             return choix;
         }
 
-        private void Affiche()
-        {
-            if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
-            {
-
-                btnValider.Text = "Valider";
-                txtQuestion.Text = question.Intitule;
-                if (question.Type == Question.TypeQues.QCM)// pour les qcm
-                {
-                    if (question.Intitule == "Dijkstra")
-                    {
-                        d = new Dijkstra(false);
-                        d.Show();
-                    }
-                    else
-                    {
-                        if (question.Intitule == "A*")
-                        {
-                            d = new Dijkstra(true);
-                            d.Show();
-                        }
-                        else
-                        {
-
-                            CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                            lesCheckBoxes = new CheckBox[question.LesReponses.Count];
-
-                            for (int i = 0; i < question.LesReponses.Count; i++)
-                            {
-                                checkBoxes[i] = new CheckBox();
-                                checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                                checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
-                                checkBoxes[i].AutoSize = true;
-                                Controls.Add(checkBoxes[i]);
-                                lesCheckBoxes[i] = checkBoxes[i];
-                            }
-                        }
-                    }
-                }
+      
+           
+                
 
         private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes, out int indiceOuvertCorrect, out int indiceFermeCorrect)
 
