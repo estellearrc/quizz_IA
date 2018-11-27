@@ -189,27 +189,38 @@ namespace App
                         }
                     }
                 }
+            }
+        }
 
         private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes, out int indiceOuvertCorrect, out int indiceFermeCorrect)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
-
             List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
             List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
             indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
             indiceFermeCorrect = Graphe.rnd.Next(nbPropositions);
+            propositionsOuverts[indiceOuvertCorrect] = reponseCorrecteOuverts;
+            propositionsFermes[indiceFermeCorrect] = reponseCorrecteFermes;
+
             for (int i = 1; i < nbPropositions; i++) //on va faire des rotations sur les sommets fermés puis, après chaque rotation effectuée, on ajoute le premier ouvert à la fin de la liste des fermés
             {
                 Sommet O = copieReponseCorrecteOuverts.First();
                 //on met le sommet O à la fin des ouverts
                 copieReponseCorrecteOuverts.Remove(O);
                 copieReponseCorrecteOuverts.Add(O);
-                //on l'ajoute à la liste des propositions
-                propositionsOuverts[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteOuverts);
+                int k;
+                do
+                {
+                    k = Graphe.rnd.Next(nbPropositions);
+                    //on l'ajoute à la liste des propositions
+                    propositionsOuverts[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteOuverts);
+                }
+                while (k == i);
 
                 Sommet F = copieReponseCorrecteFermes.Last();
                 //on change le dernier sommet des fermés
@@ -218,10 +229,14 @@ namespace App
                 O = copieReponseCorrecteOuverts.First();
                 //On l'ajoute à la fin de la liste des fermés
                 copieReponseCorrecteFermes.Add(O);
-                //on l'ajoute à la liste des propositions
-                propositionsFermes[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteFermes);
+                do
+                {
+                    k = Graphe.rnd.Next(nbPropositions);
+                    //on l'ajoute à la liste des propositions
+                    propositionsFermes[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteFermes);
+                }
+                while (k == i);
             }
         }
-
     }
 }
