@@ -202,6 +202,41 @@ namespace App
                     }
                 }
 
+
         
+
+        private void GenerePropositions(int numEtape, out List<Sommet> propositionsOuverts, out List<Sommet> propositionsFermes)
+        {
+            List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
+            List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
+
+            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
+            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+            int nbPropositions = reponseCorrecteFermes.Count;
+            propositionsOuverts = new List<Sommet>[nbPropositions];
+            propositionsFermes = new List<Sommet>[nbPropositions];
+            indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
+            indiceFermeCorrect = Graphe.rnd.Next(nbPropositions);
+            for (int i = 1; i < nbPropositions; i++) //on va faire des rotations sur les sommets fermés puis, après chaque rotation effectuée, on ajoute le premier ouvert à la fin de la liste des fermés
+            {
+                Sommet O = copieReponseCorrecteOuverts.First();
+                //on met le sommet O à la fin des ouverts
+                copieReponseCorrecteOuverts.Remove(O);
+                copieReponseCorrecteOuverts.Add(O);
+                //on l'ajoute à la liste des propositions
+                propositionsOuverts[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteOuverts);
+
+                Sommet F = copieReponseCorrecteFermes.Last();
+                //on change le dernier sommet des fermés
+                copieReponseCorrecteFermes.Remove(F);
+                //on récupère le nouveau premier sommet ouvert
+                O = copieReponseCorrecteOuverts.First();
+                //On l'ajoute à la fin de la liste des fermés
+                copieReponseCorrecteFermes.Add(O);
+                //on l'ajoute à la liste des propositions
+                propositionsFermes[i] = grapheDijkstra.DeepCopy(copieReponseCorrecteFermes);
+            }
+        }
+
     }
 }
