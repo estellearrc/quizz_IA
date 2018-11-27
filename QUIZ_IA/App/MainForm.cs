@@ -27,12 +27,10 @@ namespace App
             InitializeComponent();
             _quizRepository = quizRepository;
             _quiz = new Quiz(_quizRepository.Get20Questions());
-            Size = new Size(550, 550); //dans le designer.cs
+            Size = new Size(550, 550);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             NumBox.Hide();
             labelSaisie.Hide();
-            d = new Dijkstra();
-            d.Show();
         }
 
         private void AfficheScore()
@@ -55,26 +53,36 @@ namespace App
             {
 
                 btnValider.Text = "Valider";
-                txtQuestion.Text = @question.Intitule;
+                txtQuestion.Text = question.Intitule;
                 if (question.Type == Question.TypeQues.QCM)// pour les qcm
                 {
-                    if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
+                    if (question.Intitule == "Dijkstra")
                     {
-
+                        d = new Dijkstra(false);
+                        d.Show();
                     }
                     else
                     {
-                        CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
-                        lesCheckBoxes = new CheckBox[question.LesReponses.Count];
-
-                        for (int i = 0; i < question.LesReponses.Count; i++)
+                        if(question.Intitule == "A*")
                         {
-                            checkBoxes[i] = new CheckBox();
-                            checkBoxes[i].Location = new Point(69, 145 + i * 20);
-                            checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
-                            checkBoxes[i].AutoSize = true;
-                            Controls.Add(checkBoxes[i]);
-                            lesCheckBoxes[i] = checkBoxes[i];
+                            d = new Dijkstra(true);
+                            d.Show();
+                        }
+                        else
+                        {
+
+                            CheckBox[] checkBoxes = new CheckBox[question.LesReponses.Count];
+                            lesCheckBoxes = new CheckBox[question.LesReponses.Count];
+
+                            for (int i = 0; i < question.LesReponses.Count; i++)
+                            {
+                                checkBoxes[i] = new CheckBox();
+                                checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                                checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
+                                checkBoxes[i].AutoSize = true;
+                                Controls.Add(checkBoxes[i]);
+                                lesCheckBoxes[i] = checkBoxes[i];
+                            }
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace App
         public static Panel zoneDessin; //design context = zone de dessin
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
         public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
-        public Dijkstra()
+        public Dijkstra(bool ResolutionAEtoile)
         {
             //Initialisation des composants et de la fenêtre client
             InitializeComponent();
@@ -49,7 +49,7 @@ namespace App
 
             //Création du graphe à afficher dans le drawing panel
             grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
-            grapheDijkstra.ResoutGraphePlusCourtChemin(true);
+            grapheDijkstra.ResoutGraphePlusCourtChemin(ResolutionAEtoile);
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
         {
@@ -105,6 +105,18 @@ namespace App
             Font f = new Font("Calibri", 11, FontStyle.Regular);
             PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
             dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
+        }
+        private void AfficheQuestion()
+        {
+
+        }
+        private List<List<Sommet>> GenerePropositions(List<Sommet> propositionAlgo)
+        {
+            List<Sommet> reponseCorrecte = propositionAlgo;
+            List<List<Sommet>> propositions = new List<List<Sommet>>();
+            List<Sommet> copieReponseCorrecte = grapheDijkstra.DeepCopy(propositionAlgo);
+            int nbSommets = propositionAlgo.Count;
+            return propositions;
         }
     }
 }
