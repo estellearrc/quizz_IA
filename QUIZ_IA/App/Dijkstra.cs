@@ -116,12 +116,14 @@ namespace App
         private void AfficheChoixPossible()
         {
             //prendre en compte le compteur
+
             int nbPropositions = 3;
             List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
             List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
             int indiceOuvertCorrect;
             int indiceFermeCorrect;
             GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes,out indiceOuvertCorrect, out indiceFermeCorrect);
+
 
             btn.Text = "Valider";
             btn.Location= new Point(300, 300);
@@ -148,6 +150,19 @@ namespace App
             }
 
 
+        }
+
+        private string ListeString(List<Sommet> liste)
+        {
+            string choix;
+            choix = "{";
+
+            for (int i = 0; i < liste.Count(); i++)
+            {
+                choix += liste[i] + ", ";
+            }
+            choix.Substring(-1);
+            return choix;
         }
 
         private void Affiche()
