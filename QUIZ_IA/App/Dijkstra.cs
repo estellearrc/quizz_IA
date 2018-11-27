@@ -160,13 +160,19 @@ namespace App
                     }
                 }
 
-        private List<List<Sommet>> GenerePropositions(List<Sommet> propositionAlgo)
+        private void GenerePropositions(int numEtape, out List<Sommet> propositionsOuverts, out List<Sommet> propositionsFermes)
         {
-            List<Sommet> reponseCorrecte = propositionAlgo;
-            List<List<Sommet>> propositions = new List<List<Sommet>>();
-            List<Sommet> copieReponseCorrecte = grapheDijkstra.DeepCopy(propositionAlgo);
-            int nbSommets = propositionAlgo.Count;
-            return propositions;
+            List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
+            List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
+
+            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
+            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+            int nbPropositions = reponseCorrecteFermes.Count;
+            propositionsOuverts = new List<Sommet>(nbPropositions);
+            propositionsFermes = new List<Sommet>(nbPropositions);
+            for(int i = 0; i < nbPropositions; i++)
+            {
+            }
         }
     }
 }
