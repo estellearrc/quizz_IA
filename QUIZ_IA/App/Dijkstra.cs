@@ -22,7 +22,7 @@ namespace App
         private int offset = 20;
         public static Panel zoneDessin; //design context = zone de dessin
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
-        public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
+        public Graphics dessin; //dessin du graphe graphDijkstra dans la zoneDessin
         public Dijkstra(bool ResolutionAEtoile)
         {
             //Initialisation des composants et de la fenêtre client
@@ -110,12 +110,15 @@ namespace App
         {
 
         }
-        private List<List<Sommet>> GenerePropositions(List<Sommet> propositionAlgo)
+        private List<List<Sommet>> GenerePropositions(int numEtape)
         {
-            List<Sommet> reponseCorrecte = propositionAlgo;
+            List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
+            List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
             List<List<Sommet>> propositions = new List<List<Sommet>>();
-            List<Sommet> copieReponseCorrecte = grapheDijkstra.DeepCopy(propositionAlgo);
-            int nbSommets = propositionAlgo.Count;
+            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
+            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+            int nbSommets = reponseCorrecteFermes.Count;
+
             return propositions;
         }
     }

@@ -40,6 +40,10 @@ namespace App
             Aretes = new List<Arete>();
             ConnecteSommets(); //initialise la liste Aretes
         }
+        public int GetNbEtapes()
+        {
+            return EtatsSuccessifsOuverts.Count;
+        }
         public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... réglé avec compteur
         {
             Sommet s;
