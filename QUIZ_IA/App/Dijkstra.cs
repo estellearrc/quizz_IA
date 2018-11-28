@@ -37,7 +37,6 @@ namespace App
 
         private int nbPropositions;
         private int compteur = 0;
-        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         public Dijkstra(bool ResolutionAEtoile)
         {
             //Initialisation des composants et de la fenêtre client
@@ -190,7 +189,7 @@ namespace App
                     choix = ListeString(propositionsFermes[i- nbPropositions]);
                 }
                                 
-                checkBoxes[i].Text = alphabet[i] + ".  "+ choix ;
+                checkBoxes[i].Text = MainForm.alphabet[i] + ".  "+ choix ;
 
                 checkBoxes[i].AutoSize = true;
                 Controls.Add(checkBoxes[i]);
@@ -262,11 +261,11 @@ namespace App
                     {
                         if (i==indiceOuvertCorrect)
                         {
-                            correction += " " + alphabet[i];
+                            correction += " " + MainForm.alphabet[i];
                         }
                     if (i-3 == indiceFermeCorrect)
                     {
-                        correction += " et " + alphabet[i];
+                        correction += " et " + MainForm.alphabet[i];
                     }
                     }
 

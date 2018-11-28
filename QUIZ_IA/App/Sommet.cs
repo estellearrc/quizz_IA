@@ -56,7 +56,7 @@ namespace App
                 }
                 else
                 {
-                    label = "P" + Numero;
+                    label = "S" + Numero;
                 }
             }
             return label;

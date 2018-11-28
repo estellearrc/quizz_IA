@@ -19,6 +19,7 @@ namespace App
 
         //propriétés utiles pour l'affichage du graphe
         public static Random rnd = new Random();
+        private static int __NBSOMMETS = 11;
         public List<Arete> Aretes { get; private set; }
         public List<Sommet> Sommets { get; private set; } //liste des noeuds du graphe
 
@@ -155,7 +156,7 @@ namespace App
             //Sommets.Add(new Sommet(4, 6));
             //Sommets.Add(new Sommet(5, 7));
             //Sommets.Add(new Sommet(7, 7));
-            int nbPoints = rnd.Next(5, MainForm.alphabet.Length + 1);
+            int nbPoints = rnd.Next(7, __NBSOMMETS + 1);
             for (int i = 0; i < nbPoints; i++)
             {
                 float partieDecimaleX = (float)rnd.NextDouble();

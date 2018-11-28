@@ -16,7 +16,7 @@ namespace App
     {
         private IQuizRepository _quizRepository;
 
-        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
+        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         public static Dijkstra d;
         public static Quiz _quiz;
         CheckBox[] lesCheckBoxes = null;
