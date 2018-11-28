@@ -115,7 +115,7 @@ namespace App
         }
         private void TraceArete(Arete r)
         {
-            Pen aPen = new Pen(Color.Black, 2);
+            Pen aPen = new Pen(Color.Black, 1);
             // Set line caps and dash style:
             aPen.StartCap = LineCap.RoundAnchor;
             aPen.EndCap = LineCap.RoundAnchor;
