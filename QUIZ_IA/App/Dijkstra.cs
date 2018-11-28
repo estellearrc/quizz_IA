@@ -63,6 +63,7 @@ namespace App
             zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
             btnValider.Text = "Valider";
+            btnValider.Size = new Size(137, 31);
             btnValider.Location = new Point(300, 600);
             btnValider.Click += new EventHandler(btnValider_Click);
             Controls.Add(btnValider);
@@ -133,7 +134,10 @@ namespace App
         {
             //prendre en compte le compteur
 
-            int nbPropositions = 3;
+
+
+            int nbPropositions = grapheDijkstra.EtatsSuccessifsFermes[compteur].Count;
+
             List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
             List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
             
@@ -333,7 +337,7 @@ namespace App
 
         }
 
-        private void GenerePropositions(out int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
+        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
