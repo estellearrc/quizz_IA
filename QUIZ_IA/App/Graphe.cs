@@ -85,7 +85,7 @@ namespace App
                 distanceMin = CalculeDistanceMinimale(s, SommetInitial);
                 compteur++;
             }
-            while (s.CalculeDistance(SommetInitial) <= 2*distanceMin/3 && compteur < n ); //|| s.Incidences.Count < 2);
+            while (s.CalculeDistance(SommetInitial) < distanceMin && compteur < n ); //|| s.Incidences.Count < 2);
             return s;
         }
         /// <summary>
@@ -98,8 +98,8 @@ namespace App
             List<Arete> incidencesS2 = DeepCopy(s2.Incidences);
 
             //calcul de la distance max sur ces 2 nouvelles listes
-            double distanceMax1 = CalculeDistanceMax(incidencesS1,0);
-            double distanceMax2 = CalculeDistanceMax(incidencesS2, 0);
+            double distanceMax1 = CalculeDistanceMin(incidencesS1,0);
+            double distanceMax2 = CalculeDistanceMin(incidencesS2, 0);
 
             double distanceMin = distanceMax1 + distanceMax2;
             return distanceMin;
@@ -122,25 +122,25 @@ namespace App
         /// <summary>
         /// Calcule la distance entre un sommet et son sommet voisin le plus éloigné
         /// </summary>
-        public double CalculeDistanceMax(List<Arete> incidences, double distanceMax)
+        public double CalculeDistanceMin(List<Arete> incidences, double distanceMin)
         {
             if(incidences.Count == 1)
             {
-                return distanceMax;
+                return distanceMin;
             }
             else
             {
                 Arete a1 = incidences[0];
                 Arete a2 = incidences[1];
-                if(a1.Cout < a2.Cout)
+                if(a1.Cout > a2.Cout)
                 {
                     incidences.Remove(a1);
-                    return CalculeDistanceMax(incidences, a2.Cout);
+                    return CalculeDistanceMin(incidences, a2.Cout);
                 }
                 else
                 {
                     incidences.Remove(a2);
-                    return CalculeDistanceMax(incidences, a1.Cout);
+                    return CalculeDistanceMin(incidences, a1.Cout);
                 }
             }
         }

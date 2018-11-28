@@ -64,7 +64,7 @@ namespace App
             Controls.Add(zoneDessin);
             btnValider.Text = "Valider";
             btnValider.Location = new Point(300, 600);
-            this.btnValider.Click += new System.EventHandler(this.btnValider_Click);
+            btnValider.Click += new EventHandler(btnValider_Click);
             Controls.Add(btnValider);
             
 
@@ -308,13 +308,14 @@ namespace App
 
         }
 
-        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
+        private void GenerePropositions(out int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
             List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
             List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
+            nbPropositions = grapheDijkstra.EtatsSuccessifsFermes[numEtape].Count;
 
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
