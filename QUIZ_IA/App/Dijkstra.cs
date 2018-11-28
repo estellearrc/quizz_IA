@@ -133,11 +133,11 @@ namespace App
         {
             //prendre en compte le compteur
 
-            int nbPropositions = 3;
-            List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
-            List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
+            int nbPropositions;
+            List<List<Sommet>> propositionsOuverts = new List<List<Sommet>>();
+            List<List<Sommet>> propositionsFermes = new List<List<Sommet>>();
             
-            GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes);
+            GenerePropositions(out nbPropositions,compteur, out propositionsOuverts, out propositionsFermes);
 
             btnValider.Text = "Valider";
           
@@ -325,7 +325,7 @@ namespace App
 
         }
 
-        private void GenerePropositions(out int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
+        private void GenerePropositions(out int nbPropositions, int numEtape, out List<List<Sommet>> propositionsOuverts, out List<List<Sommet>> propositionsFermes)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
@@ -334,8 +334,8 @@ namespace App
             List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
             nbPropositions = grapheDijkstra.EtatsSuccessifsFermes[numEtape].Count;
 
-            propositionsOuverts = new List<Sommet>[nbPropositions];
-            propositionsFermes = new List<Sommet>[nbPropositions];
+            propositionsOuverts = new List<List<Sommet>>();
+            propositionsFermes = new List<List<Sommet>>();
             indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
             indiceFermeCorrect = Graphe.rnd.Next(nbPropositions);
             propositionsOuverts[indiceOuvertCorrect] = reponseCorrecteOuverts;
