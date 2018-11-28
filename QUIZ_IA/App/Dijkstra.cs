@@ -340,7 +340,6 @@ namespace App
         }
 
         private void GenerePropositions(int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
-
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
@@ -350,8 +349,8 @@ namespace App
 
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
-            indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
-            indiceFermeCorrect = Graphe.rnd.Next(nbPropositions);
+            indiceOuvertCorrect = Graphe.rnd.Next(Math.Min(nbPropositions,4));
+            indiceFermeCorrect = Graphe.rnd.Next(Math.Min(nbPropositions, 4));
             propositionsOuverts[indiceOuvertCorrect] = reponseCorrecteOuverts;
             propositionsFermes[indiceFermeCorrect] = reponseCorrecteFermes;
 
