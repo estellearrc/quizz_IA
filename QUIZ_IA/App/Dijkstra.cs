@@ -342,8 +342,8 @@ namespace App
 
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
-            indiceOuvertCorrect = Graphe.rnd.Next(nbPropositions);
-            indiceFermeCorrect = Graphe.rnd.Next(nbPropositions);
+            indiceOuvertCorrect = Graphe.rnd.Next(Math.Min(nbPropositions,4));
+            indiceFermeCorrect = Graphe.rnd.Next(Math.Min(nbPropositions, 4));
             propositionsOuverts[indiceOuvertCorrect] = reponseCorrecteOuverts;
             propositionsFermes[indiceFermeCorrect] = reponseCorrecteFermes;
 
