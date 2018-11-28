@@ -170,15 +170,15 @@ namespace App
 
             string choix;
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 2*nbPropositions; i++)
             {
                 
                 checkBoxes[i] = new CheckBox();
-                if (i < 3) { checkBoxes[i].Location = new Point(69, 500 + i * 20);
+                if (i < nbPropositions) { checkBoxes[i].Location = new Point(69, 500 + i * 20);
                     choix= ListeString(propositionsOuverts[i]);
                 }
-                else { checkBoxes[i].Location = new Point(300, 500 + (i-3) * 20);
-                    choix = ListeString(propositionsFermes[i-3]);
+                else { checkBoxes[i].Location = new Point(300, 500 + (i-nbPropositions) * 20);
+                    choix = ListeString(propositionsFermes[i- nbPropositions]);
                 }
                                 
                 checkBoxes[i].Text = alphabet[i] + ".  "+ choix ;

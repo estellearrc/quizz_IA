@@ -25,7 +25,7 @@ namespace App
         }
         public override string ToString()
         {
-            return Math.Round(Cout, 1).ToString();
+            return (10*Math.Round(Cout, 1)).ToString();
         }
     }
 }

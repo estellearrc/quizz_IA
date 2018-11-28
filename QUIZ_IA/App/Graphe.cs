@@ -15,6 +15,7 @@ namespace App
         //distance minimale entre le point initial et le point final à respecter, genre min 5
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
+        //retirer graphes linéaires
 
         //propriétés utiles pour l'affichage du graphe
         public static Random rnd = new Random();
