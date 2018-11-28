@@ -24,8 +24,8 @@ namespace App
         public static Graphe grapheDijkstra; //graphe soumis à l'agorithme Dijkstra ou A*
         public Graphics dessin; //dessin du graphe graphDijkstra dans le zoneDessin
 
-        public int indiceOuvertCorrect;
-        public int indiceFermeCorrect;
+        private int indiceOuvertCorrect;
+        private int indiceFermeCorrect;
 
         CheckBox[] lesCheckBoxes = null;
         Button btnValider = new Button();
@@ -35,8 +35,8 @@ namespace App
         Label lblEtape = null;
         Label lblCorrection = null;
 
-
-        public int compteur = 0;
+        private int nbPropositions;
+        private int compteur = 0;
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K" };
         public Dijkstra(bool ResolutionAEtoile)
         {
@@ -134,16 +134,16 @@ namespace App
         {
             //prendre en compte le compteur
 
-            int nbPropositions = grapheDijkstra.EtatsSuccessifsFermes[compteur].Count;
+            nbPropositions = grapheDijkstra.EtatsSuccessifsFermes[compteur].Count;
             List<Sommet>[] propositionsOuverts = new List<Sommet>[nbPropositions];
             List<Sommet>[] propositionsFermes = new List<Sommet>[nbPropositions];
             
-            GenerePropositions(nbPropositions,compteur, out propositionsOuverts, out propositionsFermes);
+            GenerePropositions(compteur, out propositionsOuverts, out propositionsFermes);
 
             btnValider.Text = "Valider";
           
-            CheckBox[] checkBoxes = new CheckBox[6];
-            lesCheckBoxes = new CheckBox[6];
+            CheckBox[] checkBoxes = new CheckBox[2*nbPropositions];
+            lesCheckBoxes = new CheckBox[2*nbPropositions];
 
             lblConsigne = new Label();
             lblConsigne.Location= new Point(200, 400);
@@ -225,9 +225,9 @@ namespace App
         private bool Corrige()
         {
             bool juste = true;          
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 2*nbPropositions; i++)
                 {
-                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || (i-3)!=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || (i-3) == indiceFermeCorrect)))
+                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || (i- nbPropositions) !=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || (i- nbPropositions) == indiceFermeCorrect)))
                     {
                         juste = false;
                     }
@@ -239,9 +239,10 @@ namespace App
 
         private void AfficheCorrection( bool avoirJuste)
         {
+
             string correction = "";
             lblCorrection = new Label();
-            lblCorrection.Location = new Point(300, 550);
+            lblCorrection.Location = new Point(300, 600);
             lblCorrection.AutoSize = true;
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
@@ -309,11 +310,8 @@ namespace App
             {
                 if (btnValider.Text == "Suivant" )
                 {
-                    if (btnValider.Text == "Suivant")
-                    {
-                        NettoieForm();
-                    }
-                  
+                    grapheDijkstra.SommetActuel = grapheDijkstra.PlusCourtChemin[compteur];
+                    NettoieForm();                  
                     AfficheChoixPossible();
                 }
                 else
@@ -334,7 +332,7 @@ namespace App
 
         }
 
-        private void GenerePropositions(int nbPropositions, int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
+        private void GenerePropositions(int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
 
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
