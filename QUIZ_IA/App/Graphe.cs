@@ -239,7 +239,7 @@ namespace App
         {
             Sommet s = SommetInitial;
             SommetsOuverts.Add(s);
-            EtatsSuccessifsOuverts.Add(SommetsOuverts); //objets de type référence donc seront tous les mêmes à la fin de A*....... breaker le while
+            EtatsSuccessifsOuverts.Add(SommetsOuverts); 
             EtatsSuccessifsFermes.Add(SommetsFermes);
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
             while (SommetsOuverts.Count != 0 && s.EndState() == false)
@@ -247,9 +247,7 @@ namespace App
                 // Le meilleur noeud des ouverts est supposé placé en tête de liste
                 // On le place dans les fermés
                 SommetsOuverts.Remove(s);
-                EtatsSuccessifsOuverts.Add(DeepCopy(SommetsOuverts));
                 SommetsFermes.Add(s);
-                EtatsSuccessifsFermes.Add(DeepCopy(SommetsFermes));
 
                 // Il faut trouver les noeuds successeurs de s
                 MAJSuccesseurs(s);
@@ -265,6 +263,8 @@ namespace App
                 {
                     s = null;
                 }
+                EtatsSuccessifsOuverts.Add(DeepCopy(SommetsOuverts));
+                EtatsSuccessifsFermes.Add(DeepCopy(SommetsFermes));
             }
 
             // A* terminé
