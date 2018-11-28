@@ -281,6 +281,8 @@ namespace App
                     CoutPlusCourtChemin += s.CoutTotal;
                 }
             }
+            EtatsSuccessifsFermes.Reverse();
+            EtatsSuccessifsOuverts.Reverse();
         }
 
         private void MAJSuccesseurs(Sommet s)
