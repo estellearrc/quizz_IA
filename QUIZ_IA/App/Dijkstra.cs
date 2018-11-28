@@ -26,6 +26,7 @@ namespace App
 
         private int indiceOuvertCorrect;
         private int indiceFermeCorrect;
+        public bool avoirJuste;
 
         CheckBox[] lesCheckBoxes = null;
         Button btnValider = new Button();
@@ -63,7 +64,7 @@ namespace App
             Controls.Add(zoneDessin);
             btnValider.Text = "Valider";
             btnValider.Size = new Size(137, 31);
-            btnValider.Location = new Point(300, 600);
+            btnValider.Location = new Point(280, 600);
             btnValider.Click += new EventHandler(btnValider_Click);
             Controls.Add(btnValider);
             
@@ -145,33 +146,37 @@ namespace App
             lesCheckBoxes = new CheckBox[2*nbPropositions];
 
             lblConsigne = new Label();
-            lblConsigne.Location= new Point(200, 400);
-            if(grapheDijkstra.ResolutionAEtoile)
+            lblConsigne.Location= new Point(80, 390);
+            lblConsigne.Font = new Font("Calibri", 13, FontStyle.Bold, GraphicsUnit.Point, 0);
+            if (grapheDijkstra.ResolutionAEtoile)
             {
-                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal + ".";
+                lblConsigne.Text = "Appliquez A* pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal;
             }
             else
             {
 
-                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal + ".";
+                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal;
             }
             Controls.Add(lblConsigne);
             lblConsigne.AutoSize = true;
 
             lblFerme = new Label();
-            lblFerme.Location = new Point(300, 450);
-            lblFerme.Text = "Donnez l'ensemble des fermés";
+            lblFerme.Location = new Point(100, 455);
+            lblFerme.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFerme.Text = "Ensemble des fermés";
             Controls.Add(lblFerme);
             lblFerme.AutoSize = true;
 
             lblOuvert = new Label();
-            lblOuvert.Location = new Point(69, 450);
-            lblOuvert.Text = "Donnez l'ensemble des ouverts";
+            lblOuvert.Location = new Point(450, 455);
+            lblOuvert.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblOuvert.Text = "Ensemble des ouverts";
             Controls.Add(lblOuvert);
             lblOuvert.AutoSize = true;
 
             lblEtape = new Label();
-            lblEtape.Location = new Point(200, 350);
+            lblEtape.Location = new Point(310, 420);
+            lblEtape.Font = new Font("Calibri", 15, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblEtape.Text = "Etape "+(compteur+1);
             Controls.Add(lblEtape);
             lblEtape.AutoSize = true;
@@ -182,11 +187,13 @@ namespace App
             {
                 
                 checkBoxes[i] = new CheckBox();
-                if (i < nbPropositions) { checkBoxes[i].Location = new Point(69, 500 + i * 20);
-                    choix= ListeString(propositionsOuverts[i]);
+                if (i < nbPropositions) {
+                    checkBoxes[i].Location = new Point(120, 480 + i* 20);
+                    choix = ListeString(propositionsFermes[i ]);
                 }
-                else { checkBoxes[i].Location = new Point(300, 500 + (i-nbPropositions) * 20);
-                    choix = ListeString(propositionsFermes[i- nbPropositions]);
+                else { 
+                    checkBoxes[i].Location = new Point(485, 480 + (i - nbPropositions) * 20);
+                    choix = ListeString(propositionsOuverts[i - nbPropositions]);
                 }
                                 
                 checkBoxes[i].Text = MainForm.alphabet[i] + ".  "+ choix ;
@@ -241,7 +248,8 @@ namespace App
 
             string correction = "";
             lblCorrection = new Label();
-            lblCorrection.Location = new Point(300, 600);
+            lblCorrection.Location = new Point(260, 560);
+            lblCorrection.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCorrection.AutoSize = true;
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
@@ -309,7 +317,7 @@ namespace App
             {
                 if (btnValider.Text == "Suivant" )
                 {
-                    grapheDijkstra.SommetActuel = grapheDijkstra.PlusCourtChemin[compteur];
+                    //grapheDijkstra.SommetActuel = grapheDijkstra.PlusCourtChemin[compteur];
                     NettoieForm();                  
                     AfficheChoixPossible();
                 }
