@@ -148,21 +148,25 @@ namespace App
             lblConsigne.Location= new Point(200, 400);
             lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre A et E.";
             Controls.Add(lblConsigne);
+            lblConsigne.AutoSize = true;
 
             lblFerme = new Label();
             lblFerme.Location = new Point(300, 450);
             lblFerme.Text = "Donnez l'ensemble des fermés";
             Controls.Add(lblFerme);
+            lblFerme.AutoSize = true;
 
             lblOuvert = new Label();
             lblOuvert.Location = new Point(69, 450);
             lblOuvert.Text = "Donnez l'ensemble des ouverts";
             Controls.Add(lblOuvert);
+            lblOuvert.AutoSize = true;
 
             lblEtape = new Label();
             lblEtape.Location = new Point(200, 350);
             lblEtape.Text = "Etape "+(compteur+1);
             Controls.Add(lblEtape);
+            lblEtape.AutoSize = true;
 
             string choix;
 
@@ -214,7 +218,7 @@ namespace App
             bool juste = true;          
                 for (int i = 0; i < 6; i++)
                 {
-                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || i!=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || i == indiceFermeCorrect)))
+                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || (i-3)!=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || (i-3) == indiceFermeCorrect)))
                     {
                         juste = false;
                     }
@@ -229,6 +233,7 @@ namespace App
             string correction = "";
             lblCorrection = new Label();
             lblCorrection.Location = new Point(300, 550);
+            lblCorrection.AutoSize = true;
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
             {
@@ -245,10 +250,14 @@ namespace App
                     correction = "Faux! Il fallait cocher:";
                     for (int i = 0; i < 6; i++)
                     {
-                        if (i==indiceOuvertCorrect|| i==indiceFermeCorrect)
+                        if (i==indiceOuvertCorrect)
                         {
                             correction += " " + alphabet[i];
                         }
+                    if (i-3 == indiceFermeCorrect)
+                    {
+                        correction += " et " + alphabet[i];
+                    }
                     }
 
                 }
