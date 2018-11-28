@@ -191,12 +191,20 @@ namespace App
         {
             string choix;
             choix = "{";
-
-            for (int i = 0; i < liste.Count(); i++)
+            int n;
+            if(liste == null)
             {
-                choix += liste[i] + ", ";
+                n = 0;
             }
-            choix.Substring(0, choix.Length-2);
+            else
+            {
+                n = liste.Count;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                choix += liste[i] + ",";
+            }
+            choix.Substring(0, choix.Length-1);
             choix += "}";
             return choix;
         }
