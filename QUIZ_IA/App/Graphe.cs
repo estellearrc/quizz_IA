@@ -87,7 +87,7 @@ namespace App
                 distanceMin = CalculeDistanceMinimale(s, SommetInitial);
                 compteur++;
             }
-            while (s.CalculeDistance(SommetInitial) < distanceMin && compteur < n ); //|| s.Incidences.Count < 2);
+            while (s.CalculeDistance(SommetInitial) <= distanceMin && compteur < n && s.IsEqual(SommetInitial)); //|| s.Incidences.Count < 2);
             return s;
         }
         /// <summary>
@@ -148,14 +148,15 @@ namespace App
         }
         public void GenereSommets(int xMin, int xMax, int yMin, int yMax)
         {
-            //int nbPoints = 7;
-            //Sommets.Add(new Sommet(1, 1));
-            //Sommets.Add(new Sommet(2, 5));
-            //Sommets.Add(new Sommet(3, 3));
-            //Sommets.Add(new Sommet(1, 4));
-            //Sommets.Add(new Sommet(4, 6));
-            //Sommets.Add(new Sommet(5, 7));
-            //Sommets.Add(new Sommet(7, 7));
+            //Sommets.Add(new Sommet((float)3.4, (float)8.4,true));
+            //Sommets.Add(new Sommet((float)6.7, (float)7.7, true));
+            //Sommets.Add(new Sommet((float)8.5, (float)2.8, true));
+            //Sommets.Add(new Sommet((float)5.4, (float)8.4, true));
+            //Sommets.Add(new Sommet((float)4.5, (float)1.3, true));
+            //Sommets.Add(new Sommet((float)3.8, (float)7.5, true));
+            //Sommets.Add(new Sommet((float)1.5, (float)3.9, true));
+            //Sommets.Add(new Sommet((float)4.5, (float)2.4, true));
+            //Sommets.Add(new Sommet((float)7.9, (float)5.9, true));
             int nbPoints = rnd.Next(7, __NBSOMMETS + 1);
             for (int i = 0; i < nbPoints; i++)
             {
@@ -163,7 +164,7 @@ namespace App
                 float partieDecimaleY = (float)rnd.NextDouble();
                 float x = rnd.Next(xMin + 1, xMax - 1) + partieDecimaleX;
                 float y = rnd.Next(yMin + 1, yMax - 1) + partieDecimaleY;
-                Sommet s = new Sommet(x, y,true);
+                Sommet s = new Sommet(x, y, true);
                 if (!Sommets.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les sommets du graphe et à une distance >= 1 des autres sommets
                 {
                     Sommets.Add(s);
@@ -237,10 +238,11 @@ namespace App
         }
         public void RechercheSolutionAEtoile()
         {
+            int numEtape = 1;
             Sommet s = SommetInitial;
             SommetsOuverts.Add(s);
-            EtatsSuccessifsOuverts.Add(SommetsOuverts); 
-            EtatsSuccessifsFermes.Add(SommetsFermes);
+            EtatsSuccessifsOuverts.Add(DeepCopy(SommetsOuverts)); 
+            EtatsSuccessifsFermes.Add(DeepCopy(SommetsFermes));
             // tant que le noeud n'est pas terminal et que ouverts n'est pas vide
             while (SommetsOuverts.Count != 0 && s.EndState() == false)
             {
@@ -250,9 +252,9 @@ namespace App
                 SommetsFermes.Add(s);
 
                 // Il faut trouver les noeuds successeurs de s
-                MAJSuccesseurs(s);
+                MAJSuccesseurs(s,numEtape);
                 // Inutile de retrier car les insertions ont été faites en respectant l'ordre
-
+                
                 // On prend le meilleur, donc celui en position 0, pour continuer à explorer les états
                 // A condition qu'il existe bien sûr
                 if (SommetsOuverts.Count > 0)
@@ -265,8 +267,12 @@ namespace App
                 }
                 EtatsSuccessifsOuverts.Add(DeepCopy(SommetsOuverts));
                 EtatsSuccessifsFermes.Add(DeepCopy(SommetsFermes));
+                numEtape++;
             }
-
+            SommetsOuverts.Remove(SommetFinal);
+            SommetsFermes.Add(SommetFinal);
+            EtatsSuccessifsOuverts.Add(SommetsOuverts);
+            EtatsSuccessifsFermes.Add(SommetsFermes);
             // A* terminé
             // On retourne le chemin qui va du noeud initial au noeud final sous forme de liste
             // Le chemin est retrouvé en partant du noeud final et en accédant aux parents de manière
@@ -282,11 +288,9 @@ namespace App
                     CoutPlusCourtChemin += s.CoutTotal;
                 }
             }
-            EtatsSuccessifsFermes.Reverse();
-            EtatsSuccessifsOuverts.Reverse();
         }
 
-        private void MAJSuccesseurs(Sommet s)
+        private void MAJSuccesseurs(Sommet s,int numEtape)
         {
             // On fait appel à GetListSucc, méthode abstraite qu'on doit réécrire pour chaque
             // problème. Elle doit retourner la liste complète des noeuds successeurs de s.
@@ -314,7 +318,7 @@ namespace App
                             succBis.SommetParent = s;
                             // Mise à jour des ouverts
                             SommetsOuverts.Remove(succBis);
-                            InsertNewNodeInOpenList(succBis);
+                            InsertNewNodeInOpenList(succBis,numEtape);
                         }
                         // else on ne fait rien, car le nouveau chemin est moins bon
                     }
@@ -324,7 +328,7 @@ namespace App
                         succ.CoutCumule = s.CoutCumule + RetrouveArete(s, succ).Cout;
                         succ.SommetParent = s;
                         succ.CalculCoutTotal(); // somme de GCost et HCost
-                        InsertNewNodeInOpenList(succ);
+                        InsertNewNodeInOpenList(succ,numEtape);
                     }
                 }
                 // else il est dans les fermés donc on ne fait rien,
@@ -332,7 +336,7 @@ namespace App
             }
         }
 
-        public void InsertNewNodeInOpenList(Sommet NewNode)
+        public void InsertNewNodeInOpenList(Sommet NewNode, int numEtape)
         {
             // Insertion pour respecter l'ordre du cout total le plus petit au plus grand
             if (SommetsOuverts.Count == 0)
@@ -343,7 +347,7 @@ namespace App
                 bool trouve = false;
                 int i = 0;
                 do
-                    if (NewNode.CoutTotal < s.CoutTotal)
+                    if ((NewNode.CoutTotal < s.CoutTotal) && (!EtatsSuccessifsOuverts[numEtape - 1].Contains(s)))//si s n'était pas présent dans les ouverts de l'étape précédente
                     {
                         SommetsOuverts.Insert(i, NewNode);
                         trouve = true;
