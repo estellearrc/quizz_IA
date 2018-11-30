@@ -65,7 +65,7 @@ namespace App
                     {
                         if(question.Intitule == "A*")
                         {
-                            d = new Dijkstra(false);
+                            d = new Dijkstra(true);
                             d.Show();
                         }
                         else

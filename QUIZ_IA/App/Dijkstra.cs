@@ -61,7 +61,6 @@ namespace App
             zoneDessin = new Panel();
             zoneDessin.Location = new Point(0, 0);
             // Subscribing to a paint eventhandler to drawingPanel:
-           
             zoneDessin.Paint += new PaintEventHandler(DrawingPanel_Paint);
             zoneDessin.BackColor = Color.White;
             zoneDessin.BorderStyle = BorderStyle.FixedSingle;
@@ -361,10 +360,14 @@ namespace App
             if (compteur< grapheDijkstra.GetNbEtapes())
             {
                 if (btnValider.Text == "Suivant" )
-                {
-                    //grapheDijkstra.SommetActuel = grapheDijkstra.PlusCourtChemin[compteur];
-                    NettoieForm();                  
+                { 
+                    NettoieForm();
+                    grapheDijkstra.SommetActuel = grapheDijkstra.EtatsSuccessifsFermes[compteur].Last();
+                    //zoneDessin.Invalidate();
+                    zoneDessin.Update();
+                    //zoneDessin.Refresh();
                     AfficheChoixPossible();
+                    Application.DoEvents();
                 }
                 else
                 {
