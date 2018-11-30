@@ -26,8 +26,10 @@ namespace App
 
         private int indiceOuvertCorrect;
         private int indiceFermeCorrect;
+        public bool avoirJuste;
 
-        CheckBox[] lesCheckBoxes = null;
+        RadioButton[] lesRadiobuttons = null;
+
         Button btnValider = new Button();
         Label lblConsigne = null;
         Label lblOuvert = null;
@@ -35,14 +37,25 @@ namespace App
         Label lblEtape = null;
         Label lblCorrection = null;
 
+        public static Panel zoneRadButFerme;
+        public static Panel zoneRadButOuvert;
+
         private int nbPropositions;
         private int compteur = 0;
+        public int score = 0;
         public Dijkstra(bool ResolutionAEtoile)
         {
             //Initialisation des composants et de la fenêtre client
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
             Size = new Size(700, 700);
+
+            zoneRadButFerme = new Panel();
+            zoneRadButFerme.Location = new Point(120,480);
+            zoneRadButFerme.AutoSize = true;
+            zoneRadButOuvert = new Panel();
+            zoneRadButOuvert.Location = new Point(485, 480);
+            zoneRadButOuvert.AutoSize = true;
 
             //Ajout d'une zone de dessin drawingPanel
             zoneDessin = new Panel();
@@ -61,9 +74,13 @@ namespace App
             zoneDessin.Width = ClientRectangle.Width - 2 * offset;
             zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
+
+            Controls.Add(zoneRadButOuvert);
+            Controls.Add(zoneRadButFerme);
+
             btnValider.Text = "Valider";
             btnValider.Size = new Size(137, 31);
-            btnValider.Location = new Point(300, 600);
+            btnValider.Location = new Point(280, 600);
             btnValider.Click += new EventHandler(btnValider_Click);
             Controls.Add(btnValider);
             
@@ -129,6 +146,9 @@ namespace App
             PointF milieu = r.S1.CalculeMilieu(r.S2).Pt;
             dessin.DrawString(r.ToString(), f, Brushes.Black, milieu);
         }
+
+
+
         private void AfficheChoixPossible()
         {
             //prendre en compte le compteur
@@ -141,68 +161,82 @@ namespace App
 
             btnValider.Text = "Valider";
           
-            CheckBox[] checkBoxes = new CheckBox[2*nbPropositions];
-            lesCheckBoxes = new CheckBox[2*nbPropositions];
+            RadioButton[] radButFerme = new RadioButton[nbPropositions];
+            RadioButton[] radButOuvert = new RadioButton[nbPropositions];
+
+
+            lesRadiobuttons = new RadioButton[2*nbPropositions];
 
             lblConsigne = new Label();
-            lblConsigne.Location= new Point(200, 400);
-            if(grapheDijkstra.ResolutionAEtoile)
+            lblConsigne.Location= new Point(80, 390);
+            lblConsigne.Font = new Font("Calibri", 13, FontStyle.Bold, GraphicsUnit.Point, 0);
+            if (grapheDijkstra.ResolutionAEtoile)
             {
-                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal + ".";
+                lblConsigne.Text = "Appliquez A* pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal;
             }
             else
             {
 
-                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal + ".";
+                lblConsigne.Text = "Appliquez Dijkstra pour trouver le plus court chemin entre " + grapheDijkstra.SommetInitial + " et " + grapheDijkstra.SommetFinal;
             }
             Controls.Add(lblConsigne);
             lblConsigne.AutoSize = true;
 
             lblFerme = new Label();
-            lblFerme.Location = new Point(300, 450);
-            lblFerme.Text = "Donnez l'ensemble des fermés";
+            lblFerme.Location = new Point(100, 455);
+            lblFerme.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFerme.Text = "Ensemble des fermés";
             Controls.Add(lblFerme);
             lblFerme.AutoSize = true;
 
             lblOuvert = new Label();
-            lblOuvert.Location = new Point(69, 450);
-            lblOuvert.Text = "Donnez l'ensemble des ouverts";
+            lblOuvert.Location = new Point(450, 455);
+            lblOuvert.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblOuvert.Text = "Ensemble des ouverts";
             Controls.Add(lblOuvert);
             lblOuvert.AutoSize = true;
 
             lblEtape = new Label();
-            lblEtape.Location = new Point(200, 350);
+            lblEtape.Location = new Point(310, 420);
+            lblEtape.Font = new Font("Calibri", 15, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblEtape.Text = "Etape "+(compteur+1);
             Controls.Add(lblEtape);
             lblEtape.AutoSize = true;
 
             string choix;
 
-            for (int i = 0; i < 2*nbPropositions; i++)
+            for (int i = 0; i < nbPropositions; i++)
             {
-                
-                checkBoxes[i] = new CheckBox();
-                if (i < nbPropositions) { checkBoxes[i].Location = new Point(69, 500 + i * 20);
-                    choix= ListeString(propositionsOuverts[i]);
-                }
-                else { checkBoxes[i].Location = new Point(300, 500 + (i-nbPropositions) * 20);
-                    choix = ListeString(propositionsFermes[i- nbPropositions]);
-                }
-                                
-                checkBoxes[i].Text = MainForm.alphabet[i] + ".  "+ choix ;
+                radButFerme[i] = new RadioButton();
+                radButFerme[i].Location = new Point(5, 5 + i* 20);
+                choix = ListeString(propositionsFermes[i ]);            
+                radButFerme[i].Text = MainForm.alphabet[i] + ".  "+ choix ;
+                radButFerme[i].AutoSize = true;
+                zoneRadButFerme.Controls.Add(radButFerme[i]);
+                lesRadiobuttons[i] = radButFerme[i];
 
-                checkBoxes[i].AutoSize = true;
-                Controls.Add(checkBoxes[i]);
-                lesCheckBoxes[i] = checkBoxes[i];
+            }
+            for (int i = nbPropositions; i < 2*nbPropositions; i++)
+            {
+                radButOuvert[i-nbPropositions] = new RadioButton();
+                radButOuvert[i-nbPropositions].Location = new Point(5, 5 + (i-nbPropositions) * 20);
+                choix = ListeString(propositionsOuverts[i-nbPropositions]);
+                radButOuvert[i-nbPropositions].Text = MainForm.alphabet[i] + ".  " + choix;
+                radButOuvert[i-nbPropositions].AutoSize = true;
+                zoneRadButOuvert.Controls.Add(radButOuvert[i-nbPropositions]);
+                lesRadiobuttons[i] = radButOuvert[i-nbPropositions];
+
             }
 
 
         }
 
+
+
         private string ListeString(List<Sommet> liste)
         {
             string choix;
-            choix = "{";
+            choix = "{ ";
             int n;
             if(liste == null)
             {
@@ -216,8 +250,8 @@ namespace App
             {
                 choix += liste[i] + ",";
             }
-            choix.Substring(0, choix.Length-1);
-            choix += "}";
+            choix=choix.Substring(0, choix.Length-1);
+            choix += " }";
             return choix;
         }
 
@@ -226,10 +260,20 @@ namespace App
             bool juste = true;          
                 for (int i = 0; i < 2*nbPropositions; i++)
                 {
-                    if ((lesCheckBoxes[i].Checked && (i !=indiceOuvertCorrect || (i- nbPropositions) !=indiceFermeCorrect) ) || (!lesCheckBoxes[i].Checked && (i== indiceOuvertCorrect || (i- nbPropositions) == indiceFermeCorrect)))
+                if (i < nbPropositions)
+                {
+                    if ((lesRadiobuttons[i].Checked && (i != indiceFermeCorrect )) || (!lesRadiobuttons[i].Checked && (i == indiceFermeCorrect)))
                     {
                         juste = false;
                     }
+                }
+                else
+                {
+                    if ((lesRadiobuttons[i].Checked && ((i - nbPropositions) != indiceOuvertCorrect)) || (!lesRadiobuttons[i].Checked &&  ((i - nbPropositions) == indiceOuvertCorrect)))
+                    {
+                        juste = false;
+                    }
+                }
                 }
             
             return juste;
@@ -241,29 +285,31 @@ namespace App
 
             string correction = "";
             lblCorrection = new Label();
-            lblCorrection.Location = new Point(300, 600);
+          
+            lblCorrection.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCorrection.AutoSize = true;
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
             {
-
+                lblCorrection.Location = new Point(290, 636);
                 correction = "C'est ça ! BRAVO !";
                 lblCorrection.ForeColor = couleurtxt;
             }
             else
             {
+                lblCorrection.Location = new Point(260, 636);
                 couleurtxt = Color.FromKnownColor(KnownColor.Red);
                 lblCorrection.ForeColor = couleurtxt;
                 
                 
                     correction = "Faux! Il fallait cocher:";
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 2*nbPropositions; i++)
                     {
-                        if (i==indiceOuvertCorrect)
+                        if (i==indiceFermeCorrect)
                         {
                             correction += " " + MainForm.alphabet[i];
                         }
-                    if (i-3 == indiceFermeCorrect)
+                    if (i-nbPropositions == indiceOuvertCorrect)
                     {
                         correction += " et " + MainForm.alphabet[i];
                     }
@@ -285,24 +331,31 @@ namespace App
             Controls.Remove(lblFerme);
             Controls.Remove(lblOuvert);
             
-            if (lesCheckBoxes != null)
+            if (lesRadiobuttons != null)
             {
-                foreach (CheckBox checkbox in lesCheckBoxes)
+                for (int i = 0; i < nbPropositions; i++)
                 {
-                    Controls.Remove(checkbox);
-
+                    zoneRadButFerme.Controls.Remove(lesRadiobuttons[i]);
+                    zoneRadButOuvert.Controls.Remove(lesRadiobuttons[i + nbPropositions]);
                 }
-
+              
             }
+        }
+
+        private void MAJscore( bool estJuste)
+        {
+                if (estJuste)
+                {
+                score += 1;
+                }
         }
 
         private void btnValider_Click(object sender, EventArgs e)
         {
             if (btnValider.Text == "Terminer")
             {
-               
                     Application.Exit();
-                }
+            }
                 
             
             if (compteur< grapheDijkstra.GetNbEtapes())
@@ -317,7 +370,7 @@ namespace App
                 {
                     btnValider.Text = "Suivant";
                     AfficheCorrection(Corrige());
-                   
+                    MAJscore(Corrige());
                     compteur++;
                 }
             }
@@ -329,6 +382,10 @@ namespace App
 
             }
 
+        }
+        public void NoteSur2()
+        {
+            score = (score * 2) / grapheDijkstra.GetNbEtapes();
         }
 
         private void GenerePropositions(int numEtape, out List<Sommet>[] propositionsOuverts, out List<Sommet>[] propositionsFermes)
@@ -344,7 +401,7 @@ namespace App
             {
                 OuvertsEtapePrecedente = grapheDijkstra.EtatsSuccessifsOuverts[numEtape - 1];
                 FermesEtapePrecedente = grapheDijkstra.EtatsSuccessifsFermes[numEtape - 1];
-                nbPropositions = OuvertsEtapePrecedente.Count;
+                nbPropositions = Math.Min(OuvertsEtapePrecedente.Count,4);
             }
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
