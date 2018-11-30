@@ -95,7 +95,6 @@ namespace App
             return (Pt.X == s.Pt.X && Pt.Y == s.Pt.Y);
             //return (Pt.Equals(s.Pt));
         }
-
         public List<Sommet> GetSuccesseurs()
         {
             List<Sommet> lsucc = new List<Sommet>();
