@@ -36,6 +36,9 @@ namespace App
         Label lblFerme = null;
         Label lblEtape = null;
         Label lblCorrection = null;
+        Label lblRecap = null;
+      
+        ListBox lbRecap = null;
 
         public static Panel zoneRadButFerme;
         public static Panel zoneRadButOuvert;
@@ -51,10 +54,10 @@ namespace App
             Size = new Size(700, 700);
 
             zoneRadButFerme = new Panel();
-            zoneRadButFerme.Location = new Point(120,480);
+            zoneRadButFerme.Location = new Point(250,450);
             zoneRadButFerme.AutoSize = true;
             zoneRadButOuvert = new Panel();
-            zoneRadButOuvert.Location = new Point(485, 480);
+            zoneRadButOuvert.Location = new Point(500, 450);
             zoneRadButOuvert.AutoSize = true;
 
             //Ajout d'une zone de dessin drawingPanel
@@ -73,15 +76,26 @@ namespace App
             zoneDessin.Width = ClientRectangle.Width - 2 * offset;
             zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
-
+            lbRecap = new ListBox();
+            lbRecap.Location = new Point(15, 450);
+            lbRecap.Size = new Size(200, 150);
+            lblRecap = new Label();
+            lblRecap.Text = "Récapitulatif";
+            lblRecap.Font = new Font("Arial", 11, FontStyle.Bold);
+            lblRecap.AutoSize = true;
+            lblRecap.Location = new Point(20, 425);
+            Controls.Add(lbRecap);
+            Controls.Add(lblRecap);
             Controls.Add(zoneRadButOuvert);
             Controls.Add(zoneRadButFerme);
 
             btnValider.Text = "Valider";
-            btnValider.Size = new Size(137, 31);
-            btnValider.Location = new Point(280, 600);
+            btnValider.Font = new Font("Arial", 11, FontStyle.Regular);
+            btnValider.Size = new Size(145, 45);
+            btnValider.Location = new Point(280, 595);
             btnValider.Click += new EventHandler(btnValider_Click);
             Controls.Add(btnValider);
+            
             
 
             //Création du graphe à afficher dans le drawing panel
@@ -167,7 +181,7 @@ namespace App
             lesRadiobuttons = new RadioButton[2*nbPropositions];
 
             lblConsigne = new Label();
-            lblConsigne.Location= new Point(80, 390);
+            lblConsigne.Location= new Point(80, 365);
             lblConsigne.Font = new Font("Calibri", 13, FontStyle.Bold, GraphicsUnit.Point, 0);
             if (grapheDijkstra.ResolutionAEtoile)
             {
@@ -182,22 +196,25 @@ namespace App
             lblConsigne.AutoSize = true;
 
             lblFerme = new Label();
-            lblFerme.Location = new Point(100, 455);
+            lblFerme.Location = new Point(250, 425);
             lblFerme.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFerme.ForeColor = Color.FromKnownColor(KnownColor.DarkSlateGray);
             lblFerme.Text = "Ensemble des fermés";
             Controls.Add(lblFerme);
             lblFerme.AutoSize = true;
 
             lblOuvert = new Label();
-            lblOuvert.Location = new Point(450, 455);
+            lblOuvert.Location = new Point(500, 425);
             lblOuvert.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblOuvert.ForeColor = Color.FromKnownColor(KnownColor.DarkSlateGray);
             lblOuvert.Text = "Ensemble des ouverts";
             Controls.Add(lblOuvert);
             lblOuvert.AutoSize = true;
 
             lblEtape = new Label();
-            lblEtape.Location = new Point(310, 420);
+            lblEtape.Location = new Point(380, 390);
             lblEtape.Font = new Font("Calibri", 15, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEtape.ForeColor=Color.FromKnownColor(KnownColor.DarkSlateGray);
             lblEtape.Text = "Etape "+(compteur+1)+ "/" + grapheDijkstra.GetNbEtapes();
             Controls.Add(lblEtape);
             lblEtape.AutoSize = true;
@@ -208,7 +225,8 @@ namespace App
             {
                 radButFerme[i] = new RadioButton();
                 radButFerme[i].Location = new Point(5, 5 + i* 20);
-                choix = ListeString(propositionsFermes[i ]);            
+                choix = ListeString(propositionsFermes[i ]);
+                radButFerme[i].ForeColor = Color.FromKnownColor(KnownColor.DarkSlateGray);
                 radButFerme[i].Text = MainForm.alphabet[i] + ".  "+ choix ;
                 radButFerme[i].AutoSize = true;
                 zoneRadButFerme.Controls.Add(radButFerme[i]);
@@ -220,6 +238,7 @@ namespace App
                 radButOuvert[i-nbPropositions] = new RadioButton();
                 radButOuvert[i-nbPropositions].Location = new Point(5, 5 + (i-nbPropositions) * 20);
                 choix = ListeString(propositionsOuverts[i-nbPropositions]);
+                radButOuvert[i - nbPropositions].ForeColor = Color.FromKnownColor(KnownColor.DarkSlateGray);
                 radButOuvert[i-nbPropositions].Text = MainForm.alphabet[i] + ".  " + choix;
                 radButOuvert[i-nbPropositions].AutoSize = true;
                 zoneRadButOuvert.Controls.Add(radButOuvert[i-nbPropositions]);
@@ -285,18 +304,18 @@ namespace App
             string correction = "";
             lblCorrection = new Label();
           
-            lblCorrection.Font = new Font("Calibri", 11, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCorrection.Font = new Font("Calibri", 13, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCorrection.AutoSize = true;
             Color couleurtxt = Color.FromKnownColor(KnownColor.Green);
             if (avoirJuste)
             {
-                lblCorrection.Location = new Point(290, 636);
+                lblCorrection.Location = new Point(345, 555);
                 correction = "C'est ça ! BRAVO !";
                 lblCorrection.ForeColor = couleurtxt;
             }
             else
             {
-                lblCorrection.Location = new Point(260, 636);
+                lblCorrection.Location = new Point(345, 555);
                 couleurtxt = Color.FromKnownColor(KnownColor.Red);
                 lblCorrection.ForeColor = couleurtxt;
                 
@@ -371,10 +390,16 @@ namespace App
                 }
                 else
                 {
+                    
+                   
                     btnValider.Text = "Suivant";
                     AfficheCorrection(Corrige());
                     MAJscore(Corrige());
                     compteur++;
+                    string ferme = lesRadiobuttons[indiceFermeCorrect].Text.Substring(2);
+                    string ouvert = lesRadiobuttons[indiceOuvertCorrect + nbPropositions].Text.Substring(2);
+                    string recap = compteur + ")  F=" + ferme + " et  O=" + ouvert;
+                    lbRecap.Items.Add(recap);
                 }
             }
             else

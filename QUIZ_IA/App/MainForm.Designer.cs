@@ -43,11 +43,12 @@
             this.txtQuestion.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.txtQuestion.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtQuestion.Enabled = false;
-            this.txtQuestion.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtQuestion.Location = new System.Drawing.Point(31, 53);
+            this.txtQuestion.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtQuestion.ForeColor = System.Drawing.Color.Black;
+            this.txtQuestion.Location = new System.Drawing.Point(31, 285);
             this.txtQuestion.Multiline = true;
             this.txtQuestion.Name = "txtQuestion";
-            this.txtQuestion.Size = new System.Drawing.Size(467, 84);
+            this.txtQuestion.Size = new System.Drawing.Size(626, 84);
             this.txtQuestion.TabIndex = 0;
             this.txtQuestion.Text = "Afin d\'évaluer vos connaissances en IA, 20 questions vont vous etre posées. Atten" +
     "tion car il peut y avoir plusieurs réponses possibles ! Bonne chance ;)";
@@ -55,12 +56,13 @@
             // 
             // btnValider
             // 
-            this.btnValider.BackColor = System.Drawing.Color.Azure;
+            this.btnValider.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btnValider.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnValider.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnValider.Location = new System.Drawing.Point(196, 445);
+            this.btnValider.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnValider.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnValider.Location = new System.Drawing.Point(263, 597);
             this.btnValider.Name = "btnValider";
-            this.btnValider.Size = new System.Drawing.Size(137, 31);
+            this.btnValider.Size = new System.Drawing.Size(148, 40);
             this.btnValider.TabIndex = 1;
             this.btnValider.Text = "Commencer";
             this.btnValider.UseVisualStyleBackColor = false;
@@ -70,8 +72,8 @@
             // 
             this.txtBoxCorrection.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.txtBoxCorrection.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtBoxCorrection.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCorrection.Location = new System.Drawing.Point(31, 386);
+            this.txtBoxCorrection.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxCorrection.Location = new System.Drawing.Point(110, 538);
             this.txtBoxCorrection.Multiline = true;
             this.txtBoxCorrection.Name = "txtBoxCorrection";
             this.txtBoxCorrection.Size = new System.Drawing.Size(467, 53);
@@ -81,42 +83,46 @@
             // textBxNumQuestion
             // 
             this.textBxNumQuestion.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBxNumQuestion.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBxNumQuestion.ForeColor = System.Drawing.Color.LightSeaGreen;
-            this.textBxNumQuestion.Location = new System.Drawing.Point(175, 20);
+            this.textBxNumQuestion.Font = new System.Drawing.Font("Goudy Stout", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBxNumQuestion.ForeColor = System.Drawing.Color.Black;
+            this.textBxNumQuestion.Location = new System.Drawing.Point(209, 12);
             this.textBxNumQuestion.Name = "textBxNumQuestion";
-            this.textBxNumQuestion.Size = new System.Drawing.Size(174, 24);
+            this.textBxNumQuestion.Size = new System.Drawing.Size(279, 26);
             this.textBxNumQuestion.TabIndex = 4;
             this.textBxNumQuestion.Text = "IA QUIZ ! ";
             this.textBxNumQuestion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // NumBox
             // 
-            this.NumBox.BackColor = System.Drawing.SystemColors.Window;
-            this.NumBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NumBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NumBox.Location = new System.Drawing.Point(196, 199);
+            this.NumBox.BackColor = System.Drawing.SystemColors.Menu;
+            this.NumBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.NumBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumBox.Location = new System.Drawing.Point(233, 456);
             this.NumBox.Name = "NumBox";
-            this.NumBox.Size = new System.Drawing.Size(137, 31);
+            this.NumBox.Size = new System.Drawing.Size(211, 37);
             this.NumBox.TabIndex = 5;
             this.NumBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumBox_KeyPress);
             // 
             // labelSaisie
             // 
             this.labelSaisie.AutoSize = true;
-            this.labelSaisie.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSaisie.Location = new System.Drawing.Point(199, 175);
+            this.labelSaisie.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSaisie.ForeColor = System.Drawing.Color.Navy;
+            this.labelSaisie.Location = new System.Drawing.Point(259, 422);
             this.labelSaisie.Name = "labelSaisie";
-            this.labelSaisie.Size = new System.Drawing.Size(131, 16);
+            this.labelSaisie.Size = new System.Drawing.Size(152, 23);
             this.labelSaisie.TabIndex = 6;
             this.labelSaisie.Text = "Saisir la réponse ici :";
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(108, 237);
+            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox.Image = global::App.Properties.Resources.ia2;
+            this.pictureBox.InitialImage = global::App.Properties.Resources.ia;
+            this.pictureBox.Location = new System.Drawing.Point(0, 59);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(322, 144);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.Size = new System.Drawing.Size(688, 204);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 7;
             this.pictureBox.TabStop = false;
             // 
@@ -125,7 +131,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(534, 512);
+            this.ClientSize = new System.Drawing.Size(684, 661);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.labelSaisie);
             this.Controls.Add(this.NumBox);

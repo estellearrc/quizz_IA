@@ -28,7 +28,7 @@ namespace App
             InitializeComponent();
             _quizRepository = quizRepository;
             _quiz = new Quiz(_quizRepository.Get20Questions());
-            Size = new Size(550, 550);
+            Size = new Size(700, 700);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             NumBox.Hide();
             labelSaisie.Hide();
@@ -39,15 +39,27 @@ namespace App
             _quiz.NoteSur20(_quiz.CalculNoteMax());
             txtQuestion.Font = new Font("Calibri", 20, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtQuestion.Text = "Note obtenue: " + _quiz.Score + "/20";
+            string file;
+            if (_quiz.Score>15)
+            {
+                file = "../../../DAL/images/bravo.jpg";
+                pictureBox.Image = Image.FromFile(file);
+                textBxNumQuestion.Text = "BRAVO !";
+            }
+            textBxNumQuestion.Text = "IA QUIZ !";
         }
         private void AfficheQuestion(Question question)
         {
-
+            string file;
             if (question.PieceJointe !=null)
             {
-                string file = "../../../DAL/images/" + question.PieceJointe;
-                pictureBox.Show();
+                file = "../../../DAL/images/" + question.PieceJointe;
                 pictureBox.Image= Image.FromFile(file);
+            }
+            else
+            {
+                file = "../../../DAL/images/ia.jpg" ;
+                pictureBox.Image = Image.FromFile(file);
             }
 
             if (question != null) //par précaution on teste si la question est nulle mais normalement elle ne sera jamais nulle
@@ -77,7 +89,8 @@ namespace App
                             for (int i = 0; i < question.LesReponses.Count; i++)
                             {
                                 checkBoxes[i] = new CheckBox();
-                                checkBoxes[i].Location = new Point(69, 145 + i * 20);
+                                checkBoxes[i].Location = new Point(69, 400 + i * 20);
+                                checkBoxes[i].Font = new Font("Calibri", 11, FontStyle.Regular, GraphicsUnit.Point, 0);
                                 checkBoxes[i].Text = alphabet[i] + ".  " + question.LesReponses[i].Intitule;
                                 checkBoxes[i].AutoSize = true;
                                 Controls.Add(checkBoxes[i]);
@@ -136,14 +149,15 @@ namespace App
                 string correction = "";
                 if (question.Type == Question.TypeQues.QCM)
                 {
-                    correction = "Faux! Il fallait cocher:";
+                    correction = "Faux! Il fallait cocher: ";
                     for (int i = 0; i < question.LesReponses.Count; i++)
                     {
                         if (question.LesReponses[i].EstCorrecte)
                         {
-                            correction += " " + alphabet[i];
+                            correction +=  alphabet[i]+", " ;
                         }
                     }
+                    correction = correction.Substring(0, correction.Length - 2);
 
                 }
                 else
@@ -159,7 +173,8 @@ namespace App
             textBxNumQuestion.Text = "";
             NumBox.Hide();
             labelSaisie.Hide();
-            pictureBox.Hide();
+            NumBox.Text = "";
+           
             if (lesCheckBoxes != null)
             {
                 foreach (CheckBox checkbox in lesCheckBoxes)
@@ -197,6 +212,7 @@ namespace App
                 }
                 else
                 {
+                    txtQuestion.Font = new Font("Calibri", 14, FontStyle.Bold, GraphicsUnit.Point, 0);
                     NettoieForm();
                     compteur = 0;
                     _quiz = new Quiz(_quizRepository.Get20Questions());
@@ -234,11 +250,22 @@ namespace App
 
         private void NumBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if ((Char.IsControl(e.KeyChar) || !Char.IsNumber(e.KeyChar)) && e.KeyChar != 8)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != '-')
             {
                 e.Handled = true;
-                return;
+            }
+
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+
+            if (e.KeyChar == '-' && (sender as TextBox).Text.Length > 0)
+            {
+                e.Handled = true;
             }
         }
+
+       
     }
 }
