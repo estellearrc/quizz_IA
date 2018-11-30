@@ -199,7 +199,7 @@ namespace App
             lblEtape = new Label();
             lblEtape.Location = new Point(310, 420);
             lblEtape.Font = new Font("Calibri", 15, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEtape.Text = "Etape "+(compteur+1);
+            lblEtape.Text = "Etape "+(compteur+1)+ "/" + grapheDijkstra.GetNbEtapes();
             Controls.Add(lblEtape);
             lblEtape.AutoSize = true;
 
