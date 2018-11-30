@@ -14,6 +14,7 @@ namespace App
         //mais surtout, ne proposer qu'une solution correcte à l'utilisateur pour les ouverts et fermés et toutes les autres incorrectes
         //distance minimale entre le point initial et le point final à respecter, genre min 5
         //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
+        //enlever les doublons dans les listes des fermés et des ouverts
         //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
         //retirer graphes linéaires
 
