@@ -42,6 +42,8 @@ namespace App
 
         public static Panel zoneRadButFerme;
         public static Panel zoneRadButOuvert;
+        public static Panel zoneTreeView;
+        public static TreeView TV;
 
         private int nbPropositions;
         private int compteur = 0;
@@ -77,13 +79,13 @@ namespace App
             zoneDessin.Height = ClientRectangle.Height - 16 * offset;
             Controls.Add(zoneDessin);
             lbRecap = new ListBox();
-            lbRecap.Location = new Point(15, 450);
+            lbRecap.Location = new Point(15, 425);
             lbRecap.Size = new Size(200, 150);
             lblRecap = new Label();
             lblRecap.Text = "Récapitulatif";
             lblRecap.Font = new Font("Arial", 11, FontStyle.Bold);
             lblRecap.AutoSize = true;
-            lblRecap.Location = new Point(20, 425);
+            lblRecap.Location = new Point(20, 400);
             Controls.Add(lbRecap);
             Controls.Add(lblRecap);
             Controls.Add(zoneRadButOuvert);
@@ -406,8 +408,52 @@ namespace App
             {
                 btnValider.Text = "Terminer";
                 NettoieForm();
-                
+                zoneRadButFerme.Hide();
+                zoneRadButOuvert.Hide();
+                zoneTreeView = new Panel();
+                zoneTreeView.Location = new Point(250, 425);
+                zoneTreeView.AutoSize = true;
+                zoneTreeView.BringToFront();
+                Controls.Add(zoneTreeView);
+                Label lblTV = new Label();
+                lblTV.Text = "Arbre de recherche";
+                lblTV.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblTV.Location = new Point(250, 400);
+                lblTV.AutoSize = true;
+                Controls.Add(lblTV);
+                TV = new TreeView();
+                grapheDijkstra.GetSearchTree(TV);
+                TV.Location = new Point(5, 5);
+                TV.Size = new Size(200, 150);
+                zoneTreeView.Controls.Add(TV);
 
+                Label lblChemin = new Label();
+                lblChemin.Text = "Le plus court chemin";
+                lblChemin.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblChemin.Location = new Point(475, 420);
+                lblChemin.AutoSize = true;
+                Controls.Add(lblChemin);
+
+                Label chemin = new Label();
+                chemin.Text = ListeString(grapheDijkstra.PlusCourtChemin);
+                chemin.Font = new Font("Arial", 10, FontStyle.Regular);
+                chemin.Location = new Point(475, 440);
+                chemin.AutoSize = true;
+                Controls.Add(chemin);
+
+                Label lblCoutChemin = new Label();
+                lblCoutChemin.Text = "Poids du plus court chemin";
+                lblCoutChemin.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblCoutChemin.Location = new Point(475, 520);
+                lblCoutChemin.AutoSize = true;
+                Controls.Add(lblCoutChemin);
+
+                Label coutChemin = new Label();
+                coutChemin.Text = (10*Math.Round(grapheDijkstra.CoutPlusCourtChemin,1)).ToString();
+                coutChemin.Font = new Font("Arial", 10, FontStyle.Regular);
+                coutChemin.Location = new Point(475, 540);
+                coutChemin.AutoSize = true;
+                Controls.Add(coutChemin);
             }
 
         }
@@ -453,7 +499,10 @@ namespace App
                 //}
                 for(int j = nbPropositions - 1; j < reponseCorrecteOuverts.Count; j++)
                 {
-                    finOuverts.Add(reponseCorrecteOuverts[j]);
+                    if (!configurationPoss.Contains(reponseCorrecteOuverts[j]))
+                    {
+                        finOuverts.Add(reponseCorrecteOuverts[j]);
+                    }
                 }
                 //if (!configurationPoss.Equals(configCorrecte))
                 //{

@@ -50,14 +50,8 @@ namespace App
             string label = "";
             if (addLabel)
             {
-                if (Numero < MainForm.alphabet.Count())
-                {
-                    label = MainForm.alphabet[Numero];
-                }
-                else
-                {
-                    label = "S" + Numero;
-                }
+                int n = MainForm.alphabet.Count();
+                label = MainForm.alphabet[Numero % n];
             }
             return label;
         }

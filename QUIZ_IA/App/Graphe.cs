@@ -5,17 +5,13 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace App
 {
     public class Graphe
     {
-        //pour la génération automatique de graphes : gestion de plusieurs solutions possibles avec un simple Dijkstra ou A* : vérifier que le coût du chemin trouvé par l'utilisateur est égal à celui trouvé par l'algo
-        //mais surtout, ne proposer qu'une solution correcte à l'utilisateur pour les ouverts et fermés et toutes les autres incorrectes
         //distance minimale entre le point initial et le point final à respecter, genre min 5
-        //2 modes pour l'utilisateur : donner les ouverts et fermés pour Dijkstra ou A*
-        //enlever les doublons dans les listes des fermés et des ouverts
-        //affichage de l'arbre de recherche final sur le form + le meilleur chemin trouvé et son coût
         //retirer graphes linéaires
 
         //propriétés utiles pour l'affichage du graphe
@@ -72,8 +68,8 @@ namespace App
         {
             Sommet s;
             int compteur = 0;
-            double distanceMin;
-            List<int> indicesDejaTestes = new List<int>();
+            //on ne veut pas prendre le SommetInitial comme SommetFinal donc on le supprime des sommets à tester
+            List<int> indicesDejaTestes = new List<int>(Sommets.IndexOf(SommetInitial)); 
             int n = Sommets.Count;
             do
             {
@@ -85,28 +81,37 @@ namespace App
                 while (indicesDejaTestes.Contains(k));
                 indicesDejaTestes.Add(k);
                 s = Sommets[k];
-                distanceMin = CalculeDistanceMinimale(s, SommetInitial);
                 compteur++;
             }
-            while (s.CalculeDistance(SommetInitial) <= distanceMin && compteur < n && s.IsEqual(SommetInitial)); //|| s.Incidences.Count < 2);
+            //tant que les sommets initial et final ne sont pas assez éloignés et qu'on a pas parcouru tous les sommets du graphe
+            while (PointsInitialFinalAssezEloignes(s) == false && compteur < n); 
             return s;
         }
         /// <summary>
-        /// Calcule la distance minimale entre 2 sommets s1 et s2 pour qu'ils soient séparés d'au moins 2 sommets
+        /// Détermine si le sommet s est assez éloigné du SommetInitial, c'est-à-dire qu'ils soient séparés d'au moins 2 sommets
         /// </summary>
-        public double CalculeDistanceMinimale(Sommet s1, Sommet s2)
+        public bool PointsInitialFinalAssezEloignes(Sommet s)
         {
-            // création de deep copies des listes d'incidences des somets s1 et s2 pour ne pas que ces dernières soient modifiées
-            List<Arete> incidencesS1 = DeepCopy(s1.Incidences);
-            List<Arete> incidencesS2 = DeepCopy(s2.Incidences);
-
-            //calcul de la distance max sur ces 2 nouvelles listes
-            double distanceMax1 = CalculeDistanceMin(incidencesS1,0);
-            double distanceMax2 = CalculeDistanceMin(incidencesS2, 0);
-
-            double distanceMin = distanceMax1 + distanceMax2;
-            return distanceMin;
-
+                List<Sommet> plusProchesVoisins = s.GetSuccesseurs();
+                foreach (Sommet voisin in plusProchesVoisins)
+                {
+                    if (voisin.IsEqual(SommetInitial))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        List<Sommet> voisinsEloignes = voisin.GetSuccesseurs();
+                        foreach (Sommet voisinEloigne in voisinsEloignes)
+                        {
+                            if (voisinEloigne.IsEqual(SommetInitial))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            return true;
         }
         public List<Arete> DeepCopy(List<Arete> liste)
         {
@@ -122,31 +127,6 @@ namespace App
             List<Sommet> copieListe = new List<Sommet>(tab);
             return copieListe;
         }
-        /// <summary>
-        /// Calcule la distance entre un sommet et son sommet voisin le plus éloigné
-        /// </summary>
-        public double CalculeDistanceMin(List<Arete> incidences, double distanceMin)
-        {
-            if(incidences.Count == 1)
-            {
-                return distanceMin;
-            }
-            else
-            {
-                Arete a1 = incidences[0];
-                Arete a2 = incidences[1];
-                if(a1.Cout > a2.Cout)
-                {
-                    incidences.Remove(a1);
-                    return CalculeDistanceMin(incidences, a2.Cout);
-                }
-                else
-                {
-                    incidences.Remove(a2);
-                    return CalculeDistanceMin(incidences, a1.Cout);
-                }
-            }
-        }
         public void GenereSommets(int xMin, int xMax, int yMin, int yMax)
         {
             //Sommets.Add(new Sommet((float)3.4, (float)8.4,true));
@@ -158,7 +138,7 @@ namespace App
             //Sommets.Add(new Sommet((float)1.5, (float)3.9, true));
             //Sommets.Add(new Sommet((float)4.5, (float)2.4, true));
             //Sommets.Add(new Sommet((float)7.9, (float)5.9, true));
-            int nbPoints = rnd.Next(7, __NBSOMMETS + 1);
+            int nbPoints = rnd.Next(8, __NBSOMMETS + 1);
             for (int i = 0; i < nbPoints; i++)
             {
                 float partieDecimaleX = (float)rnd.NextDouble();
@@ -386,31 +366,31 @@ namespace App
             }
         }
 
-        // Si on veut afficher l'arbre de recherche, il suffit de passer un treeview en paramètres
+        //Si on veut afficher l'arbre de recherche, il suffit de passer un treeview en paramètres
         // Celui-ci est mis à jour avec les noeuds de la liste des fermés, on ne tient pas compte des ouverts
-        //public void GetSearchTree(TreeView TV)
-        //{
-        //    if (PointsFermes == null) return;
-        //    if (PointsFermes.Count == 0) return;
+        public void GetSearchTree(TreeView TV)
+        {
+            if (SommetsFermes == null) return;
+            if (SommetsFermes.Count == 0) return;
 
-        //    // On suppose le TreeView préexistant
-        //    TV.Nodes.Clear();
+            // On suppose le TreeView préexistant
+            TV.Nodes.Clear();
 
-        //    TreeNode TN = new TreeNode(PointsFermes[0].ToString());
-        //    TV.Nodes.Add(TN);
+            TreeNode TN = new TreeNode(SommetsFermes[0].ToString());
+            TV.Nodes.Add(TN);
 
-        //    AjouteBranche(PointsFermes[0], TN);
-        //}
+            AjouteBranche(SommetsFermes[0], TN);
+        }
 
-        //// AjouteBranche est exclusivement appelée par GetSearchTree; les noeuds sont ajoutés de manière récursive
-        //private void AjouteBranche(Sommet GN, TreeNode TN)
-        //{
-        //    foreach (Sommet GNfils in GN.Enfants)
-        //    {
-        //        TreeNode TNfils = new TreeNode(GNfils.ToString());
-        //        TN.Nodes.Add(TNfils);
-        //        if (GNfils.Enfants.Count > 0) AjouteBranche(GNfils, TNfils);
-        //    }
-        //}
+        // AjouteBranche est exclusivement appelée par GetSearchTree; les noeuds sont ajoutés de manière récursive
+        private void AjouteBranche(Sommet GN, TreeNode TN)
+        {
+            foreach (Sommet GNfils in GN.Enfants)
+            {
+                TreeNode TNfils = new TreeNode(GNfils.ToString());
+                TN.Nodes.Add(TNfils);
+                if (GNfils.Enfants.Count > 0) AjouteBranche(GNfils, TNfils);
+            }
+        }
     }
 }
