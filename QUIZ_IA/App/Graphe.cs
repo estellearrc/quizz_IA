@@ -261,12 +261,11 @@ namespace App
             if (s != null)
             {
                 PlusCourtChemin.Add(s);
-                CoutPlusCourtChemin += s.CoutTotal;
+                CoutPlusCourtChemin = s.CoutTotal;
                 while (!s.IsEqual(SommetInitial))
                 {
                     s = s.SommetParent;
                     PlusCourtChemin.Insert(0, s);  // On insère en position 1
-                    CoutPlusCourtChemin += s.CoutTotal;
                 }
             }
         }
