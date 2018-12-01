@@ -11,9 +11,6 @@ namespace App
 {
     public class Graphe
     {
-        //distance minimale entre le point initial et le point final à respecter, genre min 5
-        //retirer graphes linéaires
-
         //propriétés utiles pour l'affichage du graphe
         public static Random rnd = new Random();
         private static int __NBSOMMETS = 11;
@@ -43,7 +40,7 @@ namespace App
         {
             return EtatsSuccessifsOuverts.Count;
         }
-        public Sommet DeterminePointInitial() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... réglé avec compteur
+        public Sommet DeterminePointInitial()
         {
             Sommet s;
             int compteur = 0;
@@ -64,7 +61,7 @@ namespace App
             while (s.Incidences.Count < 2 && compteur < n);
             return s;
         }
-        public Sommet DeterminePointFinal() //problème : attention au graphe linéaire, i.e dont tous les sommets n'ont qu'une seule incidence... réglé avec compteur
+        public Sommet DeterminePointFinal()
         {
             Sommet s;
             int compteur = 0;
