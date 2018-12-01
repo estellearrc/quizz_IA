@@ -466,8 +466,11 @@ namespace App
         {
             if (btnValider.Text == "Terminer")
             {
+
+                NoteSur2();
                 terminer = true;
                 Close();
+                
                 MainForm.btnValider.Enabled = true;
                 MainForm._quiz.ActualiseScore(score);
             }

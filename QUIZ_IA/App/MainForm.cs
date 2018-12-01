@@ -74,6 +74,7 @@ namespace App
                         btnValider.Text = "Suivant";
                         d = new Dijkstra(false);
                         d.Show();
+                       
                         compteur++;
                     }
                     else
@@ -84,6 +85,7 @@ namespace App
                             btnValider.Text = "Suivant";
                             d = new Dijkstra(true);
                             d.Show();
+                           
                             compteur++;
                         }
                         else
