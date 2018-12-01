@@ -377,10 +377,12 @@ namespace App
         {
             List<Sommet> reponseCorrecteFermes = grapheDijkstra.EtatsSuccessifsFermes[numEtape];
             List<Sommet> reponseCorrecteOuverts = grapheDijkstra.EtatsSuccessifsOuverts[numEtape];
-            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes);
-            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts);
-            nbPropositions = 1;
-            List<Sommet> OuvertsEtapePrecedente = new List<Sommet>();
+            // On crée une copie des réponses correctes des ouverts et des fermés afin de travailler dessus sans modifier les listes d'origine.
+            List<Sommet> copieReponseCorrecteFermes = grapheDijkstra.DeepCopy(reponseCorrecteFermes); 
+            List<Sommet> copieReponseCorrecteOuverts = grapheDijkstra.DeepCopy(reponseCorrecteOuverts); 
+            nbPropositions = 1; 
+            // On récupère les listes de sommets ouverts et fermés de l'étape précédente. Ces listes nous permettent d'effectuer des mauvaises réponses en créant des rotations sur les sommets ouverts de l'étape précédente.
+            List<Sommet> OuvertsEtapePrecedente = new List<Sommet>(); 
             List<Sommet> FermesEtapePrecedente = new List<Sommet>();
             if (numEtape != 0)
             {
@@ -388,37 +390,39 @@ namespace App
                 FermesEtapePrecedente = grapheDijkstra.EtatsSuccessifsFermes[numEtape - 1];
                 nbPropositions = Math.Min(OuvertsEtapePrecedente.Count,4);
             }
+            //On crée une liste de propositions pour les QCM.
             propositionsOuverts = new List<Sommet>[nbPropositions];
             propositionsFermes = new List<Sommet>[nbPropositions];
+            // On place aléatoirement les bonnes réponses des ouverts et des fermés dans les listes de propositions de réponse. 
             indiceOuvertCorrect = Graphe.rnd.Next(Math.Min(nbPropositions,4));
             indiceFermeCorrect = Graphe.rnd.Next(Math.Min(nbPropositions, 4));
             propositionsOuverts[indiceOuvertCorrect] = reponseCorrecteOuverts;
             propositionsFermes[indiceFermeCorrect] = reponseCorrecteFermes;
             List<int> indicesDejaTestesOuverts = new List<int>();
             List<int> indicesDejaTestesFermes = new List<int>();
-
-            for(int i = 1; i < nbPropositions; i++) //on va faire des rotations sur les sommets fermés puis, après chaque rotation effectuée, on ajoute le premier ouvert à la fin de la liste des fermés
+            // On commence à 1 car le premier sommet ouvert de l'étape précédente deviendra fermé à l'étape suivante. Il s'agit de la bonne réponse déjà placé dans la liste de proposition. 
+            for(int i = 1; i < nbPropositions; i++) //on va faire des rotations sur les sommets ouverts puis, après chaque rotation effectuée, on ajoute l'ouvert choisi à la fin de la liste des fermés
             {
-                Sommet F = OuvertsEtapePrecedente[i];
-                List<Sommet> configurationPoss = GenereConfigurations(OuvertsEtapePrecedente, F);
-                FermesEtapePrecedente.Add(F);
-                List<Sommet> finOuverts = new List<Sommet>();
+                Sommet F = OuvertsEtapePrecedente[i]; //On prend le sommet ouvert de l'étape précédente que l'on veut mettre à la fin de la liste des sommets fermés.
+                List<Sommet> configurationPoss = GenereConfigurations(OuvertsEtapePrecedente, F); //On génère une configuration possible de sommets ouverts sans prend en compte les voisins de F
+                FermesEtapePrecedente.Add(F); // On ajoute le sommet F à la fin de la liste des fermés de l'étape précédente pour créer une proposition de réponse pour les fermés. 
+                List<Sommet> finOuverts = new List<Sommet>(); //On stocke les voisins de F
                 for(int j = nbPropositions - 1; j < reponseCorrecteOuverts.Count; j++)
                 {
-                    if (!configurationPoss.Contains(reponseCorrecteOuverts[j]))
+                    if (!configurationPoss.Contains(reponseCorrecteOuverts[j])) // Si c'est voisins ne sont pas présent dans la configuration généré quelques lignes plus haut, on ne les stocke pas.  
                     {
                         finOuverts.Add(reponseCorrecteOuverts[j]);
                     }
                 }
-                    configurationPoss.AddRange(finOuverts);
+                    configurationPoss.AddRange(finOuverts); // On ajoute les voisins à la liste des sommets ouverts possibles. 
                     int k;
                     do
                     {
-                        k = Graphe.rnd.Next(nbPropositions);
+                        k = Graphe.rnd.Next(nbPropositions); 
                     }
-                    while (k == indiceOuvertCorrect || indicesDejaTestesOuverts.Contains(k));
+                    while (k == indiceOuvertCorrect || indicesDejaTestesOuverts.Contains(k)); //Comme l'emplacement de la bonne réponse dans la liste des propositions est généré aléatoirement, il faut vérifier que la nouvelle configuration n'écrase pas la bonne réponse.  
                     //on l'ajoute à la liste des propositions
-                    propositionsOuverts[k] = grapheDijkstra.DeepCopy(configurationPoss);
+                    propositionsOuverts[k] = grapheDijkstra.DeepCopy(configurationPoss); 
                     indicesDejaTestesOuverts.Add(k);
 
                     do
@@ -430,14 +434,14 @@ namespace App
                     propositionsFermes[k] = grapheDijkstra.DeepCopy(FermesEtapePrecedente);
                     indicesDejaTestesFermes.Add(k);
                 
-                    FermesEtapePrecedente.Remove(F);
+                    FermesEtapePrecedente.Remove(F); // On enlève le sommet F de la liste des fermés pour regénerer une configuration de réponse possible. 
             }
         }
         public List<Sommet> GenereConfigurations(List<Sommet> liste, Sommet aRetirer)
         {
-            List<Sommet> copieListe = grapheDijkstra.DeepCopy(liste);
-            copieListe.Remove(aRetirer);
-            return copieListe;
+            List<Sommet> copieListe = grapheDijkstra.DeepCopy(liste); //  On crée une copie de la liste des ouverts de l'étape précédent afin de travailler dessus sans modifier les listes d'origine.
+            copieListe.Remove(aRetirer); // On retire le sommet F 
+            return copieListe; // On renvoie la configuration illustrant la volonté de mettre le sommet F dans la liste des fermés. 
         }
 
         private void Dijkstra_FormClosing(object sender, FormClosingEventArgs e)
