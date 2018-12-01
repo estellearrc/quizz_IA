@@ -471,11 +471,7 @@ namespace App
                 {
                     NettoieForm();
                     grapheDijkstra.SommetActuel = grapheDijkstra.EtatsSuccessifsFermes[compteur].Last();
-                    //zoneDessin.Invalidate();
-                    zoneDessin.Update();
-                    //zoneDessin.Refresh();
                     AfficheChoixPossible();
-                    Application.DoEvents();
                 }
                 else
                 {
