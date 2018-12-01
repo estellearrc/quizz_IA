@@ -29,59 +29,73 @@ namespace App
         public List<List<Sommet>> EtatsSuccessifsFermes { get; private set; }
         public bool ResolutionAEtoile { get; private set; }
 
-        public Graphe(int xMin, int xMax, int yMin, int yMax)
+        public Graphe(int xMin, int xMax, int yMin, int yMax, bool auto)
         {
             Sommets = new List<Sommet>();
-            GenereSommets(xMin,xMax,yMin,yMax); //initialise la liste Sommets
+            GenereSommets(xMin,xMax,yMin,yMax, auto); //initialise la liste Sommets
             Aretes = new List<Arete>();
-            ConnecteSommets(); //initialise la liste Aretes
+            ConnecteSommets(auto); //initialise la liste Aretes
         }
         public int GetNbEtapes()
         {
             return EtatsSuccessifsOuverts.Count;
         }
-        public Sommet DeterminePointInitial()
+        public Sommet DeterminePointInitial(bool auto)
         {
             Sommet s;
-            int compteur = 0;
-            List<int> indicesDejaTestes = new List<int>();
-            int n = Sommets.Count;
-            do
+            if (auto)
             {
-                int i;
+                int compteur = 0;
+                List<int> indicesDejaTestes = new List<int>();
+                int n = Sommets.Count;
                 do
                 {
-                    i = rnd.Next(n);
+                    int i;
+                    do
+                    {
+                        i = rnd.Next(n);
+                    }
+                    while (indicesDejaTestes.Contains(i));
+                    indicesDejaTestes.Add(i);
+                    s = Sommets[i];
+                    compteur++;
                 }
-                while (indicesDejaTestes.Contains(i));
-                indicesDejaTestes.Add(i);
-                s = Sommets[i];
-                compteur++;
+                while (s.Incidences.Count < 2 && compteur < n);
             }
-            while (s.Incidences.Count < 2 && compteur < n);
+            else
+            {
+                s = Sommets[0];
+            }
             return s;
         }
-        public Sommet DeterminePointFinal()
+        public Sommet DeterminePointFinal(bool auto)
         {
             Sommet s;
-            int compteur = 0;
-            //on ne veut pas prendre le SommetInitial comme SommetFinal donc on le supprime des sommets à tester
-            List<int> indicesDejaTestes = new List<int>(Sommets.IndexOf(SommetInitial)); 
-            int n = Sommets.Count;
-            do
+            if (auto)
             {
-                int k;
+                int compteur = 0;
+                //on ne veut pas prendre le SommetInitial comme SommetFinal donc on le supprime des sommets à tester
+                List<int> indicesDejaTestes = new List<int>(Sommets.IndexOf(SommetInitial));
+                int n = Sommets.Count;
                 do
                 {
-                    k = rnd.Next(n);
+                    int k;
+                    do
+                    {
+                        k = rnd.Next(n);
+                    }
+                    while (indicesDejaTestes.Contains(k));
+                    indicesDejaTestes.Add(k);
+                    s = Sommets[k];
+                    compteur++;
                 }
-                while (indicesDejaTestes.Contains(k));
-                indicesDejaTestes.Add(k);
-                s = Sommets[k];
-                compteur++;
+                //tant que les sommets initial et final ne sont pas assez éloignés et qu'on a pas parcouru tous les sommets du graphe
+                while (PointsInitialFinalAssezEloignes(s) == false && compteur < n);
             }
-            //tant que les sommets initial et final ne sont pas assez éloignés et qu'on a pas parcouru tous les sommets du graphe
-            while (PointsInitialFinalAssezEloignes(s) == false && compteur < n); 
+            else
+            {
+                s = Sommets[6];
+            }
             return s;
         }
         /// <summary>
@@ -129,59 +143,100 @@ namespace App
             List<Sommet> copieListe = new List<Sommet>(tab);
             return copieListe;
         }
-        public void GenereSommets(int xMin, int xMax, int yMin, int yMax)
+        public void GenereSommets(int xMin, int xMax, int yMin, int yMax, bool auto)
         {
-            //Sommets.Add(new Sommet((float)3.4, (float)8.4,true));
-            //Sommets.Add(new Sommet((float)6.7, (float)7.7, true));
-            //Sommets.Add(new Sommet((float)8.5, (float)2.8, true));
-            //Sommets.Add(new Sommet((float)5.4, (float)8.4, true));
-            //Sommets.Add(new Sommet((float)4.5, (float)1.3, true));
-            //Sommets.Add(new Sommet((float)3.8, (float)7.5, true));
-            //Sommets.Add(new Sommet((float)1.5, (float)3.9, true));
-            //Sommets.Add(new Sommet((float)4.5, (float)2.4, true));
-            //Sommets.Add(new Sommet((float)7.9, (float)5.9, true));
-            int nbPoints = rnd.Next(8, __NBSOMMETS + 1);
-            for (int i = 0; i < nbPoints; i++)
+            if (auto)
             {
-                float partieDecimaleX = (float)rnd.NextDouble();
-                float partieDecimaleY = (float)rnd.NextDouble();
-                float x = rnd.Next(xMin + 1, xMax - 1) + partieDecimaleX;
-                float y = rnd.Next(yMin + 1, yMax - 1) + partieDecimaleY;
-                Sommet s = new Sommet(x, y, true);
-                if (!Sommets.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les sommets du graphe et à une distance >= 1 des autres sommets
+                int nbPoints = rnd.Next(8, __NBSOMMETS + 1);
+                for (int i = 0; i < nbPoints; i++)
                 {
-                    Sommets.Add(s);
+                    float partieDecimaleX = (float)rnd.NextDouble();
+                    float partieDecimaleY = (float)rnd.NextDouble();
+                    float x = rnd.Next(xMin + 1, xMax - 1) + partieDecimaleX;
+                    float y = rnd.Next(yMin + 1, yMax - 1) + partieDecimaleY;
+                    Sommet s = new Sommet(x, y, true);
+                    if (!Sommets.Exists(z => z.IsEqual(s) || (z.CalculeDistance(s) < 1))) //si le sommet s n'est pas déjà dans les sommets du graphe et à une distance >= 1 des autres sommets
+                    {
+                        Sommets.Add(s);
+                    }
                 }
             }
+            else
+            {
+                Sommets.Add(new Sommet((float)1.8, (float)9, true));
+                Sommets.Add(new Sommet((float)1.3, (float)6.5, true));
+                Sommets.Add(new Sommet((float)2.9, (float)4.5, true));
+                Sommets.Add(new Sommet((float)3.8, (float)7, true));
+                Sommets.Add(new Sommet((float)4.5, (float)5.5, true));
+                Sommets.Add(new Sommet((float)5.3, (float)7, true));
+                Sommets.Add(new Sommet((float)6.5, (float)4.5, true));
+                Sommets.Add(new Sommet((float)9, (float)4.5, true));
+            }
+
         }
         /// <summary>
         /// Génère le Graphe de Gabriel d'après le nuage de points Sommets
         /// </summary>
-        public void ConnecteSommets()
+        public void ConnecteSommets(bool auto)
         {
-            int n = Sommets.Count;
-            for (int i = 0; i < n; i++)
+            if (auto)
             {
-                Sommet s1 = Sommets[i];
-                for(int j = i + 1; j < n; j++) //Parcours "en triangle"
+                int n = Sommets.Count;
+                for (int i = 0; i < n; i++)
                 {
-                    Sommet s2 = Sommets[j];
-                    if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
+                    Sommet s1 = Sommets[i];
+                    for (int j = i + 1; j < n; j++) //Parcours "en triangle"
                     {
-                        Arete a = new Arete(s1, s2);
-                        Aretes.Add(a);
-                        s1.Incidences.Add(a);
-                        s2.Incidences.Add(a);
+                        Sommet s2 = Sommets[j];
+                        if (DoiventEtreRelies(s1, s2)) //Si les deux sommets doivent être reliés
+                        {
+                            Arete a = new Arete(s1, s2);
+                            Aretes.Add(a);
+                            s1.Incidences.Add(a);
+                            s2.Incidences.Add(a);
+                        }
                     }
                 }
             }
-            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[1]));
-            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[2]));
-            //Aretes.Add(new Arete(PointsOuverts[0], PointsOuverts[3]));
-            //Aretes.Add(new Arete(PointsOuverts[1], PointsOuverts[4]));
-            //Aretes.Add(new Arete(PointsOuverts[2], PointsOuverts[4]));
-            //Aretes.Add(new Arete(PointsOuverts[4], PointsOuverts[5]));
-            //Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
+            else
+            {
+                Aretes.Add(new Arete(Sommets[0], Sommets[1]));
+                Aretes.Add(new Arete(Sommets[0], Sommets[2]));
+                Aretes.Add(new Arete(Sommets[0], Sommets[3]));
+                Aretes.Add(new Arete(Sommets[3], Sommets[5]));
+                Aretes.Add(new Arete(Sommets[2], Sommets[4]));
+                Aretes.Add(new Arete(Sommets[4], Sommets[5]));
+                Aretes.Add(new Arete(Sommets[4], Sommets[6]));
+                Aretes.Add(new Arete(Sommets[5], Sommets[6]));
+                Aretes.Add(new Arete(Sommets[6], Sommets[7]));
+
+                Sommets[0].Incidences.Add(Aretes[0]);
+                Sommets[0].Incidences.Add(Aretes[1]);
+                Sommets[0].Incidences.Add(Aretes[2]);
+                Sommets[1].Incidences.Add(Aretes[0]);
+                Sommets[2].Incidences.Add(Aretes[1]);
+                Sommets[3].Incidences.Add(Aretes[2]);
+
+                Sommets[3].Incidences.Add(Aretes[3]);
+                Sommets[5].Incidences.Add(Aretes[3]);
+
+                Sommets[2].Incidences.Add(Aretes[4]);
+                Sommets[4].Incidences.Add(Aretes[4]);
+
+                Sommets[4].Incidences.Add(Aretes[5]);
+                Sommets[5].Incidences.Add(Aretes[5]);
+
+                Sommets[4].Incidences.Add(Aretes[6]);
+                Sommets[6].Incidences.Add(Aretes[6]);
+
+                Sommets[5].Incidences.Add(Aretes[7]);
+                Sommets[6].Incidences.Add(Aretes[7]);
+
+                Sommets[6].Incidences.Add(Aretes[8]);
+                Sommets[7].Incidences.Add(Aretes[8]);
+
+            }
+
         }
         /// <summary>
         /// Prédicat vrai si et seulement si le graphe de Gabriel comporte l'arête entre s1 et s2
@@ -206,13 +261,13 @@ namespace App
         /// Résolution du graphe au sens du plus court chemin
         /// </summary>
         /// <param name="AEtoile">booléen indiquant l'utilisation d'A* ou non</param>
-        public void ResoutGraphePlusCourtChemin(bool AEtoile)
+        public void ResoutGraphePlusCourtChemin(bool AEtoile, bool auto)
         {
             SommetsOuverts = new List<Sommet>();
             SommetsFermes = new List<Sommet>();
-            SommetInitial = DeterminePointInitial();
+            SommetInitial = DeterminePointInitial(auto);
             SommetActuel = SommetInitial;
-            SommetFinal = DeterminePointFinal();
+            SommetFinal = DeterminePointFinal(auto);
             PlusCourtChemin = new List<Sommet>();
             ResolutionAEtoile = AEtoile;
             EtatsSuccessifsFermes = new List<List<Sommet>>();

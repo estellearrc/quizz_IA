@@ -104,8 +104,8 @@ namespace App
             
 
             //Création du graphe à afficher dans le drawing panel
-            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax);
-            grapheDijkstra.ResoutGraphePlusCourtChemin(ResolutionAEtoile);
+            grapheDijkstra = new Graphe(xMin,xMax,yMin,yMax,true);
+            grapheDijkstra.ResoutGraphePlusCourtChemin(ResolutionAEtoile,true);
             AfficheChoixPossible();
         }
         private void DrawingPanel_Paint(object sender, PaintEventArgs e)
