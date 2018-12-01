@@ -15,14 +15,14 @@ namespace App
 
         public int Numero { get; private set; }                 //indice du sommet (unique)
         public string Label { get; private set; }               //label du sommet
-        public PointF Pt { get; set; }                   //coordonnées du sommet
-        public List<Arete> Incidences { get; private set; } //liste des arêtes incidentes
-        public double CoutCumule { get; set; }               //coût du chemin du noeud initial jusqu'à ce noeud
-        public double CoutHeuristique { get; private set; }               //estimation heuristique du coût pour atteindre le noeud final
+        public PointF Pt { get; set; }                          //coordonnées du sommet
+        public List<Arete> Incidences { get; private set; }     //liste des arêtes incidentes
+        public double CoutCumule { get; set; }                  //coût du chemin du noeud initial jusqu'à ce noeud
+        public double CoutHeuristique { get; private set; }     //estimation heuristique du coût pour atteindre le noeud final
         public double CoutTotal { get; private set; }           //coût total (g+h)
-        public List<Sommet> Enfants { get; private set; }     // noeuds enfants
+        public List<Sommet> Enfants { get; private set; }       // noeuds enfants
         private Sommet _sommetParent;
-        public Sommet SommetParent                                // noeud parent
+        public Sommet SommetParent                              // noeud parent
         {
             get
             {
@@ -87,7 +87,6 @@ namespace App
         public bool IsEqual(Sommet s)
         {
             return (Pt.X == s.Pt.X && Pt.Y == s.Pt.Y);
-            //return (Pt.Equals(s.Pt));
         }
         public List<Sommet> GetSuccesseurs()
         {

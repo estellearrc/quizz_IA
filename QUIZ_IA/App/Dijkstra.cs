@@ -14,7 +14,8 @@ namespace App
     public partial class Dijkstra : Form
     {
         // Unit defined in world coordinate system:
-        private int xMin = 0;
+        //bornes du graphe
+        private int xMin = 0; 
         private int xMax = 10;
         private int yMin = 0;
         private int yMax = 10;
@@ -249,12 +250,8 @@ namespace App
                 lesRadiobuttons[i] = radButOuvert[i-nbPropositions];
 
             }
-
-
         }
-
-
-
+        
         private string ListeString(List<Sommet> liste)
         {
             string choix;
@@ -405,12 +402,7 @@ namespace App
                 Sommet F = OuvertsEtapePrecedente[i];
                 List<Sommet> configurationPoss = GenereConfigurations(OuvertsEtapePrecedente, F);
                 FermesEtapePrecedente.Add(F);
-                //List<Sommet> configCorrecte = new List<Sommet>();
                 List<Sommet> finOuverts = new List<Sommet>();
-                //for(int j = 0; j < nbPropositions - 1; j++)
-                //{
-                //    configCorrecte.Add(reponseCorrecteOuverts[j]);
-                //}
                 for(int j = nbPropositions - 1; j < reponseCorrecteOuverts.Count; j++)
                 {
                     if (!configurationPoss.Contains(reponseCorrecteOuverts[j]))
@@ -418,8 +410,6 @@ namespace App
                         finOuverts.Add(reponseCorrecteOuverts[j]);
                     }
                 }
-                //if (!configurationPoss.Equals(configCorrecte))
-                //{
                     configurationPoss.AddRange(finOuverts);
                     int k;
                     do
@@ -441,7 +431,6 @@ namespace App
                     indicesDejaTestesFermes.Add(k);
                 
                     FermesEtapePrecedente.Remove(F);
-                //}
             }
         }
         public List<Sommet> GenereConfigurations(List<Sommet> liste, Sommet aRetirer)
