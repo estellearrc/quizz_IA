@@ -110,6 +110,11 @@ namespace App
                 }
             return true;
         }
+        /// <summary>
+        /// Crée une copie de liste en cassant la référence à la liste d'origine
+        /// </summary>
+        /// <param name="liste"></param>
+        /// <returns></returns>
         public List<Arete> DeepCopy(List<Arete> liste)
         {
             Arete[] tab = new Arete[liste.Count];
@@ -150,7 +155,7 @@ namespace App
             }
         }
         /// <summary>
-        /// Génère le Graphe de Voisinage Relatif (GVR) d'après le nuage de points Sommets
+        /// Génère le Graphe de Gabriel d'après le nuage de points Sommets
         /// </summary>
         public void ConnecteSommets()
         {
@@ -179,7 +184,7 @@ namespace App
             //Aretes.Add(new Arete(PointsOuverts[5], PointsOuverts[6]));
         }
         /// <summary>
-        /// Prédicat vrai ssi le graphe de Gabriel comporte l'arête entre s1 et s2
+        /// Prédicat vrai si et seulement si le graphe de Gabriel comporte l'arête entre s1 et s2
         /// </summary>
         public bool DoiventEtreRelies(Sommet s1, Sommet s2)
         {
@@ -343,6 +348,12 @@ namespace App
                 while ((s != null) && (trouve == false));
             }
         }
+        /// <summary>
+        /// Retrouve l'arête qui connecte les sommets s1 et s2
+        /// </summary>
+        /// <param name="s1"></param>
+        /// <param name="s2"></param>
+        /// <returns></returns>
         public Arete RetrouveArete(Sommet s1, Sommet s2)
         {
             if(s1.Incidences.Count < s2.Incidences.Count) //On effectue une recherche sur la plus petite liste d'incidences possible
