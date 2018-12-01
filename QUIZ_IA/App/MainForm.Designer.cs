@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.txtQuestion = new System.Windows.Forms.TextBox();
-            this.btnValider = new System.Windows.Forms.Button();
+            btnValider = new System.Windows.Forms.Button();
             this.txtBoxCorrection = new System.Windows.Forms.TextBox();
             this.textBxNumQuestion = new System.Windows.Forms.TextBox();
             this.NumBox = new System.Windows.Forms.TextBox();
@@ -56,17 +56,17 @@
             // 
             // btnValider
             // 
-            this.btnValider.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btnValider.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnValider.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnValider.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnValider.Location = new System.Drawing.Point(263, 597);
-            this.btnValider.Name = "btnValider";
-            this.btnValider.Size = new System.Drawing.Size(148, 40);
-            this.btnValider.TabIndex = 1;
-            this.btnValider.Text = "Commencer";
-            this.btnValider.UseVisualStyleBackColor = false;
-            this.btnValider.Click += new System.EventHandler(this.BtnValider_Click);
+            btnValider.BackColor = System.Drawing.SystemColors.ControlLight;
+            btnValider.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            btnValider.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            btnValider.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            btnValider.Location = new System.Drawing.Point(263, 597);
+            btnValider.Name = "btnValider";
+            btnValider.Size = new System.Drawing.Size(148, 40);
+            btnValider.TabIndex = 1;
+            btnValider.Text = "Commencer";
+            btnValider.UseVisualStyleBackColor = false;
+            btnValider.Click += new System.EventHandler(this.BtnValider_Click);
             // 
             // txtBoxCorrection
             // 
@@ -76,17 +76,20 @@
             this.txtBoxCorrection.Location = new System.Drawing.Point(110, 538);
             this.txtBoxCorrection.Multiline = true;
             this.txtBoxCorrection.Name = "txtBoxCorrection";
+            this.txtBoxCorrection.ReadOnly = true;
             this.txtBoxCorrection.Size = new System.Drawing.Size(467, 53);
             this.txtBoxCorrection.TabIndex = 2;
             this.txtBoxCorrection.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBxNumQuestion
             // 
+            this.textBxNumQuestion.BackColor = System.Drawing.Color.White;
             this.textBxNumQuestion.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBxNumQuestion.Font = new System.Drawing.Font("Goudy Stout", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBxNumQuestion.ForeColor = System.Drawing.Color.Black;
             this.textBxNumQuestion.Location = new System.Drawing.Point(209, 12);
             this.textBxNumQuestion.Name = "textBxNumQuestion";
+            this.textBxNumQuestion.ReadOnly = true;
             this.textBxNumQuestion.Size = new System.Drawing.Size(279, 26);
             this.textBxNumQuestion.TabIndex = 4;
             this.textBxNumQuestion.Text = "IA QUIZ ! ";
@@ -137,7 +140,7 @@
             this.Controls.Add(this.NumBox);
             this.Controls.Add(this.textBxNumQuestion);
             this.Controls.Add(this.txtBoxCorrection);
-            this.Controls.Add(this.btnValider);
+            this.Controls.Add(btnValider);
             this.Controls.Add(this.txtQuestion);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -152,12 +155,12 @@
         #endregion
 
         private System.Windows.Forms.TextBox txtQuestion;
-        private System.Windows.Forms.Button btnValider;
         private System.Windows.Forms.TextBox txtBoxCorrection;
         private System.Windows.Forms.TextBox textBxNumQuestion;
         private System.Windows.Forms.TextBox NumBox;
         private System.Windows.Forms.Label labelSaisie;
         private System.Windows.Forms.PictureBox pictureBox;
+        public static System.Windows.Forms.Button btnValider;
     }
 }
 

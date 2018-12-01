@@ -374,7 +374,8 @@ namespace App
         {
             if (btnValider.Text == "Terminer")
             {
-                    Application.Exit();
+                    this.Close();
+                    MainForm.btnValider.Enabled = true;
             }
                 
             

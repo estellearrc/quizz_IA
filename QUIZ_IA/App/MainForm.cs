@@ -70,15 +70,21 @@ namespace App
                 {
                     if (question.Intitule == "Dijkstra")
                     {
+                        btnValider.Enabled = false;
+                        btnValider.Text = "Suivant";
                         d = new Dijkstra(false);
                         d.Show();
+                        compteur++;
                     }
                     else
                     {
                         if(question.Intitule == "A*")
                         {
+                            btnValider.Enabled = false;
+                            btnValider.Text = "Suivant";
                             d = new Dijkstra(true);
                             d.Show();
+                            compteur++;
                         }
                         else
                         {
@@ -190,7 +196,7 @@ namespace App
 
             if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
             {
-
+                _quiz.ActualiseScore(d.score);
             }
             else
             {
@@ -226,6 +232,7 @@ namespace App
                     if (btnValider.Text == "Suivant")
                     {
                         NettoieForm();
+                       
                     }
                     textBxNumQuestion.Text = "Question " + (compteur + 1) + "/" + _quiz.LesQuestions.Count;
                     AfficheQuestion(_quiz.LesQuestions[compteur]);
