@@ -28,6 +28,8 @@ namespace App
         private int indiceFermeCorrect;
         public bool avoirJuste;
 
+        private bool terminer = false;
+
         RadioButton[] lesRadiobuttons = null;
 
         Button btnValider = new Button();
@@ -369,95 +371,6 @@ namespace App
                 score += 1;
                 }
         }
-
-        private void btnValider_Click(object sender, EventArgs e)
-        {
-            if (btnValider.Text == "Terminer")
-            {
-                    this.Close();
-                    MainForm.btnValider.Enabled = true;
-            }
-                
-            
-            if (compteur< grapheDijkstra.GetNbEtapes())
-            {
-                if (btnValider.Text == "Suivant" )
-                { 
-                    NettoieForm();
-                    grapheDijkstra.SommetActuel = grapheDijkstra.EtatsSuccessifsFermes[compteur].Last();
-                    //zoneDessin.Invalidate();
-                    zoneDessin.Update();
-                    //zoneDessin.Refresh();
-                    AfficheChoixPossible();
-                    Application.DoEvents();
-                }
-                else
-                {
-                    
-                   
-                    btnValider.Text = "Suivant";
-                    AfficheCorrection(Corrige());
-                    MAJscore(Corrige());
-                    compteur++;
-                    string ferme = lesRadiobuttons[indiceFermeCorrect].Text.Substring(2);
-                    string ouvert = lesRadiobuttons[indiceOuvertCorrect + nbPropositions].Text.Substring(2);
-                    string recap = compteur + ")  F=" + ferme + " et  O=" + ouvert;
-                    lbRecap.Items.Add(recap);
-                }
-            }
-            else
-            {
-                btnValider.Text = "Terminer";
-                NettoieForm();
-                zoneRadButFerme.Hide();
-                zoneRadButOuvert.Hide();
-                zoneTreeView = new Panel();
-                zoneTreeView.Location = new Point(250, 425);
-                zoneTreeView.AutoSize = true;
-                zoneTreeView.BringToFront();
-                Controls.Add(zoneTreeView);
-                Label lblTV = new Label();
-                lblTV.Text = "Arbre de recherche";
-                lblTV.Font = new Font("Arial", 11, FontStyle.Bold);
-                lblTV.Location = new Point(250, 400);
-                lblTV.AutoSize = true;
-                Controls.Add(lblTV);
-                TV = new TreeView();
-                grapheDijkstra.GetSearchTree(TV);
-                TV.Location = new Point(5, 5);
-                TV.Size = new Size(200, 150);
-                zoneTreeView.Controls.Add(TV);
-
-                Label lblChemin = new Label();
-                lblChemin.Text = "Le plus court chemin";
-                lblChemin.Font = new Font("Arial", 11, FontStyle.Bold);
-                lblChemin.Location = new Point(475, 420);
-                lblChemin.AutoSize = true;
-                Controls.Add(lblChemin);
-
-                Label chemin = new Label();
-                chemin.Text = ListeString(grapheDijkstra.PlusCourtChemin);
-                chemin.Font = new Font("Arial", 10, FontStyle.Regular);
-                chemin.Location = new Point(475, 440);
-                chemin.AutoSize = true;
-                Controls.Add(chemin);
-
-                Label lblCoutChemin = new Label();
-                lblCoutChemin.Text = "Poids du plus court chemin";
-                lblCoutChemin.Font = new Font("Arial", 11, FontStyle.Bold);
-                lblCoutChemin.Location = new Point(475, 520);
-                lblCoutChemin.AutoSize = true;
-                Controls.Add(lblCoutChemin);
-
-                Label coutChemin = new Label();
-                coutChemin.Text = (10*Math.Round(grapheDijkstra.CoutPlusCourtChemin,1)).ToString();
-                coutChemin.Font = new Font("Arial", 10, FontStyle.Regular);
-                coutChemin.Location = new Point(475, 540);
-                coutChemin.AutoSize = true;
-                Controls.Add(coutChemin);
-            }
-
-        }
         public void NoteSur2()
         {
             score = (score * 2) / grapheDijkstra.GetNbEtapes();
@@ -537,5 +450,108 @@ namespace App
             copieListe.Remove(aRetirer);
             return copieListe;
         }
+
+        private void Dijkstra_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(terminer == true)
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+        private void btnValider_Click(object sender, EventArgs e)
+        {
+            if (btnValider.Text == "Terminer")
+            {
+                terminer = true;
+                Close();
+                MainForm.btnValider.Enabled = true;
+                MainForm._quiz.ActualiseScore(score);
+            }
+
+
+            if (compteur < grapheDijkstra.GetNbEtapes())
+            {
+                if (btnValider.Text == "Suivant")
+                {
+                    NettoieForm();
+                    grapheDijkstra.SommetActuel = grapheDijkstra.EtatsSuccessifsFermes[compteur].Last();
+                    //zoneDessin.Invalidate();
+                    zoneDessin.Update();
+                    //zoneDessin.Refresh();
+                    AfficheChoixPossible();
+                    Application.DoEvents();
+                }
+                else
+                {
+
+
+                    btnValider.Text = "Suivant";
+                    AfficheCorrection(Corrige());
+                    MAJscore(Corrige());
+                    compteur++;
+                    string ferme = lesRadiobuttons[indiceFermeCorrect].Text.Substring(2);
+                    string ouvert = lesRadiobuttons[indiceOuvertCorrect + nbPropositions].Text.Substring(2);
+                    string recap = compteur + ")  F=" + ferme + " et  O=" + ouvert;
+                    lbRecap.Items.Add(recap);
+                }
+            }
+            else
+            {
+                btnValider.Text = "Terminer";
+                NettoieForm();
+                zoneRadButFerme.Hide();
+                zoneRadButOuvert.Hide();
+                zoneTreeView = new Panel();
+                zoneTreeView.Location = new Point(250, 425);
+                zoneTreeView.AutoSize = true;
+                zoneTreeView.BringToFront();
+                Controls.Add(zoneTreeView);
+                Label lblTV = new Label();
+                lblTV.Text = "Arbre de recherche";
+                lblTV.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblTV.Location = new Point(250, 400);
+                lblTV.AutoSize = true;
+                Controls.Add(lblTV);
+                TV = new TreeView();
+                grapheDijkstra.GetSearchTree(TV);
+                TV.Location = new Point(5, 5);
+                TV.Size = new Size(200, 150);
+                zoneTreeView.Controls.Add(TV);
+
+                Label lblChemin = new Label();
+                lblChemin.Text = "Le plus court chemin";
+                lblChemin.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblChemin.Location = new Point(475, 420);
+                lblChemin.AutoSize = true;
+                Controls.Add(lblChemin);
+
+                Label chemin = new Label();
+                chemin.Text = ListeString(grapheDijkstra.PlusCourtChemin);
+                chemin.Font = new Font("Arial", 10, FontStyle.Regular);
+                chemin.Location = new Point(475, 440);
+                chemin.AutoSize = true;
+                Controls.Add(chemin);
+
+                Label lblCoutChemin = new Label();
+                lblCoutChemin.Text = "Poids du plus court chemin";
+                lblCoutChemin.Font = new Font("Arial", 11, FontStyle.Bold);
+                lblCoutChemin.Location = new Point(475, 520);
+                lblCoutChemin.AutoSize = true;
+                Controls.Add(lblCoutChemin);
+
+                Label coutChemin = new Label();
+                coutChemin.Text = (10 * Math.Round(grapheDijkstra.CoutPlusCourtChemin, 1)).ToString();
+                coutChemin.Font = new Font("Arial", 10, FontStyle.Regular);
+                coutChemin.Location = new Point(475, 540);
+                coutChemin.AutoSize = true;
+                Controls.Add(coutChemin);
+            }
+        }
+
+        
     }
 }

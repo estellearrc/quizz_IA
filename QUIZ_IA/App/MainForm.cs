@@ -173,6 +173,8 @@ namespace App
                 txtBoxCorrection.Text = correction;
             }
         }
+
+
         private void NettoieForm()
         {
             txtBoxCorrection.Text = "";
@@ -191,22 +193,19 @@ namespace App
 
             }
         }
-        private void MAJscore(Question question, bool estJuste)
-        {
 
-            if (question.Intitule == "Dijkstra" || question.Intitule == "A*")
-            {
-                _quiz.ActualiseScore(d.score);
-            }
-            else
-            {
+
+        private void MAJscore(Question question, bool estJuste)
+        {           
                 if (estJuste)
                 {
                     _quiz.ActualiseScore(question.Points);
-                }
-
-            }
+                }           
         }
+
+
+
+
         private void BtnValider_Click(object sender, EventArgs e)
         {
             if (btnValider.Text == "Terminer")
@@ -254,6 +253,9 @@ namespace App
             }
 
         }
+
+
+
 
         private void NumBox_KeyPress(object sender, KeyPressEventArgs e)
         {

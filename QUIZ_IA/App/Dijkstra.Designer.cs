@@ -38,6 +38,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Dijkstra";
             this.Text = "Dijkstra";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Dijkstra_FormClosing);
+            this.Click += new System.EventHandler(this.btnValider_Click);
             this.ResumeLayout(false);
 
         }
